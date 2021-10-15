@@ -1,0 +1,61 @@
+<html>
+	<head>
+		<title>Ex013c</title>
+		<link rel="shortcut icon" href="favicon.ico" />
+		<style>
+			BODY {font-family: Verdana;}
+			DIV {
+				/* overflow: hidden; */ 
+				}
+			H3 {color: #0066AA;cursor: pointer;}
+			P  {color: #0022AA}
+		</style>
+		<script>
+			function openDiv(nome){
+				closeDivs();
+				console.log(nome);
+				var obj = document.getElementById(nome);
+				obj.style.display = "block"; // Estilo display
+				// obj.style.overflow = "scroll";
+				}
+			function closeDivs(){
+				var filhos = document.body.children;
+				var filho = null;
+				console.log(filhos);
+				for( a in filhos){
+					if( !isNaN(a) ){
+						var filho = filhos[a];
+						if( filho.tagName == "DIV" ) filho.style.display = "none"; // Estilo display
+						}
+					}				
+				}
+			function init(){
+				console.log("Document: Esconder as DIVs");
+				closeDivs();
+				}
+		</script>
+	</head>
+	<body onload="init();">
+		<h3 onclick="openDiv('d1')">Primeira DIV</h3>
+		<div id="d1">
+			
+			<p>Primeiro parágrafo</p>
+			<p>Segundo parágrafo</p>
+			<p>Terceiro parágrafo</p>
+		</div>
+		<h3 onclick="openDiv('d2')">Segunda DIV</h3>
+		<div id="d2">
+			
+			<p>Primeiro parágrafo</p>
+			<p>Segundo parágrafo</p>
+			<p>Terceiro parágrafo</p>
+		</div>
+		<h3 onclick="openDiv('d3')">Terceira DIV</h3>
+		<div id="d3">
+			
+			<p>Primeiro parágrafo</p>
+			<p>Segundo parágrafo</p>
+			<p>Terceiro parágrafo</p>
+		</div>	
+	</body>
+</html>

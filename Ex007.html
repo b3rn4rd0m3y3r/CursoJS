@@ -1,0 +1,37 @@
+<html>
+<head>
+	<title>Ex006</title>
+	<style>
+		BODY {
+			font-family: Verdana; 
+			font-size: 20px;
+			}
+		PRE {
+			color: #004488;
+			}
+	</style>
+	<link rel="shortcut icon" href="favicon.ico" />
+	<script>
+		function clickBody(){
+			alert('Você clicou na página do navegador.');
+			}
+		function init(){
+			alert('Estou executando de dentro da função init.\nFui chamado pelo evento onload');
+			}
+	</script>
+</head>
+<body onload="init();" onclick="clickBody();">
+	<pre>
+		A tag BODY, desta página HTML, tem o seguinte conteúdo:
+		&lt;body onload="init();"  onclick="clickBody();"&gt;
+		
+		Desta forma, é executada a função:
+		
+		function init(){
+			alert('Estou executando de dentro da função init.\nFui chamado pelo evento onload');
+			}		
+		
+		Agora dê um clique do mouse (botão normal) em qualquer lugar desta página.
+	</pre>
+</body>
+</html>

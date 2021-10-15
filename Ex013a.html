@@ -1,0 +1,51 @@
+<html>
+	<head>
+		<title>Ex013a</title>
+		<link rel="shortcut icon" href="favicon.ico" />
+		<style>
+			BODY {font-family: Verdana;}
+			DIV {
+				overflow: hidden; 
+				}
+			H3 {color: #0066AA;cursor: pointer;}
+			P  {color: #0022AA}
+		</style>
+		<script>
+			function init(){
+				console.log("Document: Esconder as DIVs");
+				var filhos = document.body.children;
+				var filho = null;
+				console.log(filhos);
+				for( a in filhos){
+					if( !isNaN(a) ){
+						var filho = filhos[a];
+						if( filho.tagName == "DIV" ) filho.style.height = 0;
+						}
+					}
+				}
+		</script>
+	</head>
+	<body onload="init();">
+		<h3>Primeira DIV</h3>
+		<div>
+			
+			<p>Primeiro parágrafo</p>
+			<p>Segundo parágrafo</p>
+			<p>Terceiro parágrafo</p>
+		</div>
+		<h3>Segunda DIV</h3>
+		<div>
+			
+			<p>Primeiro parágrafo</p>
+			<p>Segundo parágrafo</p>
+			<p>Terceiro parágrafo</p>
+		</div>
+		<h3>Terceira DIV</h3>
+		<div>
+			
+			<p>Primeiro parágrafo</p>
+			<p>Segundo parágrafo</p>
+			<p>Terceiro parágrafo</p>
+		</div>	
+	</body>
+</html>

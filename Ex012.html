@@ -1,0 +1,45 @@
+<html>
+	<head>
+		<title>Ex012</title>
+		<link rel="shortcut icon" href="favicon.ico" />
+		<style>
+			BODY {font-family: Verdana;}
+			H3 {color: #0066AA}
+			P  {color: #0022AA}
+		</style>
+		<script>
+			function init(){
+				console.log("Document: Parte de Style Sheet");
+				console.log(document.styleSheets[0].cssRules);
+				console.log("Document: Listar as DIVs");
+				var filhos = document.body.children;
+				console.log(filhos);
+				for( a in filhos){
+					if( !isNaN(a) ){
+						console.log(filhos[a]);
+						}
+					}
+				}
+		</script>
+	</head>
+	<body onload="init();">
+		<div>
+			<h3>Primeira DIV</h3>
+			<p>Primeiro parágrafo</p>
+			<p>Segundo parágrafo</p>
+			<p>Terceiro parágrafo</p>
+		</div>
+		<div>
+			<h3>Segunda DIV</h3>
+			<p>Primeiro parágrafo</p>
+			<p>Segundo parágrafo</p>
+			<p>Terceiro parágrafo</p>
+		</div>
+		<div>
+			<h3>Terceira DIV</h3>
+			<p>Primeiro parágrafo</p>
+			<p>Segundo parágrafo</p>
+			<p>Terceiro parágrafo</p>
+		</div>	
+	</body>
+</html>

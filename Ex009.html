@@ -1,0 +1,74 @@
+<html>
+<head>
+	<title>Ex009</title>
+	<style>
+		BODY {
+			font-family: Verdana; 
+			font-size: 20px;
+			}
+		DIV.retang {
+			height: 50px;
+			width: 200px;
+			
+			}
+		DIV.retang.az {
+			background-color: #004488;
+			color: white;
+			float: left;
+			border: solid 1px yellow;
+			}
+		DIV.retang.vm {
+			background-color: #ff2200;
+			float: left;
+			border: solid 1px blue;
+			}
+		DIV.retang.anula {
+			float: clear;
+			}			
+		PRE.azul {
+			color: #004488;
+			position: relative;
+			}
+		PRE.vermelho {
+			color: #ff2200;
+			float: clear;
+			height: 50px;
+			}
+		
+	</style>
+	<link rel="shortcut icon" href="favicon.ico" />
+	<script>	
+		function clicDiv(valor){
+			//event.stopPropagation();
+			var retang = "azul";
+			if( valor == 2 ) retang = "vermelho";
+			alert("Você clicou no retângulo "+retang);
+			return; 
+			}
+		function clickBody(){
+			alert('Você clicou na página do navegador.');
+			}
+	</script>
+</head>
+<body>
+	<div class="retang az" onclick="clicDiv(1);">Retângulo Azul</div>
+	<div class="retang vm" onclick="clicDiv(2);">Retângulo Vermelho</div>
+	<div class="retang anula">&nbsp;</div>
+	
+	<pre class="vermelho">
+		A tag BODY, desta página HTML, tem o seguinte conteúdo:
+		&lt;body onclick="clickBody();"&gt;
+	</pre>
+	<pre class="azul">
+		
+		As seguintes funções estão definidas:
+	
+		function clickBody(){
+			alert('Você clicou na página do navegador.');
+			}		
+		
+		Agora dê um clique do mouse (botão normal) em qualquer lugar desta página ou pressione alguma tecla do teclado.
+	</pre>
+
+</body>
+</html>

@@ -1,0 +1,82 @@
+<html>
+	<head>
+		<title>Ex014</title>
+		<meta charset="iso-8859-1"/>
+		<link rel="shortcut icon" href="favicon.ico" />
+		<style>
+			BODY {font-family: Verdana;}
+			DIV {
+				/* overflow: hidden; */ 
+				}
+			H3 {color: #0066AA;cursor: pointer;}
+			P  {color: #0022AA}
+		</style>
+		<script>
+			var NivelChamada = 0;
+			function listTags(){
+				var filhos = document.querySelectorAll("*");
+				var filho = null;
+				console.log(filhos);
+				for(a=0;a<filhos.length;a++){
+					filho = filhos[a];
+					console.log(typeof(filho)+"-"+filho.tagName); // Node
+					}				
+				}
+			// *************** Lista nós ****************
+			function listNos(obj){
+				NivelChamada++;
+				// NÓ DO TIPO TEXTO
+				if( obj.nodeName =='#text' ){
+					if( (obj.nodeValue).trim() != "" ){
+						console.log("["+NivelChamada+"][0] Text: "+obj.nodeValue);
+						}
+					NivelChamada--;
+					return;
+					} else {
+					console.log("["+NivelChamada+"][1] Nó: "+obj);
+					console.log(obj);
+					}
+				// Funções recursivas só devem ter suas variáveis de referência locais
+				// Variáveis globais à função recursiva apenas se houver somas e acumulados
+				// NÓ DO TIPO coleção (TAG HTML)
+				if( obj.hasChildNodes() ){
+					var filhos = obj.childNodes;
+					var filho = null;
+					var Dados = null;
+					for(let a=0;a<filhos.length;a++){
+						filho = filhos[a];
+						if( filho.tagName){
+							console.log("["+NivelChamada+"][2] "+filho.tagName+" - Nós:"+filho.childNodes.length);
+							}
+						listNos(filho);
+						}
+					}
+				NivelChamada--;
+				return;
+				}
+			// Fim ****************************	
+			function init(){
+				console.log("Document: Listagem dos nós");
+				//listTags();
+				listNos(document);
+				}
+		</script>
+	</head>
+	<body onload="init();">
+		<h3>Primeira DIV</h3>
+		<div id="d1" class="menu">Div 1
+			
+			<p>Primeiro parágrafo</p>
+			<p>Segundo parágrafo</p>
+			<p>Terceiro parágrafo</p>
+		</div>
+		<h3>Segunda DIV</h3>
+		<div id="d2" class="menu">
+			
+			<p>Primeiro parágrafo</p>
+			<p>Segundo parágrafo</p>
+			<p>Terceiro parágrafo</p>
+		</div>
+
+	</body>
+</html>

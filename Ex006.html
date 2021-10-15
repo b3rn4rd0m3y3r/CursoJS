@@ -1,0 +1,33 @@
+<html>
+<head>
+	<title>Ex006</title>
+	<style>
+		BODY {
+			font-family: Verdana; 
+			font-size: 20px;
+			}
+		PRE {
+			color: #004488;
+			}
+	</style>
+	<link rel="shortcut icon" href="favicon.ico" />
+	<script>
+		function init(){
+			alert('Estou executando de dentro da função init.\nFui chamado pelo evento onload');
+			}
+	</script>
+</head>
+<body onload="init();">
+	<pre>
+		A tag BODY, desta página HTML, tem o seguinte conteúdo:
+		&lt;body onload="init();"&gt;
+		
+		Desta forma, é executada a função:
+		
+		function init(){
+			alert('Estou executando de dentro da função init.\nFui chamado pelo evento onload');
+			}		
+		
+	</pre>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<html>
+<head>
+	<title>Ex008</title>
+	<style>
+		BODY {
+			font-family: Verdana; 
+			font-size: 20px;
+			}
+		PRE.azul {
+			color: #004488;
+			}
+		PRE.vermelho {
+			color: #ff2200;
+			}
+	</style>
+	<link rel="shortcut icon" href="favicon.ico" />
+	<script>
+		function keyPress(){
+			alert('Você pressionou uma tecla.');
+			}		
+		function clickBody(){
+			alert('Você clicou na página do navegador.');
+			}
+	</script>
+</head>
+<body onclick="clickBody();" onkeypress="keyPress();">
+	<pre class="vermelho">
+		A tag BODY, desta página HTML, tem o seguinte conteúdo:
+		&lt;body onclick="clickBody();" onkeypress="keyPress();"&gt;
+	</pre>
+	<pre class="azul">
+		
+		As seguintes funções estão definidas:
+		
+		function keyPress(){
+			alert('Você pressionou uma tecla.');
+			}		
+		function clickBody(){
+			alert('Você clicou na página do navegador.');
+			}		
+		
+		Agora dê um clique do mouse (botão normal) em qualquer lugar desta página ou pressione alguma tecla do teclado.
+	</pre>
+</body>
+</html>
