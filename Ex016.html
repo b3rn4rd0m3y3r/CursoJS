@@ -1,0 +1,82 @@
+<html>
+	<head>
+		<title>Ex016</title>
+		<meta charset="iso-8859-1"/>
+		<link rel="shortcut icon" href="favicon.ico" />
+		<style>
+			BODY {font-family: Verdana;}
+			DIV {
+				/* overflow: hidden; */ 
+				}
+			H3 {color: #0066AA;cursor: pointer;}
+			P  {color: #0022AA}
+			PRE {
+				color: #006688;
+				font-size: 18px;
+				}
+		</style>
+		<script>
+			var MEU_OBJETO = [];
+			MEU_OBJETO[0] = "item_0";
+			MEU_OBJETO[1] = [];
+			MEU_OBJETO[1][0] = "item_1_0";
+			MEU_OBJETO[1][1] = "item_1_1";
+			MEU_OBJETO[2] = [];
+			MEU_OBJETO[2][0] = "item_2_0";
+			MEU_OBJETO[2][1] = [];
+			MEU_OBJETO[2][1][0] = "item_2_1_0";
+			MEU_OBJETO[2][1][1] = "item_2_1_1";
+			MEU_OBJETO[3] = "item_3";
+			/*
+
+			*/
+			
+			
+			console.log(MEU_OBJETO);
+			
+			var NivelChamada = 0;
+			// *************** Lista nós ****************
+			function listNos(obj){
+				NivelChamada++;
+
+				if (Array.isArray(obj) && obj.length){
+					var filhos = obj;
+					var filho = null;
+					var Dados = null;
+					for(let a=0;a<filhos.length;a++){
+						filho = filhos[a];
+							if( (Array.isArray(filho) && filho.length) ){
+								console.log("["+NivelChamada+"][2] "+" [Array] "+" - Nós: "+(Array.isArray(filho) && filho.length));
+								} else {
+								console.log("["+NivelChamada+"][2] "+filho+" - Nós: "+(Array.isArray(filho) && filho.length));
+								}
+						listNos(filho);
+						}
+					}
+				NivelChamada--;
+				return;
+				}
+			function init(){
+				console.log("Meu Objeto: Listagem dos items");
+				listNos(MEU_OBJETO);
+				}
+		</script>
+	</head>
+	<body onload="init();">
+		<h1>Abra a console para ver o código</h1>
+		<h3>Listando os itens de um Array multidimensional</h3>
+		<pre>
+			var MEU_OBJETO = [];
+			MEU_OBJETO[0] = "item_0";
+			MEU_OBJETO[1] = [];
+			MEU_OBJETO[1][0] = "item_1_0";
+			MEU_OBJETO[1][1] = "item_1_1";
+			MEU_OBJETO[2] = [];
+			MEU_OBJETO[2][0] = "item_2_0";
+			MEU_OBJETO[2][1] = [];
+			MEU_OBJETO[2][1][0] = "item_2_1_0";
+			MEU_OBJETO[2][1][1] = "item_2_1_1";
+			MEU_OBJETO[3] = "item_3";		
+		</pre>
+	</body>
+</html>

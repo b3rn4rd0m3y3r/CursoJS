@@ -1,0 +1,81 @@
+<html>
+	<head>
+		<title>Ex020</title>
+		<meta charset="iso-8859-1"/>
+		<link rel="shortcut icon" href="favicon.ico" />
+		<style>
+			BODY {font-family: Verdana;}
+			DIV {
+				border: solid 1px  #006688;
+				margin-bottom: 10px;
+				padding-left: 20px;
+				width: 550px;
+				}
+			H3 {color: #0066AA;cursor: pointer;}
+			P  {color: #0022AA}
+			PRE {
+				color: #006688;
+				font-size: 18px;
+				}
+		</style>
+		<script>
+			var MEU_OBJETO = [];
+			MEU_OBJETO["lista1"] = []
+			MEU_OBJETO["lista1"][0] = "Primeiro parágrafo da DIV 1";
+			MEU_OBJETO["lista1"][1] =  "Segundo parágrafo da DIV 1";
+			MEU_OBJETO["lista1"][2] = "Terceiro parágrafo da DIV 1";
+			MEU_OBJETO["lista2"] = []
+			MEU_OBJETO["lista2"][0] = "Primeiro parágrafo da DIV 2";
+			MEU_OBJETO["lista2"][1] =  "Segundo parágrafo da DIV 2";
+			MEU_OBJETO["lista2"][2] = "Terceiro parágrafo da DIV 2";
+
+			console.log(MEU_OBJETO);
+			
+			var NivelChamada = 0;
+			// *************** Lista nós ****************
+			function criaNos(obj,pai){
+				if (Array.isArray(obj) && obj.length){
+					var filhos = obj;
+					var filho = null;
+					var texto;
+					var elemento;
+					for(let a=0;a<filhos.length;a++){
+						filho = filhos[a];
+						// Cria o nó texto
+						texto = document.createTextNode(filho);
+						console.log(texto);
+						// Cria o nó tipo filho
+						elemento = document.createElement("p");
+						console.log(elemento);
+						// Vincula o texto ao nó filho
+						elemento.appendChild(texto);
+						console.log(elemento);
+						//; Vincula o nó filho ao pai
+						pai.appendChild(elemento);
+						console.log(pai);
+						}
+					}
+				NivelChamada--;
+				return;
+				}
+				
+			function init(){
+				console.log("Meu Objeto: Listagem de parágrafos em DIVs");
+				noPai = document.getElementById("lista1");
+				console.log(noPai);
+				criaNos(MEU_OBJETO["lista1"],noPai);
+				noPai = document.getElementById("lista2");
+				console.log(noPai);
+				criaNos(MEU_OBJETO["lista2"],noPai);
+				}
+		</script>
+	</head>
+	<body onload="init();">
+		<h1>Abra a console para ver o código</h1>
+		<h3>Armazenando parágrafos em um Array multidimensional</h3>
+		<div id="lista1">
+		</div>
+		<div id="lista2">
+		</div>
+	</body>
+</html>

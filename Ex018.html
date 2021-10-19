@@ -1,0 +1,75 @@
+<html>
+	<head>
+		<title>Ex018</title>
+		<meta charset="iso-8859-1"/>
+		<link rel="shortcut icon" href="favicon.ico" />
+		<style>
+			BODY {font-family: Verdana;}
+			DIV {
+				/* overflow: hidden; */ 
+				}
+			H3 {color: #0066AA;cursor: pointer;}
+			P  {color: #0022AA}
+			PRE {
+				color: #006688;
+				font-size: 18px;
+				}
+		</style>
+		<script>
+			var MEU_OBJETO = [];
+			MEU_OBJETO[0] = []
+			MEU_OBJETO[0][0] = "Primeiro parágrafo da DIV 1";
+			MEU_OBJETO[0][1] =  "Segundo parágrafo da DIV 1";
+			MEU_OBJETO[0][2] = "Terceiro parágrafo da DIV 1";
+			MEU_OBJETO[1] = []
+			MEU_OBJETO[1][0] = "Primeiro parágrafo da DIV 2";
+			MEU_OBJETO[1][1] =  "Segundo parágrafo da DIV 2";
+			MEU_OBJETO[1][2] = "Terceiro parágrafo da DIV 2";
+			/*
+
+			*/
+			console.log(MEU_OBJETO);
+			
+			var NivelChamada = 0;
+			// *************** Lista nós ****************
+			function criaNos(obj,pai){
+				if (Array.isArray(obj) && obj.length){
+					var filhos = obj;
+					var filho = null;
+					var texto;
+					var elemento;
+					for(let a=0;a<filhos.length;a++){
+						filho = filhos[a];
+						// Cria o nó texto
+						texto = document.createTextNode(filho);
+						console.log(texto);
+						// Cria o nó tipo item de lista: LI
+						elemento = document.createElement("p");
+						console.log(elemento);
+						// Vincula o texto ao nó LI
+						elemento.appendChild(texto);
+						console.log(elemento);
+						//; Vincula o nó LI ao UL
+						pai.appendChild(elemento);
+						console.log(pai);
+						}
+					}
+				NivelChamada--;
+				return;
+				}
+				
+			function init(){
+				console.log("Meu Objeto: Listagem de parágrafos em DIVs");
+				noPai = document.getElementById("lista");
+				console.log(noPai);
+				criaNos(MEU_OBJETO,noPai);
+				}
+		</script>
+	</head>
+	<body onload="init();">
+		<h1>Abra a console para ver o código</h1>
+		<h3>Armazenando parágrafos em um Array multidimensional</h3>
+		<div id="lista">
+		</div>
+	</body>
+</html>

@@ -1,0 +1,110 @@
+<html>
+	<head>
+		<title>Ex021</title>
+		<meta charset="iso-8859-1"/>
+		<link rel="shortcut icon" href="favicon.ico" />
+		<style>
+			BODY {font-family: Verdana;}
+			DIV {
+				border: solid 1px  #006688;
+				margin-bottom: 10px;
+				padding-left: 20px;
+				
+				}
+			DIV.coluna {
+
+				float: left;
+				width: 500px;
+				}
+			DIV.secao {
+				border: solid 0px  #006688;
+				display: table-row;
+				float: clear;
+				height: auto;
+				width: 100%;
+
+				}
+			H3 {color: #0066AA;cursor: pointer;width: 550px;}
+			P  {color: #0022AA}
+			PRE {
+				color: #006688;
+				font-size: 18px;
+				}
+		</style>
+		<script>
+			var TITULO_GERAL = "Arranjos com índices literais/string";
+			var MEU_OBJETO = [];
+			MEU_OBJETO["lista1"] = []
+			MEU_OBJETO["lista1"][0] = "Título da DIV 1";
+			MEU_OBJETO["lista1"][1] = "Primeiro parágrafo da DIV 1";
+			MEU_OBJETO["lista1"][2] =  "Segundo parágrafo da DIV 1";
+			MEU_OBJETO["lista1"][3] = "Terceiro parágrafo da DIV 1";
+			MEU_OBJETO["lista2"] = []
+			MEU_OBJETO["lista2"][0] = "Título da DIV 2";
+			MEU_OBJETO["lista2"][1] = "Primeiro parágrafo da DIV 2";
+			MEU_OBJETO["lista2"][2] =  "Segundo parágrafo da DIV 2";
+			MEU_OBJETO["lista2"][3] = "Terceiro parágrafo da DIV 2";
+
+			console.log(MEU_OBJETO);
+			
+			var NivelChamada = 0;
+			// *************** Lista nós ****************
+			function criaNos(obj,pai){
+				if (Array.isArray(obj) && obj.length){
+					var filhos = obj;
+					var filho = null;
+					var texto;
+					var elemento;
+					var pai1 = "tit1"+(pai.id).substr(-1);
+					var noPai = document.getElementById(pai1);
+					texto = document.createTextNode(obj[0]);
+					noPai.append(texto);
+					for(let a=1;a<filhos.length;a++){
+						filho = filhos[a];
+						// Cria o nó texto
+						texto = document.createTextNode(filho);
+						console.log(texto);
+						// Cria o nó tipo filho
+						elemento = document.createElement("p");
+						console.log(elemento);
+						// Vincula o texto ao nó filho
+						elemento.appendChild(texto);
+						console.log(elemento);
+						//; Vincula o nó filho ao pai
+						pai.appendChild(elemento);
+						console.log(pai);
+						}
+					}
+				NivelChamada--;
+				return;
+				}
+				
+			function init(){
+				console.log("Meu Objeto: Listagem de parágrafos em DIVs");
+				noPai = document.getElementById("lista1");
+				console.log(noPai);
+				criaNos(MEU_OBJETO["lista1"],noPai);
+				noPai = document.getElementById("lista2");
+				console.log(noPai);
+				criaNos(MEU_OBJETO["lista2"],noPai);
+				}
+		</script>
+	</head>
+	<body onload="init();">
+		<h1>Abra a console para ver o código</h1>
+		<h3 id="tit1"></h3>
+		<div class="secao">
+			
+			<div class="coluna" id="lista1">
+				<h3 id="tit11"></h3>
+			</div>
+			
+			<div class="coluna" id="lista2">
+				<h3 id="tit12"></h3>
+			</div>
+		</div>
+		<div class="secao">
+			Seção 2
+		</div>
+	</body>
+</html>
