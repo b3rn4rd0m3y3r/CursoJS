@@ -1,0 +1,121 @@
+<html>
+<head>
+	<title>N/A</title>
+	<meta charset="iso-8859-1"/>
+	<meta name="author" content="Bernardo Meyer">
+	<meta name="description" content="Listando 1 item no formato JSON">
+	<meta name="keywords" content="sites, web, desenvolvimento, jscript, javascript">
+	<style>
+		BODY {
+			font-family: Verdana; 
+			font-size: 20px;
+			}
+		DIV.esq {float: left;}
+		DIV.linha {
+			display: table-row;
+			}
+		DIV#aviso {margin-right: 20px;}
+		DIV#quadro {
+			border: solid 2px #CC4400;
+			display: block;
+			height: 40px;
+			float: clear;
+			margin-left: 200px;
+			width: fit-content;
+			padding: 10px;
+			}
+		DIV#main {
+			display: table-row;
+			}
+		DIV.retang {
+			height: 50px;
+			width: 200px;
+			}
+		DIV.retang.az {
+			background-color: #004488;
+			cursor: pointer;
+			color: white;
+			float: left;
+			border: solid 1px yellow;
+			}
+		DIV.retang.vd {
+			background-color: #00AA00;
+			cursor: pointer;
+			color: white;
+			float: left;
+			border: solid 1px cyan;
+			}
+		DIV.retang.vm {
+			background-color: #ff2200;
+			cursor: pointer;
+			float: left;
+			border: solid 1px blue;
+			}
+		DIV.retang.anula {
+			float: clear;
+			width: 100%;
+			}
+		IMG.esq.ptr {cursor: pointer;}
+		LABEL {
+			cursor: inherited;
+			}
+	</style>
+	<link rel="shortcut icon" href="favicon.ico" />
+	<script>
+		function fillTitle(){
+			// Descrição da página - document.head
+			var descri = document.head.querySelector("meta[name=description]");
+			getTag("titulo").innerText = descri.content;
+			// Nome da script - window.location - split
+			var path = window. location. pathname;
+			var arrPath = path. split("/");
+			var page = arrPath. pop();
+			document.title = page;			
+			}
+		function getTag(nomeId){
+			return document.getElementById(nomeId);
+			}
+		function mostra(nomeId){
+			getTag(nomeId).style.display = "block";
+			}
+		function esconde(nomeId){
+			event.stopPropagation();
+			getTag(nomeId).style.display = "none";
+			}
+		function clicDiv(valor){
+			event.stopPropagation();
+			var retang = valor;
+			var aviso = getTag("aviso");
+			aviso.innerText = "Retângulo "+retang;
+			mostra("quadro");
+			return; 
+			}
+		function clickBody(evt){
+			alert('Você clicou na página do navegador.');
+			}
+		function init(){
+			fillTitle();
+			// Vamos abrir este array na console
+			var Livro = {'número': 001,'titulo': 'Apanhador do Campo de Centeio','Autor':'Ali Savi Mali','Preço':'32.90'}; // Era um array sem Key (Chave)
+			console.log(Livro);
+			var txt = null;
+			var conteudo = null;
+			var indice = null;
+			var texto = null;
+			for( item in Livro){
+				// Item é o índice do Array atributos
+				// Conteúdo é o que este item do Array atributos contém
+				conteudo = Livro[item];
+				console.log(item+" - "+conteudo);
+				}
+			}
+	</script>
+</head>
+<body onload="init();">
+	<h1 id="titulo">&nbsp;</h1>
+	<h2>Abra o DevTools e verifique a console</h2>
+	
+
+
+</body>
+</html>

@@ -1,0 +1,78 @@
+<html>
+<head>
+	<title>Ex023</title>
+	<style>
+		BODY {
+			font-family: Verdana; 
+			font-size: 20px;
+			}
+		DIV#aviso {
+			display: none;
+			}
+		DIV#main {
+			display: table-row;
+			}
+		DIV.retang {
+			height: 50px;
+			width: 200px;
+			}
+		DIV.retang.az {
+			background-color: #004488;
+			cursor: pointer;
+			color: white;
+			float: left;
+			border: solid 1px yellow;
+			}
+		DIV.retang.vd {
+			background-color: #00AA00;
+			cursor: pointer;
+			color: white;
+			float: left;
+			border: solid 1px cyan;
+			}
+		DIV.retang.vm {
+			background-color: #ff2200;
+			cursor: pointer;
+			float: left;
+			border: solid 1px blue;
+			}
+		DIV.retang.anula {
+			float: clear;
+			width: 100%;
+			}
+		LABEL {
+			cursor: inherited;
+			}
+	</style>
+	<link rel="shortcut icon" href="favicon.ico" />
+	<script>	
+		function clicDiv(valor){
+			event.stopPropagation();
+			var retang = "azul";
+			if( valor == 2 ) retang = "vermelho";
+			if( valor == 3 ) retang = "verde";
+			var aviso = document.getElementById("aviso");
+			aviso.style.display = "block";
+			aviso.innerText = "Retângulo "+retang;
+			return; 
+			}
+		function clickBody(evt){
+			alert('Você clicou na página do navegador.');
+			}
+	</script>
+</head>
+<body onclick="clickBody(event);">
+	<h1>HTML interativo - Manipulando estilos/visibilidade</h1>
+	<div id="main">
+		<div class="retang az" onclick="clicDiv(1);">Retângulo Azul</div>
+		<div class="retang vm" onclick="clicDiv(2);">Retângulo Vermelho</div>
+		<div class="retang vd" onclick="clicDiv(3);">Retângulo Verde</div>
+		<img class="" src="EvtBubble.jpg" />
+	</div>
+	<div class="retang anula">DIV externa à #main</div>
+	<div id="aviso">AVISO</div>
+	
+
+
+</body>
+</html>
