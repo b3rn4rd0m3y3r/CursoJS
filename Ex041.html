@@ -1,0 +1,186 @@
+<html>
+<head>
+	<title>N/A</title>
+	<meta charset="iso-8859-1"/>
+	<meta name="author" content="Bernardo Meyer">
+	<meta name="description" content="Gerando uma tabela filtrada por data  de um array JSON e exibindo">
+	<meta name="keywords" content="sites, web, desenvolvimento, jscript, javascript">
+	<style>
+		BODY {
+			font-family: Verdana; 
+			font-size: 20px;
+			}
+		DIV.esq {float: left;}
+		DIV.linha {
+			display: table-row;
+			}
+		DIV#aviso {margin-right: 20px;}
+		DIV#quadro {
+			border: solid 2px #CC4400;
+			display: block;
+			height: 40px;
+			float: clear;
+			margin-left: 200px;
+			width: fit-content;
+			padding: 10px;
+			}
+		DIV#main {
+			display: table-row;
+			}
+		DIV.retang {
+			height: 50px;
+			width: 200px;
+			}
+		DIV.retang.az {
+			background-color: #004488;
+			cursor: pointer;
+			color: white;
+			float: left;
+			border: solid 1px yellow;
+			}
+		DIV.retang.vd {
+			background-color: #00AA00;
+			cursor: pointer;
+			color: white;
+			float: left;
+			border: solid 1px cyan;
+			}
+		DIV.retang.vm {
+			background-color: #ff2200;
+			cursor: pointer;
+			float: left;
+			border: solid 1px blue;
+			}
+		DIV.retang.anula {
+			float: clear;
+			width: 100%;
+			}
+		IMG.esq.ptr {cursor: pointer;}
+		LABEL {
+			cursor: inherited;
+			}
+	</style>
+	<link rel="shortcut icon" href="favicon.ico" />
+	<script>
+		function fillTitle(){
+			// Descrição da página - document.head
+			var descri = document.head.querySelector("meta[name=description]");
+			getTag("titulo").innerText = descri.content;
+			// Nome da script - window.location - split
+			var path = window. location. pathname;
+			var arrPath = path. split("/");
+			var page = arrPath. pop();
+			document.title = page;			
+			}
+		function getTag(nomeId){
+			return document.getElementById(nomeId);
+			}
+		function mostra(nomeId){
+			getTag(nomeId).style.display = "block";
+			}
+		function esconde(nomeId){
+			event.stopPropagation();
+			getTag(nomeId).style.display = "none";
+			}
+		function clicDiv(valor){
+			event.stopPropagation();
+			var retang = valor;
+			var aviso = getTag("aviso");
+			aviso.innerText = "Retângulo "+retang;
+			mostra("quadro");
+			return; 
+			}
+		function clickBody(evt){
+			alert('Você clicou na página do navegador.');
+			}
+		function init(){
+			fillTitle();
+			// Vamos abrir este array na console
+			var Vendas = [
+				{ Numero : 1, Dia : '2021-05-09', Item : 'Batata', Quantidade : '10'},
+				{ Numero : 2, Dia : '2021-05-19', Item : 'Banana', Quantidade : '8'},
+				{ Numero : 3, Dia : '2021-05-29', Item : 'Batata', Quantidade : '23'},
+				{ Numero : 4, Dia : '2021-06-08', Item : 'Queijo', Quantidade : '16'},
+				{ Numero : 5, Dia : '2021-06-12', Item : 'Banana', Quantidade : '20'},
+				{ Numero : 6, Dia : '2021-07-06', Item : 'Leite', Quantidade : '11'},
+				{ Numero : 7, Dia : '2021-07-27', Item : 'Presunto', Quantidade : '13'},
+				]; // Era um array sem Key (Chave)
+			console.log(Vendas);
+			var txt = null;
+			var conteudo = null;
+			var conteudo1 = null;
+			var indice = null;
+			var texto = null;
+			var S = "<table border=1 cellpadding=4 cellspacing=0>";
+			S += "<thead>";
+			// Uso da primeira venda para obter cabeçalhos de colunas
+			for( item in Vendas[0]){
+				console.log(item);
+				S += "<th>"+item+"</th>";
+				}
+			S += "</thead>";
+			// Relação dos livros
+			// Linha ou Registro
+			for( item in Vendas){
+				// Item é o índice do Array atributos
+				// Conteúdo é o que este item do Array atributos contém
+				conteudo = Vendas[item];
+				console.log(item+" - "+conteudo);
+				S += "<tr>";
+				// Colunas ou campos
+				for( campos in conteudo ){
+					conteudo1 = conteudo[campos];
+					console.log(campos+" - "+conteudo1);
+					S += "<td>" + conteudo1 + "</td>";
+					}
+				S += "</tr>";
+				}
+			S += "</table>";
+			getTag("main").innerHTML = S;
+			// Filtrando o array JSON
+			var intervalo = Vendas.filter(function(item){
+				return item.Dia >= "2021-05-26" && item.Dia <= "2021-07-07" ;
+				});
+			console.log(intervalo);
+			// Exibição do conteúdo filtrado
+		var S = "<table border=1 cellpadding=4 cellspacing=0>";
+		S += "<thead>";
+		// Uso do primeiro registro para obter cabeçalhos de colunas
+		for( item in intervalo[0]){
+			console.log(item);
+			S += "<th>"+item+"</th>";
+			}
+		S += "</thead>";
+		// Linha ou Registro
+		for( item in intervalo){
+			// Item é o índice do Array atributos
+			// Conteúdo é o que este item do Array atributos contém
+			conteudo = intervalo[item];
+			console.log(item+" - "+conteudo);
+			S += "<tr>";
+			// Colunas ou campos
+			for( campos in conteudo ){
+				conteudo1 = conteudo[campos];
+				console.log(campos+" - "+conteudo1);
+				S += "<td>" + conteudo1 + "</td>";
+				}
+			S += "</tr>";
+			}
+		S += "</table>";		
+		getTag("filtrado").innerHTML = S;
+		}
+	
+	</script>
+</head>
+<body onload="init();">
+	<h1 id="titulo">&nbsp;</h1>
+	<h2>Abra o DevTools e verifique a console</h2>
+	<div id="main">
+	
+	</div>
+	<h2>Conteúdo filtrado</h2>
+	<div id="filtrado">
+	
+	</div>
+</body>
+</html>
