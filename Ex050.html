@@ -1,0 +1,185 @@
+<html>
+<head>
+	<title>N/A</title>
+	<meta charset="iso-8859-1"/>
+	<meta name="author" content="Bernardo Meyer">
+	<meta name="description" content="Gerando um JSON com nova estrutura a partir de outro. Array map.">
+	<meta name="keywords" content="sites, web, desenvolvimento, jscript, javascript">
+	<style>
+		BODY {
+			font-family: Verdana; 
+			font-size: 20px;
+			}
+		DIV.esq {float: left;}
+		DIV.linha {
+			display: table-row;
+			}
+		DIV#aviso {margin-right: 20px;}
+		DIV#quadro {
+			border: solid 2px #CC4400;
+			display: block;
+			height: 40px;
+			float: clear;
+			margin-left: 200px;
+			width: fit-content;
+			padding: 10px;
+			}
+		DIV#main {
+			display: table-row;
+			}
+		DIV.retang {
+			height: 50px;
+			width: 200px;
+			}
+		DIV.retang.az {
+			background-color: #004488;
+			cursor: pointer;
+			color: white;
+			float: left;
+			border: solid 1px yellow;
+			}
+		DIV.retang.vd {
+			background-color: #00AA00;
+			cursor: pointer;
+			color: white;
+			float: left;
+			border: solid 1px cyan;
+			}
+		DIV.retang.vm {
+			background-color: #ff2200;
+			cursor: pointer;
+			float: left;
+			border: solid 1px blue;
+			}
+		DIV.retang.anula {
+			float: clear;
+			width: 100%;
+			}
+		IMG.esq.ptr {cursor: pointer;}
+		LABEL {
+			cursor: inherited;
+			}
+	</style>
+	<link rel="shortcut icon" href="favicon.ico" />
+	<!-- Carrega o arranjo de vendas feitas -->
+	<script src="Ex048.js"></script>
+	<script>
+		function fillTitle(){
+			// Descrição da página - document.head
+			var descri = document.head.querySelector("meta[name=description]");
+			getTag("titulo").innerText = descri.content;
+			// Nome da script - window.location - split
+			var path = window. location. pathname;
+			var arrPath = path. split("/");
+			var page = arrPath. pop();
+			document.title = page;			
+			}
+		function getTag(nomeId){
+			return document.getElementById(nomeId);
+			}
+		function mostra(nomeId){
+			getTag(nomeId).style.display = "block";
+			}
+		function esconde(nomeId){
+			event.stopPropagation();
+			getTag(nomeId).style.display = "none";
+			}
+		function clicDiv(valor){
+			event.stopPropagation();
+			var retang = valor;
+			var aviso = getTag("aviso");
+			aviso.innerText = "Retângulo "+retang;
+			mostra("quadro");
+			return; 
+			}
+		function clickBody(evt){
+			alert('Você clicou na página do navegador.');
+			}
+		function makeTable(Vendas){
+			var txt = null;
+			var conteudo = null;
+			var conteudo1 = null;
+			var indice = null;
+			var texto = null;
+			// Relação das Vendas
+			var S = "<table border=1 cellpadding=4 cellspacing=0>";
+			S += "<thead>";
+			// Uso do primeiro livro parta obter cabeçalhos de colunas
+			for( item in Vendas[0]){
+				console.log(item);
+				S += "<th>"+item+"</th>";
+				}
+			S += "</thead>";
+			// Linha ou Registro
+			for( item in Vendas){
+				conteudo = Vendas[item];
+				console.log(item+" - "+conteudo);
+				S += "<tr>";
+				// Colunas ou campos
+				for( campos in conteudo ){
+					conteudo1 = conteudo[campos];
+					console.log(campos+" - "+conteudo1);
+					S += "<td>" + conteudo1 + "</td>";
+					}
+				S += "</tr>";
+				}
+			S += "</table>";
+			return S;
+			}
+		function init(){
+			fillTitle();
+			// Vamos abrir este array na console
+			var Vendas = MinhasVendas; // Traz o array que está no Ex048.js
+			console.log(Vendas);
+			// Igualdade DIAGONAL
+			var S = makeTable(Vendas);
+			getTag("main").innerHTML = S;
+			// Filtrando o array JSON
+			console.log("**********************");
+			//var Soma = 0;
+			// Filtrando o array JSON
+			var Calculos = Vendas.map(function(item){
+				 item.SubTotal = item.Quantidade * item.PrecoUnit;
+				return item;
+				});
+			let sum = {};
+			Calculos.forEach((item) => {
+				if( sum[item.Item] ){
+					sum[item.Item] +=  item.SubTotal;
+					} else {
+					sum[item.Item] =  item.SubTotal;
+					}
+				});
+			console.log(Calculos);
+			S = makeTable(Calculos);
+			// Transforma o array sum em uma string que representa uma imagem de JSON, mas não é JSON ainda
+			var strSum = JSON.stringify(sum);
+			// Inicia um array para ficar compatível com o formato processado pela função makeTable
+			var jsonSum = [];
+			// O comando push de Array carrega mais um item neste Array
+			// JSON.parse trsnforma uma string que é mera imagem de JSON em JSON propriamente dito
+			var objSum = JSON.parse(strSum);
+			console.log("strSum é do tipo "+typeof(strSum)+" objSum é do tipo "+typeof(objSum));
+			jsonSum.push(objSum);
+			console.table(jsonSum);
+			getTag("mapeado").innerHTML = S;
+			S = makeTable(jsonSum);
+			getTag("Soma").innerHTML = S;
+			}
+	</script>
+</head>
+<body onload="init();">
+	<h1 id="titulo">&nbsp;</h1>
+	<h2>Abra o DevTools e verifique a console</h2>
+	<div id="main">
+	
+	</div>
+	<p>&nbsp;</p>
+	<div id="mapeado">
+	
+	</div>
+	<h2>Valor total vendido</h2>
+	<div id="Soma">
+	</div>
+</body>
+</html>

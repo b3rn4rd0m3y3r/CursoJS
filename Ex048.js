@@ -1,0 +1,18 @@
+var MinhasVendas = [
+	{ Numero : 1, Dia : '2021-05-09', Item : 'Batata', Quantidade : '10', PrecoUnit: 2.50},
+	{ Numero : 2, Dia : '2021-05-19', Item : 'Banana', Quantidade : '8', PrecoUnit: 4.50},
+	{ Numero : 3, Dia : '2021-05-29', Item : 'Batata', Quantidade : '23', PrecoUnit: 12.50},
+	{ Numero : 4, Dia : '2021-06-08', Item : 'Queijo', Quantidade : '16', PrecoUnit: 2.35},
+	{ Numero : 5, Dia : '2021-06-12', Item : 'Banana', Quantidade : '20', PrecoUnit: 2.30},
+	{ Numero : 6, Dia : '2021-07-06', Item : 'Leite', Quantidade : '11', PrecoUnit: 1.50},
+	{ Numero : 7, Dia : '2021-07-27', Item : 'Presunto', Quantidade : '13', PrecoUnit: 2.50},
+	{ Numero : 8, Dia : '2021-07-27', Item : 'Queijo', Quantidade : '9', PrecoUnit: 2.20},
+	{ Numero : 9, Dia : '2021-07-29', Item : 'Jiló', Quantidade : '43', PrecoUnit: 1.50},
+	{ Numero : 10, Dia : '2021-08-01', Item : 'Maça', Quantidade : '8', PrecoUnit: 2.10},
+	{ Numero : 11, Dia : '2021-08-07', Item : 'Jiló', Quantidade : '33', PrecoUnit: 8.50},
+	{ Numero : 12, Dia : '2021-08-07', Item : 'Maça', Quantidade : '36', PrecoUnit: 3.50},
+	{ Numero : 13, Dia : '2021-08-09', Item : 'Leite', Quantidade : '33', PrecoUnit: 2.50},
+	{ Numero : 14, Dia : '2021-08-09', Item : 'Queijo', Quantidade : '33', PrecoUnit: 3.50},
+	{ Numero : 15, Dia : '2021-08-12', Item : 'Banana', Quantidade : '33', PrecoUnit: 2.15},
+	{ Numero : 16, Dia : '2021-08-12', Item : 'Batata', Quantidade : '33', PrecoUnit: 1.50},
+	]; 
