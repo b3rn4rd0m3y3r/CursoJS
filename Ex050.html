@@ -143,6 +143,7 @@
 				return item;
 				});
 			let sum = {};
+			// Compõe um Array com subtotais por item
 			Calculos.forEach((item) => {
 				if( sum[item.Item] ){
 					sum[item.Item] +=  item.SubTotal;
@@ -150,16 +151,19 @@
 					sum[item.Item] =  item.SubTotal;
 					}
 				});
+			console.log("(1) Array com subtotal por item");
 			console.log(Calculos);
 			S = makeTable(Calculos);
 			// Transforma o array sum em uma string que representa uma imagem de JSON, mas não é JSON ainda
+			console.log("(2) Imagem string do array sum");
+			console.log(Calculos);
 			var strSum = JSON.stringify(sum);
 			// Inicia um array para ficar compatível com o formato processado pela função makeTable
 			var jsonSum = [];
 			// O comando push de Array carrega mais um item neste Array
 			// JSON.parse trsnforma uma string que é mera imagem de JSON em JSON propriamente dito
 			var objSum = JSON.parse(strSum);
-			console.log("strSum é do tipo "+typeof(strSum)+" objSum é do tipo "+typeof(objSum));
+			console.log("(3) strSum é do tipo "+typeof(strSum)+" objSum é do tipo "+typeof(objSum));
 			jsonSum.push(objSum);
 			console.table(jsonSum);
 			getTag("mapeado").innerHTML = S;

@@ -95,6 +95,8 @@
 		function clickBody(evt){
 			alert('Você clicou na página do navegador.');
 			}
+		// Cria uma TABLE com os cabeçalhos de campos lidos de um JSON
+		// e lista os seus itens/registros
 		function makeTable(Vendas){
 			var txt = null;
 			var conteudo = null;
@@ -137,18 +139,21 @@
 			// Filtrando o array JSON
 			console.log("**********************");
 			//var Soma = 0;
-			// Filtrando o array JSON
+			// Uso de Array.map para GERAR O CAMPO de SubTotal
 			var Calculos = Vendas.map(function(item){
 				 item.SubTotal = item.Quantidade * item.PrecoUnit;
 				return item;
 				});
+			// Acúmulo dos subtotais
 			let sum = 0;
 			Calculos.forEach((item) => {
-			  sum +=  item.SubTotal;
-			});
+				sum +=  item.SubTotal;
+				});
 			console.log(Calculos);
+			// Exibição dos resultados
 			var S = makeTable(Calculos);
 			getTag("mapeado").innerHTML = S;
+			// Exibição da Soma acumulada
 			getTag("Soma").innerText = sum;
 			}
 	</script>
