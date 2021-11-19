@@ -126,37 +126,38 @@
 			S += "</table>";
 			return S;
 			}
+		// Recebe o nome de uma seção em formato String
+		function filhos(sSecao){
+			var str = null;
+			var obj = eval(sSecao);
+			// Loop
+			for ( a in Object.keys(obj) ){
+				console.log(obj[a]);
+				for ( b in Object.keys(obj[a]) ){
+					console.log(Object.keys(obj[a])[b]);
+					str = eval("("+sSecao+"[a])."+Object.keys(obj[a]));
+					console.log(str);
+					}
+				}
+			}
 		function init(){
 			fillTitle();
 			// Vamos abrir este array na console
-			var Secoes = MinhasSecoes; // Traz o array que está no Site.js
+			Secoes = MinhasSecoes; // Traz o array que está no Site.js
 			console.log(Secoes);
 			// Igualdade DIAGONAL
 			var S = makeTable(Secoes);
 			getTag("main").innerHTML = S;
 			var str = "";
 			// Percorre a seção cabeçalho de MinhasSecoes (Site.js)
-			for ( a in Object.keys(Secoes.Cabecalho) ){
-				console.log(Secoes.Cabecalho[a]);
-				for ( b in Object.keys(Secoes.Cabecalho[a]) ){
-					console.log(Object.keys(Secoes.Cabecalho[a])[b]);
-					str = eval("(Secoes.Cabecalho[a])."+Object.keys(Secoes.Cabecalho[a]));
-					console.log(str);
-					}
-				}
+			 filhos("Secoes.Cabecalho");
 			//Secoes.Cabecalho.forEach(function(its){
 			//	console.log(its.Titulo0);
 			//	});
-			// Percorre a seção cabeçalho de MinhasSecoes (Site.js)
-			for ( a in Object.keys(Secoes.QuemSomos.Frases) ){
-				console.log(Secoes.QuemSomos.Frases[a]);
-				for ( b in Object.keys(Secoes.QuemSomos.Frases[a]) ){
-					console.log(Object.keys(Secoes.QuemSomos.Frases[a])[b]);
-					str = eval("(Secoes.QuemSomos.Frases[a])."+Object.keys(Secoes.QuemSomos.Frases[a]));
-					console.log(str);
-					}
-				}
+			// Percorre a seção QuemSomos.Frases de MinhasSecoes (Site.js)
+			 filhos("Secoes.QuemSomos.Frases");
 			}
+		var Secoes;
 	</script>
 </head>
 <body onload="init();">
