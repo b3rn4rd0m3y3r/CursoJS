@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta charset="iso-8859-1"/>
+	<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
+    <title>LeArq01</title>
+    <style type="text/css">
+        #conteudo {
+            border: solid 1px #008080;
+            overflow-y: scroll;
+            height: 400px;
+        }
+    </style>
+    <script type="text/javascript">
+	function getTag(nomeId){
+		return document.getElementById(nomeId);
+		}
+	function separaLinhas(txt){
+		var separado = txt.replace(/\r\n/g,"},{");
+		separado = separado.replace(/,/g,",");
+		separado = "{"+separado;
+		separado = "["+separado.substr(0,separado.length-2)+"]";
+		return separado;
+		}
+	function init(){
+		var arqSele = document.getElementById('arqAlvo');
+		var fileReader = new FileReader();
+		var rel = null;
+		var S = "";
+		fileReader.onload = function (e) {
+			var fileContents = document.getElementById('conteudo');
+			S += separaLinhas(fileReader.result);
+			rel.innerHTML = S;
+			}
+		arqSele.addEventListener('change', function (e) {
+			var arquivo = arqSele.files[0];
+			rel = getTag("conteudo");
+			S = "<h1>Dados do arquivo</h1>";
+			S += "<p><b>Nome:</b> "+arquivo.name+"</p>";
+			S += "<p><b>Tipo:</b> "+arquivo.type+"</p>";
+			// Lê, efetivamente, o conteúdo do arquivo
+			fileReader.readAsText(arquivo, 'ISO-8859-1');
+			// Apresenta todas as informações
+			
+			
+			});
+		}
+    </script>
+</head>
+<body onload="init();">
+	Por favor selecione arquivo que será lido:
+	<input type="file" id="arqAlvo" /><br />
+	<div id="conteudo">
+    
+	</div>
+</body>
+</html>
