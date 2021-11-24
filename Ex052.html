@@ -1,177 +1,51 @@
-<html>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	
 <head>
-	<title>N/A</title>
-	<meta charset="iso-8859-1"/>
-	<meta name="author" content="Bernardo Meyer">
-	<meta name="description" content="Gerando um JSON com nova estrutura a partir de outro. Array map.">
-	<meta name="keywords" content="sites, web, desenvolvimento, jscript, javascript">
-	<style>
-		BODY {
-			font-family: Verdana; 
-			font-size: 20px;
+    <meta name="viewport" content="width=device-width" />
+    <meta charset="iso-8859-1"/>
+    <title>LeArq01</title>
+    <style type="text/css">
+        #conteudo {
+            border: solid 1px #008080;
+            overflow-y: scroll;
+            height: 400px;
+        }
+    </style>
+    <script type="text/javascript">
+	function getTag(nomeId){
+		return document.getElementById(nomeId);
+		}
+	function init(){
+		var arqSele = document.getElementById('arqAlvo');
+		var fileReader = new FileReader();
+		var rel = null;
+		var S = "";
+		fileReader.onload = function (e) {
+			var fileContents = document.getElementById('conteudo');
+			S += fileReader.result;
+			rel.innerHTML = S;
 			}
-		DIV.esq {float: left;}
-		DIV.linha {
-			display: table-row;
-			}
-		DIV#aviso {margin-right: 20px;}
-		DIV#quadro {
-			border: solid 2px #CC4400;
-			display: block;
-			height: 40px;
-			float: clear;
-			margin-left: 200px;
-			width: fit-content;
-			padding: 10px;
-			}
-		DIV#main {
-			display: table-row;
-			}
-		DIV.retang {
-			height: 50px;
-			width: 200px;
-			}
-		DIV.retang.az {
-			background-color: #004488;
-			cursor: pointer;
-			color: white;
-			float: left;
-			border: solid 1px yellow;
-			}
-		DIV.retang.vd {
-			background-color: #00AA00;
-			cursor: pointer;
-			color: white;
-			float: left;
-			border: solid 1px cyan;
-			}
-		DIV.retang.vm {
-			background-color: #ff2200;
-			cursor: pointer;
-			float: left;
-			border: solid 1px blue;
-			}
-		DIV.retang.anula {
-			float: clear;
-			width: 100%;
-			}
-		IMG.esq.ptr {cursor: pointer;}
-		LABEL {
-			cursor: inherited;
-			}
-	</style>
-	<link rel="shortcut icon" href="favicon.ico" />
-	<!-- Carrega o arranjo de vendas feitas -->
-	<script src="Site.js"></script>
-	<script>
-		function fillTitle(){
-			// Descrição da página - document.head
-			var descri = document.head.querySelector("meta[name=description]");
-			getTag("titulo").innerText = descri.content;
-			// Nome da script - window.location - split
-			var path = window. location. pathname;
-			var arrPath = path. split("/");
-			var page = arrPath. pop();
-			document.title = page;			
-			}
-		function getTag(nomeId){
-			return document.getElementById(nomeId);
-			}
-		function mostra(nomeId){
-			getTag(nomeId).style.display = "block";
-			}
-		function esconde(nomeId){
-			event.stopPropagation();
-			getTag(nomeId).style.display = "none";
-			}
-		function clicDiv(valor){
-			event.stopPropagation();
-			var retang = valor;
-			var aviso = getTag("aviso");
-			aviso.innerText = "Retângulo "+retang;
-			mostra("quadro");
-			return; 
-			}
-		function clickBody(evt){
-			alert('Você clicou na página do navegador.');
-			}
-		function makeTable(Itens){
-			var txt = null;
-			var conteudo = null;
-			var conteudo1 = null;
-			var indice = null;
-			var texto = null;
-			// Relação das Itens
-			var S = "<table border=1 cellpadding=4 cellspacing=0>";
-			S += "<thead>";
-			// Uso do primeiro livro parta obter cabeçalhos de colunas
-			for( item in Itens[0]){
-				console.log(item);
-				S += "<th>"+item+"</th>";
-				}
-			S += "</thead>";
-			// Linha ou Registro
-			for( item in Itens){
-				conteudo = Itens[item];
-				console.log(item+" - "+conteudo);
-				S += "<tr>";
-				// Colunas ou campos
-				for( campos in conteudo ){
-					conteudo1 = conteudo[campos];
-					console.log(campos+" - "+conteudo1);
-					S += "<td>" + conteudo1 + "</td>";
-					}
-				S += "</tr>";
-				}
-			S += "</table>";
-			return S;
-			}
-		// Recebe o nome de uma seção em formato String
-		function filhos(sSecao){
-			var str = null;
-			var obj = eval(sSecao);
-			// Loop
-			for ( a in Object.keys(obj) ){
-				console.log(obj[a]);
-				for ( b in Object.keys(obj[a]) ){
-					console.log(Object.keys(obj[a])[b]);
-					str = eval("("+sSecao+"[a])."+Object.keys(obj[a]));
-					console.log(str);
-					}
-				}
-			}
-		function init(){
-			fillTitle();
-			// Vamos abrir este array na console
-			Secoes = MinhasSecoes; // Traz o array que está no Site.js
-			console.log(Secoes);
-			// Igualdade DIAGONAL
-			var S = makeTable(Secoes);
-			getTag("main").innerHTML = S;
-			var str = "";
-			// Percorre a seção cabeçalho de MinhasSecoes (Site.js)
-			 filhos("Secoes.Cabecalho");
-			//Secoes.Cabecalho.forEach(function(its){
-			//	console.log(its.Titulo0);
-			//	});
-			// Percorre a seção QuemSomos.Frases de MinhasSecoes (Site.js)
-			 filhos("Secoes.QuemSomos.Frases");
-			}
-		var Secoes;
-	</script>
+		arqSele.addEventListener('change', function (e) {
+			var arquivo = arqSele.files[0];
+			rel = getTag("conteudo");
+			S = "<h1>Dados do arquivo</h1>";
+			S += "<p><b>Nome:</b> "+arquivo.name+"</p>";
+			S += "<p><b>Tipo:</b> "+arquivo.type+"</p>";
+			// Lê, efetivamente, o conteúdo do arquivo
+			fileReader.readAsText(arquivo);
+			// Apresenta todas as informações
+			
+			
+			});
+		}
+    </script>
 </head>
 <body onload="init();">
-	<h1 id="titulo">&nbsp;</h1>
-	<h2>Abra o DevTools e verifique a console</h2>
-	<div id="main">
-	
-	</div>
-	<p>&nbsp;</p>
-	<div id="mapeado">
-	
-	</div>
-	<h2>Final</h2>
-	<div id="Soma">
+	Por favor selecione arquivo que será lido:
+	<input type="file" id="arqAlvo" /><br />
+	<div id="conteudo">
+    
 	</div>
 </body>
 </html>
