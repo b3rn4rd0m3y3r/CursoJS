@@ -4,7 +4,10 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <meta charset="iso-8859-1"/>
-	<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
+	<meta name="author" content="Bernardo Meyer">
+	<meta name="description" content="Lendo um arquivo CSV, separando o arquivo linha por linha e gerando um array JSON">
+	<meta name="keywords" content="sites, web, desenvolvimento, jscript, javascript">
+	
     <title>LeArq01</title>
     <style type="text/css">
         #conteudo {
@@ -18,6 +21,14 @@
 		return document.getElementById(nomeId);
 		}
 	function separaLinhas(txt){
+		var separado = txt.replace(/,/g,"','");
+		separado = separado.replace(/\r\n/g,"'},{'");
+		
+		separado = "{'"+separado;
+		separado = "["+separado.substr(0,separado.length-3)+"]";
+		return separado;
+		}
+	function separaLinhasSemAspas(txt){
 		var separado = txt.replace(/\r\n/g,"},{");
 		separado = separado.replace(/,/g,",");
 		separado = "{"+separado;
@@ -50,7 +61,8 @@
     </script>
 </head>
 <body onload="init();">
-	Por favor selecione arquivo que será lido:
+	<h1>Processador de arquivos CSV</h1>
+	<h2><i>Por favor selecione arquivo que será lido</i></h2>
 	<input type="file" id="arqAlvo" /><br />
 	<div id="conteudo">
     

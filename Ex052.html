@@ -2,9 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	
 <head>
+	<meta name="author" content="Bernardo Meyer">
+	<meta name="description" content="Lendo um arquivo CSV e compreendendo os eventos de leitura.">
+	<meta name="keywords" content="sites, web, desenvolvimento, jscript, javascript">
     <meta name="viewport" content="width=device-width" />
     <meta charset="iso-8859-1"/>
     <title>LeArq01</title>
+    <link rel="shortcut icon" href="favicon.ico" />
     <style type="text/css">
         #conteudo {
             border: solid 1px #008080;
@@ -18,14 +22,17 @@
 		}
 	function init(){
 		var arqSele = document.getElementById('arqAlvo');
+		// Instancia um leitor de arquivo
 		var fileReader = new FileReader();
 		var rel = null;
 		var S = "";
+		// Evento que detecta se o arquivo foi TOTALMENTE carregado
 		fileReader.onload = function (e) {
 			var fileContents = document.getElementById('conteudo');
 			S += fileReader.result;
 			rel.innerHTML = S;
 			}
+		// Evento do input type file
 		arqSele.addEventListener('change', function (e) {
 			var arquivo = arqSele.files[0];
 			rel = getTag("conteudo");
@@ -35,7 +42,7 @@
 			// Lê, efetivamente, o conteúdo do arquivo
 			fileReader.readAsText(arquivo);
 			// Apresenta todas as informações
-			
+			// no evento fileReader.onload
 			
 			});
 		}
