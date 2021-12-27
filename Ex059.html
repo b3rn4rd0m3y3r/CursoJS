@@ -1,0 +1,136 @@
+<html>
+<head>
+	<title>N/A</title>
+	<meta charset="iso-8859-1"/>
+	<meta name="author" content="Bernardo Meyer">
+	<meta name="description" content="Detectando texto selecionado em Textarea. Exibindo, paralelamente, o resultado em IFRAME">
+	<meta name="keywords" content="sites, web, desenvolvimento, jscript, javascript">
+	<style>
+		BODY {font-family: Verdana; 
+			font-size: 28px;}
+		TEXTAREA {
+			font-family: Verdana; 
+			font-size: 28px;
+			}
+		BUTTON {height: 32px;}
+		BUTTON.big {font-size: 18px;}
+		IFRAME {
+			float: left;
+			}
+		DIV#geral {display: table-row;}
+		DIV#geral DIV {display: table-cell; position:relative;float: left;}
+		
+	</style>
+	<link rel="shortcut icon" href="favicon.ico" />
+	<script>
+		var ESTILOS = "";
+		function fillTitle(){
+			// Descrição da página - document.head
+			var descri = document.head.querySelector("meta[name=description]");
+			getTag("titulo").innerText = descri.content;
+			// Nome da script - window.location - split
+			var path = window. location. pathname;
+			var arrPath = path. split("/");
+			var page = arrPath. pop();
+			document.title = page;			
+			}
+		function getTag(nomeId){
+			return document.getElementById(nomeId);
+			}
+		function mostra(nomeId){
+			getTag(nomeId).style.display = "block";
+			}
+		function esconde(nomeId){
+			event.stopPropagation();
+			getTag(nomeId).style.display = "none";
+			}
+		function clicDiv(valor){
+			event.stopPropagation();
+			var retang = valor;
+			var aviso = getTag("aviso");
+			aviso.innerText = "Retângulo "+retang;
+			mostra("quadro");
+			return; 
+			}
+		function clickBody(evt){
+			alert('Você clicou na página do navegador.');
+			}
+		function getSele(){
+			var el = getTag("area1");
+			var el_ini = el.selectionStart;
+			var el_fim = el.selectionEnd;
+			console.log("selecionou de "+el_ini+" até "+el_fim);
+			el.setSelectionRange(el_ini, el_fim);
+			console.log((el.value).substr(el_ini,el_fim-el_ini));
+			getTag("ini").value = el_ini;
+			getTag("fim").value = el_fim;
+			return;
+			};			
+		function cerca(pTag){
+			var ini = parseInt(getTag("ini").value);
+			var fim = parseInt(getTag("fim").value);
+			var texto = getTag("area1").value;
+			var tam = texto.length;
+			getTag("tam").value = tam;
+			var newTexto = "";
+			newTexto = newTexto.concat(texto.substr(0,ini));
+			newTexto = newTexto.concat("<"+pTag+">");
+			newTexto = newTexto.concat(texto.substr(ini,fim-ini));
+			newTexto = newTexto.concat("</"+pTag+">");
+			newTexto = newTexto.concat(texto.substr(fim,tam-fim-1));
+			getTag("area1").value = newTexto;
+			// Atualiza IFrame
+			docFrame(getTag("area1"));
+			}
+		function docFrame(obj){
+			// Folha CSS
+			 let sty = document.createElement("style");
+			sty.innerText = ESTILOS;
+			var headIframe = getTag("frame1").contentDocument.head;
+			// Injeta estilo no IFRAME
+
+			headIframe.appendChild(sty);
+
+			// Conteudo
+			var txtHtm = obj.value;
+			var f = getTag("frame1");
+			var d = f.contentDocument;
+			var b = d.body;
+			b.innerHTML = txtHtm;
+
+			f.focus();
+			}
+		function init(){
+			fillTitle();
+			ESTILOS = document.querySelector("style");
+			var S = "";
+			var colecao = ESTILOS.sheet.rules;
+			for( item in colecao ) {
+				if( colecao[item].cssText ){
+					S += colecao[item].cssText + " ";
+					}
+				};
+			ESTILOS = S;
+			}
+	</script>
+</head>
+<body onload="init();">
+	<h1 id="titulo">&nbsp;</h1>
+	<div id="geral">
+		<div id="main">
+			<nav style="float: clear;">
+				<button class=big onclick="cerca('b');">N</button>
+				<button onclick="cerca('div');">DIV</button>
+				<button class=big onclick="cerca('p');">P</button>
+			</nav>
+			<textarea id="area1" cols=40 rows=10 onselect="getSele();" onchange="docFrame(this);">
+			
+			</textarea><br>
+			<input id="ini" size=4>&rarr;<input id="fim" size=4>Tamanho:<input id="tam" size=4>
+		</div>
+		<div id="tela">
+
+		<iframe id="frame1" height="380px" width="500px"></iframe></div>
+	</div>
+</body>
+</html>

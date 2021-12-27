@@ -1,0 +1,74 @@
+<html>
+<head>
+	<title>N/A</title>
+	<meta charset="iso-8859-1"/>
+	<meta name="author" content="Bernardo Meyer">
+	<meta name="description" content="Template de página no formato JSON">
+	<meta name="keywords" content="sites, web, desenvolvimento, jscript, javascript">
+	<style>
+		BODY {
+			font-family: Verdana; 
+			font-size: 20px;
+			}
+		DIV.esq {float: left;}
+
+		HEADER#main {
+			display: table-row;
+			}
+		H1.tit {padding: 0px;display: table-cell; text-align: center;padding-left: 20%;width: 94%;}
+		IMG {display: table-cell;}
+
+	</style>
+	<link rel="shortcut icon" href="favicon.ico" />
+	<script>
+		function fillTitle(){
+			// Descrição da página - document.head
+			var descri = document.head.querySelector("meta[name=description]");
+			// Nome da script - window.location - split
+			var path = window. location. pathname;
+			var arrPath = path. split("/");
+			var page = arrPath. pop();
+			document.title = page;			
+			}
+		function getTag(nomeId){
+			return document.getElementById(nomeId);
+			}
+		function mostra(nomeId){
+			getTag(nomeId).style.display = "block";
+			}
+		function esconde(nomeId){
+			event.stopPropagation();
+			getTag(nomeId).style.display = "none";
+			}
+		function init(){
+			fillTitle();
+			// Vamos abrir este array na console
+			var Site = {
+				"Logo": { 'Nome': 'img/Comercio.jpg','Largura':'100','Altura': '80'},
+				"Titulo": { 'Titulo': 'Site de Vendas','Cor':'white','CorFundo':'red'}
+				}; // Era um array sem Key (Chave)
+			console.log(Site);
+			var logo = Site["Logo"]; 
+			var titulo = Site["Titulo"]; 
+			console.log(logo);
+			var TEMPLATE_TOPO ="<img style=\"width:LARGURApx;height:ALTURApx;margin-top:6px;\" src=\"NOME\"><h1 class=tit  style=\"height:ALTURApx;background-color:CORFUNDO;color:COR\">TITULO</h1>";
+			TEMPLATE_TOPO = TEMPLATE_TOPO.replace("LARGURA", logo.Largura);
+			TEMPLATE_TOPO = TEMPLATE_TOPO.replace(/ALTURA/g, logo.Altura);
+			TEMPLATE_TOPO = TEMPLATE_TOPO.replace("NOME", logo.Nome);
+			
+			TEMPLATE_TOPO = TEMPLATE_TOPO.replace("CORFUNDO", titulo.CorFundo);
+			TEMPLATE_TOPO = TEMPLATE_TOPO.replace("COR", titulo.Cor);
+			TEMPLATE_TOPO = TEMPLATE_TOPO.replace("TITULO", titulo.Titulo);
+			
+			getTag("main").innerHTML = TEMPLATE_TOPO;
+			getTag("main").style.backgroundColor = titulo.CorFundo;
+			}
+	</script>
+</head>
+<body onload="init();">
+	<header id="main">
+	
+
+	</header>
+</body>
+</html>

@@ -1,0 +1,182 @@
+<html>
+<head>
+	<title>N/A</title>
+	<meta charset="iso-8859-1"/>
+	<meta name="author" content="Bernardo Meyer">
+	<meta name="description" content="Criando os estilos para o interior do IFRAME">
+	<meta name="keywords" content="sites, web, desenvolvimento, jscript, javascript">
+	<style>
+		BODY.frame {
+			font-family: Verdana; 
+			font-size: 28px;
+			}	
+		BODY {
+			font-family: Verdana; 
+			font-size: 18px;
+			}
+		B.frame {color:red;}
+		BUTTON {
+			background: darkgreen;
+			border: solid 1px green;
+			border-radius: 6px;
+			color:white;
+			height: 33px; 
+			vertical-align: top;
+			width: 35px;
+			}
+		BUTTON.big {font-size: 18px;height: 32px;}
+		DIV#geral {display: table-row;background: #363636;}
+		DIV#geral DIV {display: table-cell; position:relative;float: left;}
+		DIV#tela {padding-top: 30px;}
+		DIV#painel {background: lightgrey;margin: 6px;}
+		H1 {color: DarkOliveGreen; text-shadow: 1px 1px gray;}
+		IFRAME {
+			background: lightgrey;
+			float: left;
+			margin-top: 2px;
+			}
+		INPUT {width: 40px; color: DarkOliveGreen;}
+		LABEL { color: darkgreen; }
+		TEXTAREA {
+			font-family: Verdana; 
+			font-size: 28px;
+			}
+	</style>
+	<link rel="shortcut icon" href="favicon.ico" />
+	<script>
+		var ESTILOS = "";
+		function fillTitle(){
+			// Descrição da página - document.head
+			var descri = document.head.querySelector("meta[name=description]");
+			getTag("titulo").innerText = descri.content;
+			// Nome da script - window.location - split
+			var path = window. location. pathname;
+			var arrPath = path. split("/");
+			var page = arrPath. pop();
+			document.title = page;			
+			}
+		function getTag(nomeId){
+			return document.getElementById(nomeId);
+			}
+		function mostra(nomeId){
+			getTag(nomeId).style.display = "block";
+			}
+		function esconde(nomeId){
+			event.stopPropagation();
+			getTag(nomeId).style.display = "none";
+			}
+		function clicDiv(valor){
+			event.stopPropagation();
+			var retang = valor;
+			var aviso = getTag("aviso");
+			aviso.innerText = "Retângulo "+retang;
+			mostra("quadro");
+			return; 
+			}
+		function clickBody(evt){
+			alert('Você clicou na página do navegador.');
+			}
+		function getSele(){
+			var el = getTag("area1");
+			var el_ini = el.selectionStart;
+			var el_fim = el.selectionEnd;
+			console.log("selecionou de "+el_ini+" até "+el_fim);
+			el.setSelectionRange(el_ini, el_fim);
+			console.log((el.value).substr(el_ini,el_fim-el_ini));
+			getTag("ini").value = el_ini;
+			getTag("fim").value = el_fim;
+			return;
+			};			
+		function cerca(pTag){
+			var ini = parseInt(getTag("ini").value);
+			var fim = parseInt(getTag("fim").value);
+			var texto = getTag("area1").value;
+			var tam = texto.length;
+			getTag("tam").value = tam;
+			var newTexto = "";
+			newTexto = newTexto.concat(texto.substr(0,ini));
+			newTexto = newTexto.concat("<"+pTag+">");
+			newTexto = newTexto.concat(texto.substr(ini,fim-ini));
+			newTexto = newTexto.concat("</"+pTag+">");
+			newTexto = newTexto.concat(texto.substr(fim,tam-fim-1));
+			getTag("area1").value = newTexto;
+			// Atualiza IFrame
+			docFrame(getTag("area1"));
+			}
+		function injectStyleSheet(){
+			// Folha CSS
+			 let sty = document.createElement("style");
+			sty.innerText = ESTILOS;
+			var headIframe = getTag("frame1").contentDocument.head;
+			// Se os estilos não tiverem sido transferidos, injeta no IFRAME
+			if( headIframe.innerText == "" ){
+				headIframe.appendChild(sty);
+				}			
+			}
+		function docFrame(obj){
+			// Folha CSS
+			injectStyleSheet();
+			//getTag("frame1").contentDocument.head.appendChild(sty);
+			// Conteudo
+			var txtHtm = obj.value;
+			var f = getTag("frame1");
+			var d = f.contentDocument;
+			var b = d.body;
+			b.innerHTML = txtHtm;
+
+			f.focus();
+			}
+		// Função executada no ONLOAD da página
+		function init(){
+			fillTitle();
+			ESTILOS = document.querySelector("style");
+			var S = "";
+			var Regra = "";
+			var TAG = "";
+			var colecao = ESTILOS.sheet.rules;
+			var arr = null;
+			var arrFmt = null;
+			for( item in colecao ) {
+				if( colecao[item].cssText ){
+					Regra = colecao[item].cssText;
+					arr = Regra.split(".");
+					TAG = arr[0];
+					if( arr[1] ){
+						arrFmt = arr[1].split("{");
+						arr = arr[1].split(" ");
+						if( arr[0].substr(0,5) == "frame" ){
+							Regra = TAG + " {" + arrFmt[1];
+							S +=Regra + " ";
+							}
+						}
+					}
+				};
+			ESTILOS = S;
+			}
+	</script>
+</head>
+<body onload="init();">
+	<h1 id="titulo">&nbsp;</h1>
+	<div id="geral">
+		<div id="main">
+			<nav style="float: clear;">
+				<button onclick="cerca('h1');">H1</button>
+				<button onclick="cerca('h2');">H2</button>
+				<button onclick="cerca('h3');">H3</button>
+				<button class=big onclick="cerca('i');">I</button>
+				<button class=big onclick="cerca('b');">N</button>
+				<button onclick="cerca('div');">DIV</button>
+				<button class=big onclick="cerca('p');">P</button>
+			</nav>
+			<textarea id="area1" cols=40 rows=11 onselect="getSele();" onchange="docFrame(this);" onpaste="injectStyleSheet();">
+			
+			</textarea><br>
+			<div id="painel">
+				<label>Seleção: </label><input id="ini" size=4>&rarr;<input id="fim" size=4>
+				<label>Tamanho:</label><input id="tam" size=4>
+			</div>
+		</div>
+		<div id="tela"><iframe id="frame1" height="374px" width="600px"></iframe></div>
+	</div>
+</body>
+</html>

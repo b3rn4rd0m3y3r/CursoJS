@@ -1,0 +1,73 @@
+<html>
+<head>
+	<title>N/A</title>
+	<meta charset="iso-8859-1"/>
+	<meta name="author" content="Bernardo Meyer">
+	<meta name="description" content="Detectando texto selecionado em Textarea. SelectionStar, SelectionEnd e setSelectionRange">
+	<meta name="keywords" content="sites, web, desenvolvimento, jscript, javascript">
+	<style>
+		TEXTAREA {
+			font-family: Verdana; 
+			font-size: 28px;
+			}
+
+	</style>
+	<link rel="shortcut icon" href="favicon.ico" />
+	<script>
+		function fillTitle(){
+			// Descrição da página - document.head
+			var descri = document.head.querySelector("meta[name=description]");
+			getTag("titulo").innerText = descri.content;
+			// Nome da script - window.location - split
+			var path = window. location. pathname;
+			var arrPath = path. split("/");
+			var page = arrPath. pop();
+			document.title = page;			
+			}
+		function getTag(nomeId){
+			return document.getElementById(nomeId);
+			}
+		function mostra(nomeId){
+			getTag(nomeId).style.display = "block";
+			}
+		function esconde(nomeId){
+			event.stopPropagation();
+			getTag(nomeId).style.display = "none";
+			}
+		function clicDiv(valor){
+			event.stopPropagation();
+			var retang = valor;
+			var aviso = getTag("aviso");
+			aviso.innerText = "Retângulo "+retang;
+			mostra("quadro");
+			return; 
+			}
+		function clickBody(evt){
+			alert('Você clicou na página do navegador.');
+			}
+		function getSele(){
+			var el = getTag("area1");
+			var el_ini = el.selectionStart;
+			var el_fim = el.selectionEnd;
+			console.log("selecionou de "+el_ini+" até "+el_fim);
+			el.setSelectionRange(el_ini, el_fim);
+			console.log((el.value).substr(el_ini,el_fim-el_ini));
+			return "";
+			};			
+		function init(){
+			fillTitle();
+			}
+	</script>
+</head>
+<body onload="init();">
+	<h1 id="titulo">&nbsp;</h1>
+
+	<div id="main">
+		<textarea id="area1" cols=80 rows=10 onselect="getSele();">
+		
+		</textarea>
+
+	</div>
+
+</body>
+</html>
