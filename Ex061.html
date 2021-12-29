@@ -24,11 +24,33 @@
 			vertical-align: top;
 			width: 35px;
 			}
+		BUTTON.action {border: solid 2px turquoise;width: 60px;}
 		BUTTON.big {font-size: 18px;height: 32px;}
 		DIV#geral {display: table-row;background: #363636;}
 		DIV#geral DIV {display: table-cell; position:relative;float: left;}
-		DIV#tela {padding-top: 30px;}
 		DIV#painel {background: lightgrey;margin: 6px;}
+		DIV#tela {padding-top: 30px;}
+		DIV#tools {
+			background-color: lightcyan;
+			border: solid 1px powderblue;
+			border-radius: 6px;
+			color: teal;
+			display: none;
+			left: 350px;
+			position: absolute;
+			top: -500px;
+			width: 400px;			
+			}
+		DIV#tools  TABLE {
+			margin: 0px;
+			padding: 0px;
+			width: 100%;
+			}
+		DIV#tools  TABLE  CAPTION{
+			color: darkcyan;
+			font-size: 24px;
+			font-weight: bold;
+			}				
 		H1 {color: DarkOliveGreen; text-shadow: 1px 1px gray;}
 		IFRAME {
 			background: lightgrey;
@@ -88,14 +110,24 @@
 			return;
 			};			
 		function cerca(pTag){
-			var ini = parseInt(getTag("ini").value);
-			var fim = parseInt(getTag("fim").value);
+
 			var texto = getTag("area1").value;
 			var tam = texto.length;
+			var ini = parseInt(getTag("ini").value);
+			var fim = parseInt(getTag("fim").value);
+			// CORREÇÃO DO FIM, caso o usuário selecione além do fim
+			if( fim > tam - 1){
+				fim = tam - 1;
+				}
 			getTag("tam").value = tam;
 			var newTexto = "";
 			newTexto = newTexto.concat(texto.substr(0,ini));
-			newTexto = newTexto.concat("<"+pTag+">");
+			if( pTag == "cor" ){
+				newTexto = newTexto.concat("<font color="+ getTag("paleta").value +">");
+				pTag = "font";
+				} else {
+				newTexto = newTexto.concat("<"+pTag+">");
+				}
 			newTexto = newTexto.concat(texto.substr(ini,fim-ini));
 			newTexto = newTexto.concat("</"+pTag+">");
 			newTexto = newTexto.concat(texto.substr(fim,tam-fim-1));
@@ -122,7 +154,7 @@
 				var b = d.body;
 				b.innerHTML = txtHtm;
 				f.focus();
-				}, 2000);
+				}, 1500);
 			}
 		function docFrame(obj){
 			// Folha CSS
@@ -131,7 +163,27 @@
 			// Conteudo
 			frameRefresh(obj);
 			}
-		// Função executada no ONLOAD da página
+		// CUIDADO: estilo é o formato sem traço ("-")
+		// Configura o estilo de uma TAG/Seletor de TAG
+		function setTagStyle(obj, estilo, valor){
+			var cmd = "document.querySelector('"+obj+"').style."+estilo+" = "+valor;
+			eval(cmd);
+			return; 
+			}
+		// Exibe o menu de contexto geral na posição do clique do mouse
+		function contexto(e){
+			console.log("Contexto");
+			var source = e.target || e.srcElement;
+			console.log(source);
+			mostra("tools");
+			setTagStyle("DIV#tools", "top", e.clientY);
+			setTagStyle("DIV#tools", "left", e.screenX);
+			e.preventDefault();
+			e.stopPropagation();
+			}
+		/*
+			Função executada no ONLOAD da página
+		*/
 		function init(){
 			fillTitle();
 			ESTILOS = document.querySelector("style");
@@ -158,6 +210,16 @@
 				};
 			ESTILOS = S;
 			}
+		function styleTag(){
+			var INI = getTag("ini").value;
+			var FIM = getTag("fim").value;
+			var texto = getTag("area1").value;
+			var Soma = ( texto.substr(INI,1) == "<" ) + ( texto.substr(FIM-1,1) == ">" );
+			if( !(Soma == 2 &&  texto.substr(parseInt(INI)+1,1) != "/") ) {
+				alert("Selecione corretamente uma tag, do sinal '<' até o '>' ");
+				return;
+				}
+			}
 	</script>
 </head>
 <body onload="init();">
@@ -172,8 +234,10 @@
 				<button class=big onclick="cerca('b');">N</button>
 				<button onclick="cerca('div');">DIV</button>
 				<button class=big onclick="cerca('p');">P</button>
+				<button onclick="cerca('cor');">Cor</button>
+				<input type=color id=paleta>
 			</nav>
-			<textarea id="area1" cols=40 rows=11 onselect="getSele();" onchange="docFrame(this);" onpaste="frameRefresh(this);">
+			<textarea id="area1" cols=45 rows=11 oncontextmenu="contexto(event);" onselect="getSele();" onchange="docFrame(this);" onpaste="frameRefresh(this);">
 			
 			</textarea><br>
 			<div id="painel">
@@ -181,7 +245,45 @@
 				<label>Tamanho:</label><input id="tam" size=4>
 			</div>
 		</div>
-		<div id="tela"><iframe id="frame1" height="374px" width="600px"></iframe></div>
+		<div id="tela"><iframe id="frame1" height="374px" width="700px"></iframe></div>
+	</div>
+	<div id="tools">
+		<table>
+			<caption>FUNÇÕES DE CÉLULA</caption><br>
+			<tbody>
+				<tr>
+					<td><label>Alinh.Texto: </label></td>
+					<td>
+						<select id="alin">
+							<option value="N/A">[Escolha]
+							<option value="left">Esquerda
+							<option value="center">Centro
+							<option value="right">Direita
+							<option value="justify">Justificado
+						</select>
+					</td>
+					<td>
+						<label>Tam.Fonte: </label>
+					</td>
+					<td>
+						<select id="tamft">
+							<option value="N/A">[Escolha]
+							<option value="12">12
+							<option value="14">14
+							<option value="16">16
+							<option value="18">18
+							<option value="20">20
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td colspan=4>&nbsp;</td>
+				</tr>
+				<tr>
+					<td colspan=4 align=center><button class=action onclick="styleTag();">Estiliza</button></td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
 </body>
 </html>
