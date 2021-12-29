@@ -211,14 +211,28 @@
 			ESTILOS = S;
 			}
 		function styleTag(){
-			var INI = getTag("ini").value;
-			var FIM = getTag("fim").value;
+			var INI = parseInt(getTag("ini").value);
+			var FIM = parseInt(getTag("fim").value);
+			FIM--;
 			var texto = getTag("area1").value;
-			var Soma = ( texto.substr(INI,1) == "<" ) + ( texto.substr(FIM-1,1) == ">" );
-			if( !(Soma == 2 &&  texto.substr(parseInt(INI)+1,1) != "/") ) {
+			var Soma = ( texto.substr(INI,1) == "<" ) + ( texto.substr(FIM,1) == ">" );
+			if( !(Soma == 2 &&  texto.substr(INI+1,1) != "/") ) {
 				alert("Selecione corretamente uma tag, do sinal '<' até o '>' ");
 				return;
 				}
+			var texto = getTag("area1").value;
+			var TAM = texto.length;
+			var pTag = texto.substr(INI+1,FIM-INI-1);
+			// Faz a substituição
+			var newTexto = "";
+			newTexto = newTexto.concat(texto.substr(1,FIM-INI-2));
+			newTexto = newTexto.concat("<"+pTag+ " style=\"");
+			newTexto = newTexto.concat("text-align: "+getTag("alin").value+";");
+			newTexto = newTexto.concat("font-size: "+getTag("tamft").value+";");
+			newTexto = newTexto.concat("\">");
+			// newTexto = newTexto.concat("</"+pTag+">");
+			newTexto = newTexto.concat(texto.substr(FIM+1,TAM-FIM-1));
+			getTag("area1").value = newTexto;			
 			}
 	</script>
 </head>
