@@ -39,7 +39,7 @@
 			left: 350px;
 			position: absolute;
 			top: -500px;
-			width: 400px;			
+			width: 500px;			
 			}
 		DIV#tools  TABLE {
 			margin: 0px;
@@ -223,16 +223,31 @@
 			var texto = getTag("area1").value;
 			var TAM = texto.length;
 			var pTag = texto.substr(INI+1,FIM-INI-1);
+			var arr = pTag.split(" ");
+			pTag = arr[0];
 			// Faz a substituição
 			var newTexto = "";
-			newTexto = newTexto.concat(texto.substr(1,FIM-INI-2));
+			newTexto = newTexto.concat(texto.substr(0,INI));
+			//newTexto = newTexto.concat(texto.substr(INI,FIM-INI-2));
 			newTexto = newTexto.concat("<"+pTag+ " style=\"");
-			newTexto = newTexto.concat("text-align: "+getTag("alin").value+";");
-			newTexto = newTexto.concat("font-size: "+getTag("tamft").value+";");
+			if( getTag("alin").value != "N/A" ){
+				newTexto = newTexto.concat("text-align: "+getTag("alin").value+";");
+				}
+			if( getTag("tamft").value != "N/A" ){
+				newTexto = newTexto.concat("font-size: "+getTag("tamft").value+";");
+				}
+			if( getTag("ftFam").value != "N/A" ){
+				newTexto = newTexto.concat("font-family: "+getTag("ftFam").value+";");
+				}
+			if( getTag("altLinha").value != "N/A" ){
+				newTexto = newTexto.concat("line-height: "+getTag("altLinha").value+";");
+				}
 			newTexto = newTexto.concat("\">");
 			// newTexto = newTexto.concat("</"+pTag+">");
 			newTexto = newTexto.concat(texto.substr(FIM+1,TAM-FIM-1));
-			getTag("area1").value = newTexto;			
+			getTag("area1").value = newTexto;
+			// Conteudo
+			frameRefresh(getTag("area1"));			
 			}
 	</script>
 </head>
@@ -263,7 +278,7 @@
 	</div>
 	<div id="tools">
 		<table>
-			<caption>FUNÇÕES DE CÉLULA</caption><br>
+			<caption>FUNÇÕES DE ESTILO</caption><br>
 			<tbody>
 				<tr>
 					<td><label>Alinh.Texto: </label></td>
@@ -282,14 +297,51 @@
 					<td>
 						<select id="tamft">
 							<option value="N/A">[Escolha]
-							<option value="12">12
-							<option value="14">14
-							<option value="16">16
-							<option value="18">18
-							<option value="20">20
+							<option value="12px">12
+							<option value="14px">14
+							<option value="16px">16
+							<option value="18px">18
+							<option value="20px">20
+							<option value="22px">22
+							<option value="24px">24
+							<option value="26px">26
+							<option value="28px">28
+							<option value="32px">32
 						</select>
 					</td>
 				</tr>
+				<tr>
+					<td><label>Tipo Fonte: </label></td>
+					<td>
+						<select id="ftFam">
+							<option value="N/A">[Escolha]
+							<option value="Arial">Arial
+							<option value="Franklin Gothic Medium">Frank.Got.Medium
+							<option value="Helvetica">Helvetica
+							<option value="Lucida Sans">Lucida Sans
+							<option value="Trebuchet MS">Trebuchet
+							<option value="Verdana">Verdana
+						</select>
+					</td>
+					<td>
+						<label>Entrelinha: </label>
+					</td>
+					<td>
+						<select id="altLinha">
+							<option value="N/A">[Escolha]
+							<option value="110%">110%
+							<option value="120%">120%
+							<option value="130%">130%
+							<option value="140%">140%
+							<option value="150%">150%
+							<option value="160%">160%
+							<option value="170%">170%
+							<option value="180%">180%
+							<option value="190%">190%
+							<option value="200%">200%
+						</select>
+					</td>
+				</tr>				
 				<tr>
 					<td colspan=4>&nbsp;</td>
 				</tr>
