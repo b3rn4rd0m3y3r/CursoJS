@@ -1,0 +1,130 @@
+<html>
+	<head>
+		<title>Class Essenciais</title>
+		<meta charset="iso-8859-1"/>
+		<meta name="author" content="Bernardo Meyer">
+		<meta name="description" content="Funções essenciais">
+		<meta name="keywords" content="sites, web, desenvolvimento, jscript, javascript">
+		<style>
+			BODY {font-family: Verdana; }
+			DIV {margin-left: 10px;font-size: 26px;}
+			P      {margin-left: 30px; font-size: 20px;}
+		</style>
+		<script>
+			class BMy{
+				constructor(){
+					this.version = "1.0";
+					}
+				// Testa se o conteúdo de uma string é numérico
+				isNumeric(str) {
+					if (typeof str != "string") return false;  
+					return !isNaN(str) && !isNaN(parseFloat(str)) 
+					}
+				// Função right
+				right(txt,NoCars){
+					var tam = txt.length;
+					var ret = NoCars <= tam ? txt.substr(tam-NoCars,NoCars):"";
+					return ret;
+					}
+				// Função left
+				left(txt,NoCars){
+					var tam = txt.length;
+					var ret = NoCars <= tam ? txt.substr(0,NoCars):"";
+					return ret;
+					}
+				// Ajuste de valor inteiro positivo em campo de zeros
+				ZeroField(Valor, NoZeros){
+					const zeros = "0000000000000000";
+					var casas = parseInt(Math.log10(Valor)+1);
+					if( NoZeros < casas ){
+						NoZeros = casas;
+						}
+					return this.right(zeros.concat(Valor),NoZeros);
+					}
+				// Devolve um HTMLElement pelo seu Id
+				getById(nomeId){
+					return document.getElementById(nomeId);
+					}
+				// Devolve um HTMLElement pela sua classe
+				getByClass(classe){
+					return this.getByQry("."+classe);
+					}
+				// Devolve uma coleção de HTMLElement que atende pelo seletor dado
+				getByQry(sele){
+					return document.querySelectorAll(sele);
+					}
+				// Exibe um container pelo Id dado
+				showById(nomeId){
+					event.stopPropagation();
+					this.getById(nomeId).style.display = "block";
+					}
+				// Esconde um container pelo Id dado
+				hideByClass(classe){
+					event.stopPropagation();
+					var lista = this.getByClass(classe);
+					var elem = null;
+					for( no in lista){
+						if( typeof(lista[no]) == "object" ){
+							elem = lista[no];
+							console.log(elem);
+							elem.style.display = "none";
+							}
+						}
+					}
+				// Exibe um container pelo Id dado
+				showByClass(classe){
+					event.stopPropagation();
+					var lista = getByClass(classe);
+					var elem = null;
+					for( no in lista){
+						if( typeof(lista[no]) == "object" ){
+							elem = lista[no];
+							console.log(elem);
+							elem.style.display = "block";
+							}
+						}
+					}
+				// Esconde um container pelo Id dado
+				hideById(nomeId){
+					event.stopPropagation();
+					this.getById(nomeId).style.display = "none";
+					}
+				}
+			// Função init
+			function init(){
+				console.log("Ponto de interrupção para o Dev Tools");
+				var ob = new BMy();
+				console.log('- ob.isNumeric("12345")');
+				console.log(ob.isNumeric("12345"));
+				console.log('- ob.isNumeric("12a45")');
+				console.log(ob.isNumeric("12a45"));
+				console.log('- ob.left("123456789",4)');
+				console.log(ob.left("123456789",4));
+				console.log('- ob.right("123456789",5)');
+				console.log(ob.right("123456789",5));
+				console.log('- ob.ZeroField(66,3)');
+				console.log(ob.ZeroField(66,3));
+				}
+		</script>
+	</head>
+	<body onload="init();">
+		<div id="d01">Div d01
+			<p class="c01">Classe c01</p>
+			<p class="c01">Classe c01</p>
+			<p class="c02">Classe c02</p>
+			<p class="c03">Classe c03</p>
+		</div>
+		<div id="d02">Div d02
+			<p class="c01">Classe c01</p>
+			<p class="c02">Classe c02</p>
+			<p class="c03">Classe c03</p>
+			<p class="c01">Classe c01</p>	
+		</div>
+		<div id="d03">Div d03
+			<p class="c02">Classe c02</p>
+			<p class="c02">Classe c02</p>
+			<p class="c03">Classe c03</p>
+			<p class="c03">Classe c03</p>	
+		</div>
+	</body>
+</html>

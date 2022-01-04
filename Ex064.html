@@ -1,0 +1,54 @@
+<html>
+	<head>
+		<title>Ex064</title>
+		<meta charset="iso-8859-1"/>
+		<meta name="author" content="Bernardo Meyer">
+		<meta name="description" content="Funções essenciais">
+		<meta name="keywords" content="sites, web, desenvolvimento, jscript, javascript">
+		<style>
+			BODY {font-family: Verdana; }
+			DIV {margin-left: 10px;font-size: 26px;}
+			P      {margin-left: 30px; font-size: 20px;}
+		</style>
+		<script src="BMyFrmwk.js">
+		</script>
+		<script>
+			// Função init
+			function init(){
+				console.log("Ponto de interrupção para o Dev Tools");
+				var ob = new BMy();
+				console.log('- ob.isNumeric("12345")');
+				console.log(ob.isNumeric("12345"));
+				console.log('- ob.isNumeric("12a45")');
+				console.log(ob.isNumeric("12a45"));
+				console.log('- ob.left("123456789",4)');
+				console.log(ob.left("123456789",4));
+				console.log('- ob.right("123456789",5)');
+				console.log(ob.right("123456789",5));
+				console.log('- ob.ZeroField(66,3)');
+				console.log(ob.ZeroField(66,3));
+				}
+		</script>
+		
+	</head>
+	<body onload="init();">
+		<div id="d01">Div d01
+			<p class="c01">Classe c01</p>
+			<p class="c01">Classe c01</p>
+			<p class="c02">Classe c02</p>
+			<p class="c03">Classe c03</p>
+		</div>
+		<div id="d02">Div d02
+			<p class="c01">Classe c01</p>
+			<p class="c02">Classe c02</p>
+			<p class="c03">Classe c03</p>
+			<p class="c01">Classe c01</p>	
+		</div>
+		<div id="d03">Div d03
+			<p class="c02">Classe c02</p>
+			<p class="c02">Classe c02</p>
+			<p class="c03">Classe c03</p>
+			<p class="c03">Classe c03</p>	
+		</div>
+	</body>
+</html>	

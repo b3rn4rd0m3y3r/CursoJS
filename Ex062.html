@@ -1,0 +1,114 @@
+<html>
+	<head>
+		<title>Essenciais</title>
+		<meta charset="iso-8859-1"/>
+		<meta name="author" content="Bernardo Meyer">
+		<meta name="description" content="Funções essenciais">
+		<meta name="keywords" content="sites, web, desenvolvimento, jscript, javascript">
+		<style>
+			BODY {font-family: Verdana; }
+			DIV {margin-left: 10px;font-size: 26px;}
+			P      {margin-left: 30px; font-size: 20px;}
+		</style>
+		<script>
+			// Testa se o conteúdo de uma string é numérico
+			function isNumeric(str) {
+				if (typeof str != "string") return false;  
+				return !isNaN(str) && !isNaN(parseFloat(str)) 
+				}
+			// Função right
+			function right(txt,NoCars){
+				var tam = txt.length;
+				var ret = NoCars <= tam ? txt.substr(tam-NoCars,NoCars):"";
+				return ret;
+				}
+			// Função left
+			function left(txt,NoCars){
+				var tam = txt.length;
+				var ret = NoCars <= tam ? txt.substr(0,NoCars):"";
+				return ret;
+				}
+			// Ajuste de valor inteiro positivo em campo de zeros
+			function ZeroField(Valor, NoZeros){
+				const zeros = "0000000000000000";
+				var casas = parseInt(Math.log10(Valor)+1);
+				if( NoZeros < casas ){
+					NoZeros = casas;
+					}
+				return right(zeros.concat(Valor),NoZeros);
+				}
+			// Devolve um HTMLElement pelo seu Id
+			function getById(nomeId){
+				return document.getElementById(nomeId);
+				}
+			// Devolve um HTMLElement pela sua classe
+			function getByClass(classe){
+				return getByQry("."+classe);
+				}
+			// Devolve uma coleção de HTMLElement que atende pelo seletor dado
+			function getByQry(sele){
+				return document.querySelectorAll(sele);
+				}
+			// Exibe um container pelo Id dado
+			function showById(nomeId){
+				event.stopPropagation();
+				getById(nomeId).style.display = "block";
+				}
+			// Esconde um container pelo Id dado
+			function hideByClass(classe){
+				event.stopPropagation();
+				var lista = getByClass(classe);
+				var elem = null;
+				for( no in lista){
+					if( typeof(lista[no]) == "object" ){
+						elem = lista[no];
+						console.log(elem);
+						elem.style.display = "none";
+						}
+					}
+				}
+			// Exibe um container pelo Id dado
+			function showByClass(classe){
+				event.stopPropagation();
+				var lista = getByClass(classe);
+				var elem = null;
+				for( no in lista){
+					if( typeof(lista[no]) == "object" ){
+						elem = lista[no];
+						console.log(elem);
+						elem.style.display = "block";
+						}
+					}
+				}
+			// Esconde um container pelo Id dado
+			function hideById(nomeId){
+				event.stopPropagation();
+				getById(nomeId).style.display = "none";
+				}
+			// Função init
+			function init(){
+				console.log("Ponto de interrupção para o Dev Tools");
+				}
+		</script>
+	</head>
+	<body onload="init();">
+		<div id="d01">Div d01
+			<p class="c01">Classe c01</p>
+			<p class="c01">Classe c01</p>
+			<p class="c02">Classe c02</p>
+			<p class="c03">Classe c03</p>
+		</div>
+		<div id="d02">Div d02
+			<p class="c01">Classe c01</p>
+			<p class="c02">Classe c02</p>
+			<p class="c03">Classe c03</p>
+			<p class="c01">Classe c01</p>	
+		</div>
+		<div id="d03">Div d03
+			<p class="c02">Classe c02</p>
+			<p class="c02">Classe c02</p>
+			<p class="c03">Classe c03</p>
+			<p class="c03">Classe c03</p>	
+		</div>
+	</body>
+</html>
