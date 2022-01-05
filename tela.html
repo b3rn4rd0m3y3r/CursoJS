@@ -1,0 +1,17 @@
+<html>
+	<head>
+	<script>
+		function init(){
+			const message = JSON.stringify({
+			    message: 'Hello from iframe',
+			    date: Date.now(),
+			});
+			window.parent.postMessage(message, '*');
+			}
+
+	</script>
+	</head>
+	<body>
+		<button onclick="init();">Manda</button>
+	</body>
+</html>
