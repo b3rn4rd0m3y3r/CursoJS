@@ -3,11 +3,10 @@
 	<script>
 		function init(){
 			window.addEventListener('message', function (e) {
-			    // Get the sent data
+			    // Obtém os dados enviados
 			    const data = e.data;
 			alert(data);
-			    // If you encode the message in JSON before sending them,
-			    // then decode here
+			    // Descomente para abrir a mensagem em JSON
 			    // const decoded = JSON.parse(data);
 			});
 			}

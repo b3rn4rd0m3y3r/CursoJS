@@ -1,9 +1,10 @@
 <html>
 	<head>
 	<script>
-		function init(){
+		function init(obj){
 			const message = JSON.stringify({
-			    message: 'Hello from iframe',
+			    mensagem: 'Eu vim do iframe',
+			    elemento: obj.tagName,
 			    date: Date.now(),
 			});
 			window.parent.postMessage(message, '*');
@@ -12,6 +13,6 @@
 	</script>
 	</head>
 	<body>
-		<button onclick="init();">Manda</button>
+		<button onclick="init(this);">Manda</button>
 	</body>
 </html>
