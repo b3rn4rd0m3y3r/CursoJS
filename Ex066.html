@@ -1,0 +1,29 @@
+<html>
+	<head>
+		<title>Ex065</title>
+		<meta charset="iso-8859-1"/>
+		<meta name="author" content="Bernardo Meyer">
+		<meta name="description" content="Apresentação de conteúdo">
+		<meta name="keywords" content="sites, web, desenvolvimento, jscript, javascript">
+		<style>
+			BODY {font-family: Verdana; }
+			DIV {margin-left: 10px;font-size: 26px;}
+			P.av  {position: relative;top:30px;left: -800px; font-size: 20px;display:none;}
+		</style>
+		<script src="Tools.js">
+		</script>
+		<script>
+			var ArrPrgfs = ['P#p01','P#p02','P#p03','P#p04','P#p05'];
+			function init(){
+				proximAviso(ArrPrgfs);
+				}
+		</script>
+	</head>
+	<body onload="init();">
+		<p class="av" id="p01">Primeiro Aviso</p>
+		<p class="av" id="p02">Segundo Aviso</p>
+		<p class="av" id="p03">Terceiro Aviso</p>
+		<p class="av" id="p04">Quarto Aviso</p>
+		<p class="av" id="p05">Quinto Aviso</p>
+	</body>
+</html>
