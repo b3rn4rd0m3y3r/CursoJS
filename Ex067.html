@@ -1,0 +1,51 @@
+<html>
+	<head>
+		<title>Ex067</title>
+		<meta charset="iso-8859-1"/>
+		<meta name="author" content="Bernardo Meyer">
+		<meta name="description" content="Classes Javascript">
+		<meta name="keywords" content="sites, web, desenvolvimento, jscript, javascript">
+		<style>
+			BODY {font-family: Verdana; }
+		</style>
+		<script src="Tools.js">
+		</script>
+		<script>
+			function geTag(obj){
+				return document.querySelector(obj);
+				}
+			// DEFINIÇÃO DA NOSSA CLASSE
+			class Container {
+				constructor(ALT, LARG, COR) {
+					this.ALT = ALT; 
+					this.LARG = LARG;
+					this.COR = COR;
+					}
+				//Getter
+				get area() {
+					return this.calcArea();
+					}
+				//Getter
+				get html() {
+					var S = "<div style=\"background-color: " + this.COR;
+					S += ";width: " + this.LARG + "px; height: " + this.ALT + "px;\">";
+					S += "&nbsp;</div>";
+					return S;
+					}
+				//Função interna
+				calcArea() {
+					return this.ALT * this.LARG;
+					}
+				}			
+			// Função chamada no evento onload do corpo do HTML
+			function init(){
+				var co1 = new Container(200, 400, "#880000" );
+				geTag("#main").innerHTML = co1.html;
+				}
+		</script>
+	</head>
+	<body onload="init();">
+		<section id="main">
+		</section>
+	</body>
+</html>
