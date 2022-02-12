@@ -1,0 +1,58 @@
+<html>
+	<head>
+		<title>Ex068a</title>
+		<meta charset="iso-8859-1"/>
+		<meta name="author" content="Bernardo Meyer">
+		<meta name="description" content="Classes Javascript. Componente Grid 1.">
+		<meta name="keywords" content="sites, web, desenvolvimento, jscript, javascript">
+		<style>
+			BODY {font-family: Verdana; }
+		</style>
+		<script src="Tools.js">
+		</script>
+		<script>
+			//function geTag(obj){
+			//	return document.querySelector(obj);
+			//	}
+			// DEFINIÇÃO DA NOSSA CLASSE
+			class Grid {
+				constructor(NOME, LINHAS, COLUNAS) {
+					this.NOME = NOME; 
+					this.LINHAS = LINHAS; 
+					this.COLUNAS = COLUNAS;
+					}
+				//Getter
+				get numCells(){
+					return this.calcCelulas;
+					}
+				//Getter
+				get html() {
+					var obj = document.createElement('table');
+					var line = null;
+					var lin = 0;
+					for(lin=0;lin<this.LINHAS;lin++){
+						line = obj.insertRow(lin);
+						}
+					return obj;
+					}
+				//Função interna
+				calcCelulas() {
+					return this.LINHAS * this.COLUNAS;
+					}
+				geTag(ob){
+					return document.querySelector(ob);
+					}
+				}			
+			// Função chamada no evento onload do corpo do HTML
+			function init(){
+				var tb1 = new Grid("Regs",6,8);
+				console.log(tb1.html);
+				//geTag("#main").innerHTML = co1.html;
+				}
+		</script>
+	</head>
+	<body onload="init();">
+		<section id="main">
+		</section>
+	</body>
+</html>
