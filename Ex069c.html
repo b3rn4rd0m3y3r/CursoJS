@@ -1,0 +1,112 @@
+<html>
+	<head>
+		<title>Ex069c</title>
+		<meta charset="iso-8859-1"/>
+		<meta name="author" content="Bernardo Meyer">
+		<meta name="description" content="Classes Javascript. Componente Grid 2.">
+		<meta name="keywords" content="sites, web, desenvolvimento, jscript, javascript">
+		<style>
+			BODY {font-family: Verdana; }
+			TABLE > TBODY > TR > TD {color: #CC0000;}
+			TD.tit {background-color: #00AA88;color:white;}
+		</style>
+		<script src="Tools.js">
+		</script>
+		<script>
+			// Instância da tabela é feita GLOBAL
+			var tb1 = null;
+			function geTag(obj){
+				return document.querySelector(obj);
+				}
+			// DEFINIÇÃO DA NOSSA CLASSE
+			class Grid {
+				constructor(NOME, LINHAS, COLUNAS) {
+					this.NOME = NOME; 
+					this.LINHAS = LINHAS; 
+					this.COLUNAS = COLUNAS;
+					}
+				//poe valor na célula
+				celula(linha, coluna, valor){
+					var id = this.coord2id(linha, coluna); // NEW
+					var sele = "TD#"+id;
+					geTag(sele).innerText = valor;
+					}
+				//Get com parametros não pode usar getter
+				vrCelula(linha, coluna){
+					var id = this.coord2id(linha, coluna); // NEW
+					var sele = "TD#"+id;
+					return geTag(sele).innerText;
+					}
+				//Getter
+				get numCells(){
+					return this.calcCelulas;
+					}
+				//Getter
+				get html() {
+					var obj = document.createElement('table');
+					var lin = 0;
+					var col = 0;
+					var line = null;
+					var colu = null;
+					var c = 65;
+					// Títulos (NEW)
+					obj = this.addLine(obj, lin);
+					line = obj.insertRow(lin);
+					for(col=0;col<this.COLUNAS;col++){
+						colu = line.insertCell(col);
+						colu.setAttribute("align","center");
+						colu.setAttribute("class","tit");
+						colu.innerText = String.fromCharCode(c+col);
+						}
+					// Demais linhas
+					for(lin=1;lin<this.LINHAS;lin++){
+						obj = this.addLine(obj, lin);
+						}
+					obj.setAttribute("border",1);
+					obj.setAttribute("cellspacing",0);
+					obj.setAttribute("cellpadding",4);
+					return obj;
+					}
+				//Funções internas
+				// NEW - Converte coordenada para o Id padronizado "tnnncmmm"
+				coord2id(linha, coluna){
+					return "t"+("000"+String(linha).trim()).substr(-3)+"c"+("000"+(String(coluna).trim())).substr(-3)
+					}
+				// Acrescenta linha em branco na Tabela
+				addLine(obj1, linha){
+					var line = null;
+					var colu = null;
+					var col = 0;					
+					line = obj1.insertRow(linha);
+					// Acrescenta Colunas nesta Linha da Tabela
+					for(col=0;col<this.COLUNAS;col++){
+						colu = line.insertCell(col);
+						colu.innerText = "( "+linha+" , "+col+" )";
+						colu.id = this.coord2id(linha, col); // NEW
+						// NEW - Célula é tornada editável
+						colu.setAttribute("contenteditable",true);
+						}
+					return obj1;
+					}
+				calcCelulas() {
+					return this.LINHAS * this.COLUNAS;
+					}
+				geTag(ob){
+					return document.querySelector(ob);
+					}
+				}			
+			// Função chamada no evento onload do corpo do HTML
+			function init(){
+				tb1 = new Grid("Regs",6,8);
+				console.log(tb1.html);
+				geTag("#main").appendChild(tb1.html);
+				tb1.celula(2,3,"xxxxx");
+				console.log(tb1.vrCelula(2,3));
+				}
+		</script>
+	</head>
+	<body onload="init();">
+		<section id="main">
+		</section>
+	</body>
+</html>

@@ -1,0 +1,89 @@
+<html>
+	<head>
+		<title>Ex069a</title>
+		<meta charset="iso-8859-1"/>
+		<meta name="author" content="Bernardo Meyer">
+		<meta name="description" content="Classes Javascript. Componente Grid 2.">
+		<meta name="keywords" content="sites, web, desenvolvimento, jscript, javascript">
+		<style>
+			BODY {font-family: Verdana; }
+			TABLE > TBODY > TR > TD {color: #CC0000;}
+		</style>
+		<script src="Tools.js">
+		</script>
+		<script>
+			function geTag(obj){
+				return document.querySelector(obj);
+				}
+			// DEFINIÇÃO DA NOSSA CLASSE
+			class Grid {
+				constructor(NOME, LINHAS, COLUNAS) {
+					this.NOME = NOME; 
+					this.LINHAS = LINHAS; 
+					this.COLUNAS = COLUNAS;
+					}
+				//set - poe valor na célula
+				celula(linha, coluna, valor){
+					var id = "t"+("000"+String(linha).trim()).substr(-3)+"c"+("000"+(String(coluna).trim())).substr(-3);
+					var sele = "TD#"+id;
+					geTag(sele).innerText = valor;
+					}
+				//Get com parametros não pode usar getter
+				vrCelula(linha, coluna){
+					var id = "t"+("000"+String(linha).trim()).substr(-3)+"c"+("000"+(String(coluna).trim())).substr(-3);
+					var sele = "TD#"+id;
+					return geTag(sele).innerText;
+					}
+				//Getter
+				get numCells(){
+					return this.calcCelulas;
+					}
+				//Getter
+				get html() {
+					var obj = document.createElement('table');
+					var lin = 0;
+					for(lin=0;lin<this.LINHAS;lin++){
+						obj = this.addLine(obj, lin);
+						}
+					obj.setAttribute("border",1);
+					obj.setAttribute("cellspacing",0);
+					obj.setAttribute("cellpadding",4);
+					return obj;
+					}
+				//Funções internas
+				// Acrescenta linha na Tabela
+				addLine(obj1, linha){
+					var line = null;
+					var colu = null;
+					var col = 0;					
+					line = obj1.insertRow(linha);
+					// Acrescenta Colunas nesta Linha da Tabela
+					for(col=0;col<this.COLUNAS;col++){
+						colu = line.insertCell(col);
+						colu.innerText = "( "+linha+" , "+col+" )";
+						colu.id = "t"+("000"+String(linha).trim()).substr(-3)+"c"+("000"+(String(col).trim())).substr(-3);
+						}
+					return obj1;
+					}
+				calcCelulas() {
+					return this.LINHAS * this.COLUNAS;
+					}
+				geTag(ob){
+					return document.querySelector(ob);
+					}
+				}			
+			// Função chamada no evento onload do corpo do HTML
+			function init(){
+				var tb1 = new Grid("Regs",6,8);
+				console.log(tb1.html);
+				geTag("#main").appendChild(tb1.html);
+				tb1.celula(2,3,"xxxxx");
+				console.log(tb1.vrCelula(2,3));
+				}
+		</script>
+	</head>
+	<body onload="init();">
+		<section id="main">
+		</section>
+	</body>
+</html>
