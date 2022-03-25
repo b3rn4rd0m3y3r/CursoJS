@@ -1,0 +1,120 @@
+<html>
+	<head>
+		<title>Ex070</title>
+		<meta charset="iso-8859-1"/>
+		<meta name="author" content="Bernardo Meyer">
+		<meta name="description" content="Componente Grid. Cálculo de juros.">
+		<meta name="keywords" content="sites, web, desenvolvimento, jscript, javascript">
+		<style>
+			BODY {font-family: Verdana; }
+			TABLE > TBODY > TR > TD {color: #CC0000;}
+			TD {text-align: right;}
+			TD.tit {text-align: center;}
+		</style>
+		<script src="Tools.js">
+		</script>
+		<script>
+			var MONTANTE = 0;
+			var arrTit = ["Mes", "JSimples", "JComposto"];
+			var tb1 = null;			
+			// Funções customizadas para cada caso
+			function Mes(lin){
+				return lin;
+				}
+			function JSimples(lin){
+				return lin*Montante*0,02;
+				}
+			function JComposto(lin){
+				return lin*Montante*0,05;
+				}
+			// FIM
+			function geTag(obj){
+				return document.querySelector(obj);
+				}
+			// DEFINIÇÃO DA NOSSA CLASSE
+			class Grid {
+				constructor(NOME, LINHAS, COLUNAS, ArrTitle) {
+					this.NOME = NOME; 
+					this.LINHAS = LINHAS; 
+					this.COLUNAS = COLUNAS;
+					this.TITLES = ArrTitle;
+					}
+				//Setter
+				//Getter
+				get numCells(){
+					return this.calcCelulas;
+					}
+				//Getter
+				get html() {
+					var obj = document.createElement('table');
+					var lin = 0;
+					obj = this.addTitle(this.TITLES,obj, lin);
+					for(lin=1;lin<this.LINHAS;lin++){
+						obj = this.addLine(this.TITLES, obj, lin);
+						}
+					obj.setAttribute("border",1);
+					obj.setAttribute("cellspacing",0);
+					obj.setAttribute("cellpadding",4);
+					return obj;
+					}
+				//Funções internas
+				// Acrescenta titulos nas colunas da Tabela
+				addTitle(arrTit, obj1, linha){
+					var line = null;
+					var colu = null;
+					var col = 0;					
+					line = obj1.insertRow(linha);
+					// Acrescenta Colunas nesta Linha da Tabela
+					for(col=0;col<this.COLUNAS;col++){
+						colu = line.insertCell(col);
+						colu.style.textAlign = "center";
+						colu.innerText = arrTit[col];
+						colu.id = "t"+("000"+String(linha).trim()).substr(-3)+"c"+("000"+(String(col).trim())).substr(-3);
+						}
+					return obj1;
+					}
+				// Acrescenta linha na Tabela
+				addLine(arrTit, obj1, linha){
+					var line = null;
+					var colu = null;
+					var col = 0;					
+					line = obj1.insertRow(linha);
+					// Acrescenta Colunas nesta Linha da Tabela
+					for(col=0;col<this.COLUNAS;col++){
+						colu = line.insertCell(col);
+						//colu.innerText = "( "+linha+" , "+col+" )";
+						colu.innerText = eval(eval("arrTit["+col+"]")+"("+linha+")");
+						colu.id = "t"+("000"+String(linha).trim()).substr(-3)+"c"+("000"+(String(col).trim())).substr(-3);
+						}
+					return obj1;
+					}
+				calcCelulas() {
+					return this.LINHAS * this.COLUNAS;
+					}
+				geTag(ob){
+					return document.querySelector(ob);
+					}
+				}			
+			function chngMont(){
+				MONTANTE = geTag("#Montante").value;
+				tb1 = new Grid("Regs",10,3, arrTit);
+				console.log(tb1.html);
+				geTag("#main").appendChild(tb1.html);
+				}
+			// Função chamada no evento onload do corpo do HTML
+			function init(){
+
+				}
+		</script>
+	</head>
+	<body onload="init();">
+		<table cellspacing=0>
+			<tr>
+				<td><label>Montante</label></td>
+				<td><input id="Montante" name="Montante"><button onclick="chngMont();">OK</button></td>
+			</tr>
+		</table>
+		<section id="main">
+		</section>
+	</body>
+</html>
