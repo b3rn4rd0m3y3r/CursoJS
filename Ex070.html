@@ -7,6 +7,8 @@
 		<meta name="keywords" content="sites, web, desenvolvimento, jscript, javascript">
 		<style>
 			BODY {font-family: Verdana; }
+			H1 {color: white;}
+			H1#titg {color: maroon;}
 			TABLE > TBODY > TR > TD {color: #CC0000;}
 			TD {text-align: right;}
 			TD.tit {text-align: center;}
@@ -14,18 +16,21 @@
 		<script src="Tools.js">
 		</script>
 		<script>
-			var MONTANTE = 0;
-			var arrTit = ["Mes", "JSimples", "JComposto"];
-			var tb1 = null;			
+			// Constantes
+			var Montante = 0; // Montante sobre o qual incidem os juros (Valor emprestado)
+			var Juros = 0; // Taxa de juros em percentual (será dividida por 100, no programa)
+			var Meses = 0; // Tempo em meses (usual no mercado)
+			var arrTit = ["Mes", "JSimples", "JComposto"]; // Títulos das colunas
+			var tb1 = null; // Variável da instância de Grid
 			// Funções customizadas para cada caso
 			function Mes(lin){
 				return lin;
 				}
 			function JSimples(lin){
-				return lin*Montante*0,02;
+				return Montante*(1+Juros/100*lin);
 				}
 			function JComposto(lin){
-				return lin*Montante*0,05;
+				return Montante*(1+Juros/100)**lin;
 				}
 			// FIM
 			function geTag(obj){
@@ -49,7 +54,7 @@
 					var obj = document.createElement('table');
 					var lin = 0;
 					obj = this.addTitle(this.TITLES,obj, lin);
-					for(lin=1;lin<this.LINHAS;lin++){
+					for(lin=1;lin<=this.LINHAS;lin++){
 						obj = this.addLine(this.TITLES, obj, lin);
 						}
 					obj.setAttribute("border",1);
@@ -96,10 +101,13 @@
 					}
 				}			
 			function chngMont(){
-				MONTANTE = geTag("#Montante").value;
-				tb1 = new Grid("Regs",10,3, arrTit);
+				Montante = geTag("#Montante").value;
+				Juros = geTag("#Juros").value;
+				Meses = geTag("#Meses").value;
+				tb1 = new Grid("Regs",Meses,3, arrTit);
 				console.log(tb1.html);
 				geTag("#main").appendChild(tb1.html);
+				geTag("H1#tit").style.color = "crimson";
 				}
 			// Função chamada no evento onload do corpo do HTML
 			function init(){
@@ -108,12 +116,19 @@
 		</script>
 	</head>
 	<body onload="init();">
+		<h1 id="titg">CÁLCULO DE JUROS</H1>
 		<table cellspacing=0>
 			<tr>
 				<td><label>Montante</label></td>
-				<td><input id="Montante" name="Montante"><button onclick="chngMont();">OK</button></td>
+				<td><input id="Montante" name="Montante"></td>
+				<td><label>Juros</label></td>
+				<td><input id="Juros" name="Juros">
+				<td><label>Meses</label></td>
+				<td><input id="Meses" name="Meses">
+				<button onclick="chngMont();">OK</button></td>
 			</tr>
 		</table>
+		<h1 id="tit">TABELA MENSAL</H1>
 		<section id="main">
 		</section>
 	</body>
