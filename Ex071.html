@@ -20,7 +20,8 @@
 			var Montante = 0; // Montante sobre o qual incidem os juros (Valor emprestado)
 			var Juros = 0; // Taxa de juros em percentual (será dividida por 100, no programa)
 			var Meses = 0; // Tempo em meses (usual no mercado)
-			var arrTit = ["Mes", "JSimples", "JComposto"]; // Títulos das colunas
+			var arrTit = ["Mês", "Juro Simples", "Juro Composto"]; // Títulos das colunas
+			var arrForm = ["Mes", "JSimples", "JComposto"]; // Títulos das colunas
 			var tb1 = null; // Variável da instância de Grid
 			// Funções customizadas para cada caso
 			function Mes(lin){
@@ -38,11 +39,12 @@
 				}
 			// DEFINIÇÃO DA NOSSA CLASSE
 			class Grid {
-				constructor(NOME, LINHAS, COLUNAS, ArrTitle) {
+				constructor(NOME, LINHAS, COLUNAS, ArrTitle, ArrForm) {
 					this.NOME = NOME; 
 					this.LINHAS = LINHAS; 
 					this.COLUNAS = COLUNAS;
 					this.TITLES = ArrTitle;
+					this.EQUATIONS = ArrForm; // Novo
 					}
 				//Setter
 				//Getter
@@ -55,7 +57,7 @@
 					var lin = 0;
 					obj = this.addTitle(this.TITLES,obj, lin);
 					for(lin=1;lin<=this.LINHAS;lin++){
-						obj = this.addLine(this.TITLES, obj, lin);
+						obj = this.addLine(this.EQUATIONS, obj, lin);
 						}
 					obj.setAttribute("border",1);
 					obj.setAttribute("cellspacing",0);
@@ -79,7 +81,7 @@
 					return obj1;
 					}
 				// Acrescenta linha na Tabela
-				addLine(arrTit, obj1, linha){
+				addLine(arrForm, obj1, linha){
 					var line = null;
 					var colu = null;
 					var col = 0;					
@@ -87,8 +89,8 @@
 					// Acrescenta Colunas nesta Linha da Tabela
 					for(col=0;col<this.COLUNAS;col++){
 						colu = line.insertCell(col);
-						//colu.innerText = "( "+linha+" , "+col+" )";
-						colu.innerText = eval(eval("arrTit["+col+"]")+"("+linha+")");
+						//NOVO - Alteração para Array de fórmulas (arrForm)
+						colu.innerText = eval(eval("arrForm["+col+"]")+"("+linha+")");
 						colu.id = "t"+("000"+String(linha).trim()).substr(-3)+"c"+("000"+(String(col).trim())).substr(-3);
 						}
 					return obj1;
@@ -104,7 +106,8 @@
 				Montante = geTag("#Montante").value;
 				Juros = geTag("#Juros").value;
 				Meses = geTag("#Meses").value;
-				tb1 = new Grid("Regs",Meses,3, arrTit);
+				// NOVO - Chamada ao objeto com arrays distintos
+				tb1 = new Grid("Regs",Meses,3, arrTit, arrForm);
 				console.log(tb1.html);
 				geTag("#main").appendChild(tb1.html);
 				geTag("H1#tit").style.color = "crimson";

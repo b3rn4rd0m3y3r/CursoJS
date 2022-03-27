@@ -20,8 +20,12 @@
 			var Montante = 0; // Montante sobre o qual incidem os juros (Valor emprestado)
 			var Juros = 0; // Taxa de juros em percentual (será dividida por 100, no programa)
 			var Meses = 0; // Tempo em meses (usual no mercado)
-			var arrTit = ["Mes", "JSimples", "JComposto"]; // Títulos das colunas
+			var arrTit = ["Mês", "Juro Simples", "Juro Simples Acumulado", "Juro Composto"]; // Títulos das colunas
+			var arrForm = ["Mes", "JSimples", "JSimplesAc", "JComposto"]; // Títulos das colunas
 			var tb1 = null; // Variável da instância de Grid
+			var SOMA_Mes = 0;
+			var SOMA_JSimples = 0;
+			var SOMA_JComposto = 0;
 			// Funções customizadas para cada caso
 			function Mes(lin){
 				return lin;
@@ -32,17 +36,24 @@
 			function JComposto(lin){
 				return (Montante*(1+Juros/100)**lin).toFixed(2);
 				}
+			// NOVA função: Juros simples acumulados
+			function JSimplesAc(lin){
+				console.log("JSAc: "+lin);
+				SOMA_JSimples += Montante*(1+Juros/100*lin);
+				return SOMA_JSimples.toFixed(2);
+				}
 			// FIM
 			function geTag(obj){
 				return document.querySelector(obj);
 				}
 			// DEFINIÇÃO DA NOSSA CLASSE
 			class Grid {
-				constructor(NOME, LINHAS, COLUNAS, ArrTitle) {
+				constructor(NOME, LINHAS, COLUNAS, ArrTitle, ArrForm) {
 					this.NOME = NOME; 
 					this.LINHAS = LINHAS; 
 					this.COLUNAS = COLUNAS;
 					this.TITLES = ArrTitle;
+					this.EQUATIONS = ArrForm; // Novo
 					}
 				//Setter
 				//Getter
@@ -51,11 +62,12 @@
 					}
 				//Getter
 				get html() {
+					console.log("get html");
 					var obj = document.createElement('table');
 					var lin = 0;
 					obj = this.addTitle(this.TITLES,obj, lin);
 					for(lin=1;lin<=this.LINHAS;lin++){
-						obj = this.addLine(this.TITLES, obj, lin);
+						this.addLine(this.EQUATIONS, obj, lin);
 						}
 					obj.setAttribute("border",1);
 					obj.setAttribute("cellspacing",0);
@@ -79,7 +91,8 @@
 					return obj1;
 					}
 				// Acrescenta linha na Tabela
-				addLine(arrTit, obj1, linha){
+				addLine(arrForm, obj1, linha){
+					console.log("Add Line "+linha);
 					var line = null;
 					var colu = null;
 					var col = 0;					
@@ -87,11 +100,12 @@
 					// Acrescenta Colunas nesta Linha da Tabela
 					for(col=0;col<this.COLUNAS;col++){
 						colu = line.insertCell(col);
-						//colu.innerText = "( "+linha+" , "+col+" )";
-						colu.innerText = eval(eval("arrTit["+col+"]")+"("+linha+")");
+						//NOVO - Alteração para Array de fórmulas (arrForm)
+						colu.innerText = eval(eval("arrForm["+col+"]")+"("+linha+")");
 						colu.id = "t"+("000"+String(linha).trim()).substr(-3)+"c"+("000"+(String(col).trim())).substr(-3);
 						}
-					return obj1;
+					//return obj1; // Retirado
+					return;
 					}
 				calcCelulas() {
 					return this.LINHAS * this.COLUNAS;
@@ -101,12 +115,22 @@
 					}
 				}			
 			function chngMont(){
+				// Inicia os valores de cálculo
 				Montante = geTag("#Montante").value;
 				Juros = geTag("#Juros").value;
 				Meses = geTag("#Meses").value;
-				tb1 = new Grid("Regs",Meses,3, arrTit);
-				console.log(tb1.html);
-				geTag("#main").appendChild(tb1.html);
+				// Zera Somas, pois são persistentes
+				var SOMA_Mes = 0;
+				var SOMA_JSimples = 0;
+				var SOMA_JComposto = 0;				
+				// NOVO - Aumento para 4 colunas
+				console.log("New Grid");
+				tb1 = new Grid("Regs",Meses,4, arrTit, arrForm);
+				var html1 = tb1.html;
+				console.log(html1);
+				// Se reutilizar o método html de tb1, a execução é duplicada
+				//geTag("#main").appendChild(tb1.html);
+				geTag("#main").appendChild(html1);
 				geTag("H1#tit").style.color = "crimson";
 				}
 			// Função chamada no evento onload do corpo do HTML
