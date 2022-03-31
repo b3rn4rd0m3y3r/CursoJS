@@ -1,0 +1,31 @@
+<html>
+	<head>
+		<title>TL06</title>
+		<meta charset="iso-8859-1"/>
+		<meta name="author" content="Bernardo Meyer">
+		<meta name="description" content="Click para marcar nó corrente. Show/hide de grupo UL.">
+		<meta name="keywords" content="sites, web, desenvolvimento, jscript, javascript">
+		<script src="BMyFrmwk.js">
+		</script>
+		<script>
+			// Função executada após a página ser carregada totalmente
+			function init(){
+				var ob = new BMy();
+				var no = ob.getById("corpo");
+				var p = document.createElement("P");
+				p.innerText = "Parágrafo";
+				// Parágrafo "filho" de "corpo" (BODY)
+				no.appendChild(p);
+				var li = document.createElement("LI");
+				// Item "filho" de "corpo" (BODY)
+				no.appendChild(li);
+				li.innerText = "Linha";
+				// Tentamos inserir o mesmo nó mais vezes
+				no.appendChild(li);
+				no.appendChild(li);
+				}
+		</script>
+	</head>
+	<body id="corpo" onload="init();">
+	</body>
+</html>
