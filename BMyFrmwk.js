@@ -38,8 +38,50 @@ BMy.fn = BMy.prototype = {
 		var casas = parseInt(Math.log10(Valor)+1);
 		if( NoZeros < casas ){
 			NoZeros = casas;
+			return this.right(zeros.concat(Valor),NoZeros);
 			}
-		return this.right(zeros.concat(Valor),NoZeros);
+		},
+
+	getById: function(nomeId){
+			return document.getElementById(nomeId);
+			},
+	getByClass: function(classe){
+		return this.getByQry("."+classe);
+		},
+	getByQry: function(sele){
+			return document.querySelectorAll(sele);
+			},
+	showById: function(nomeId){
+		event.stopPropagation();
+		this.getById(nomeId).style.display = "block";
+		},
+	showByClass: function(classe){
+		event.stopPropagation();
+		var lista = getByClass(classe);
+		var elem = null;
+		for( no in lista){
+			if( typeof(lista[no]) == "object" ){
+				elem = lista[no];
+				console.log(elem);
+				elem.style.display = "block";
+				}
+			}
+		},
+	hideById: function(nomeId){
+		event.stopPropagation();
+		this.getById(nomeId).style.display = "none";
+		},
+	hideByClass: function(classe){
+		event.stopPropagation();
+		var lista = this.getByClass(classe);
+		var elem = null;
+		for( no in lista){
+			if( typeof(lista[no]) == "object" ){
+				elem = lista[no];
+				console.log(elem);
+				elem.style.display = "none";
+				}
+			}
 		},
 	version: function() {
 		return this.bmy;
