@@ -1,0 +1,52 @@
+<html>
+	<head>
+		<title>Ex072</title>
+		<meta charset="iso-8859-1"/>
+		<meta name="author" content="Bernardo Meyer">
+		<meta name="description" content="Click para marcar nó corrente. Show/hide de grupo UL.">
+		<meta name="keywords" content="sites, web, desenvolvimento, jscript, javascript">
+		<style>
+			P > P {margin-left: 20px;}
+		</style>
+		<script src="BMyFrmwk.js">
+		</script>
+		<script>
+			// Função executada após a página ser carregada totalmente
+			function init(){
+				var ob = new BMy();
+				var no = ob.getById("corpo");
+				var p = document.createElement("P");
+				p.innerText = "Parágrafo";
+				// Parágrafo "filho" de "corpo" (BODY)
+				no.appendChild(p);
+				var li = document.createElement("P");
+				var li1 = document.createElement("P");
+				var li2 = document.createElement("P");
+				var sli1 = document.createElement("P");
+				var sli2 = document.createElement("P");
+				var sli11 = document.createElement("P");
+				var sli12 = document.createElement("P");
+				// Item "filho" de "corpo" (BODY)
+				no.appendChild(li);
+				li.innerText = "Linha 0";
+				li1.innerText = "Linha 1";
+				li2.innerText = "Linha 2";
+				sli1.innerText = "Linha s1";
+				sli2.innerText = "Linha s2";
+				sli11.innerText = "Linha s11";
+				sli12.innerText = "Linha s12";
+				// Tentamos inserir o mesmo nó mais vezes
+				no.appendChild(li1);
+				no.appendChild(li2);
+				li1.appendChild(sli1);
+				li1.appendChild(sli2);
+				sli1.appendChild(sli11);
+				sli1.appendChild(sli12);
+				// Mostra
+				console.log(li1);
+				}
+		</script>
+	</head>
+	<body id="corpo" onload="init();">
+	</body>
+</html>

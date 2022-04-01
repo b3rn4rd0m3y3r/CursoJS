@@ -1,0 +1,41 @@
+<html>
+	<head>
+		<title>Ex072</title>
+		<meta charset="iso-8859-1"/>
+		<meta name="author" content="Bernardo Meyer">
+		<meta name="description" content="Click para marcar nó corrente. Show/hide de grupo UL.">
+		<meta name="keywords" content="sites, web, desenvolvimento, jscript, javascript">
+		<script src="BMyFrmwk.js">
+		</script>
+		<script>
+			// Função executada após a página ser carregada totalmente
+			function init(){
+				var ob = new BMy();
+				var no = ob.getById("corpo");
+				var p = document.createElement("P");
+				p.innerText = "Parágrafo";
+				// Parágrafo "filho" de "corpo" (BODY)
+				no.appendChild(p);
+				var li = document.createElement("LI");
+				var li1 = document.createElement("LI");
+				var li2 = document.createElement("LI");
+				var sli1 = document.createElement("LI");
+				var sli2 = document.createElement("LI");
+				// Item "filho" de "corpo" (BODY)
+				no.appendChild(li);
+				li.innerText = "Linha";
+				li1.innerText = "Linha 1";
+				li2.innerText = "Linha 2";
+				sli1.innerText = "Linha s1";
+				sli2.innerText = "Linha s2";
+				// Tentamos inserir o mesmo nó mais vezes
+				no.appendChild(li1);
+				no.appendChild(li2);
+				li1.appendChild(sli1);
+				li1.appendChild(sli2);
+				}
+		</script>
+	</head>
+	<body id="corpo" onload="init();">
+	</body>
+</html>
