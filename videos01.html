@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+	<html lang="pt-br">
+
+	<!-- Cabeçalho -->
+	<head>
+
+		<title>Videos</title>
+		<meta name="author" content="Larissa (DVIP)">
+		<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+		<meta http-equiv="X-UA-Compatible" content="IE=7, IE=9, IE=10, IE=11" />
+		<meta name="description" content="Curso de HTMl5">
+		<link rel="stylesheet" href="estilo.css" >
+		<!-- script type="text/javascript" src="jquery_341.js"></script -->
+		<script type="text/javascript">
+		function alternate(event){
+			var objJd;
+			var obj = event.currentTarget;
+			var objId =  obj.id;
+			var pref = objId.substr(0,1);
+			var objNo = objId.substr(1,99);
+			
+		
+			if( pref == "i" ){
+				$("#"+objId).hide();
+				objJd = "j"+objNo;
+				$("#"+objJd).show();
+				} else {
+					if( pref == "j" ){
+					$("#"+objId).hide();
+					objJd = "i"+objNo;
+					$("#"+objJd).show();
+					}
+				}
+			
+			console.log(objId+":"+objNo+":"+objJd);
+			}
+		function noShowMenu(){
+			//$("#funcoes").hide();
+			$("#funcoes").css('height','30px');
+			$("#funcoes").css('margin-top','-30px');
+			
+			}
+		function showMenu(){
+			$("#funcoes").show();
+			$("#funcoes").css('height','110px');
+			$("#funcoes").css('margin-top','50px');
+			$("#funcoes").css('background-color','transparent');
+			$("#funcoes > DIV.pdfs A").css('font-size','18px');
+			}
+		function init(){
+			$("#slideshow > div:gt(0)").hide();
+			$("#functions").hide();
+			var tempo = 1000;
+			var tempoSlide = 5000;
+			setInterval(function() { 
+			  $('#slideshow > div:first')
+				.fadeOut(tempo)
+				.next()
+				.fadeIn(tempo)
+				.end()
+				.appendTo('#slideshow');
+			},  tempoSlide);
+			showMenu();
+			
+			//$("#funcoes").mouseover(showMenu);
+			//$("#funcoes").mouseout(noShowMenu);
+			//$("#rodape").mouseout(noShowMenu);
+			//$("#slideshow").mouseover(showMenu);
+			//$("#slideshow").mouseout(noShowMenu);
+			$("#widgets div:last-child").css('float','clear');
+			$("img").mouseover(alternate);
+			$("div.txt").mouseout(alternate);
+			$("div.txt").hide();
+		}
+
+		</script>
+		<style>
+			BODY {
+				background-color: #9099AE;
+				}
+			#slideshow::-webkit-scrollbar-track
+			{
+				background-color: #FFFFFF;
+			}
+
+			#slideshow::-webkit-scrollbar
+			{
+				width: 12px;
+				background-color: #FFFFFF;
+			}
+
+			#slideshow::-webkit-scrollbar-thumb
+			{
+				border-radius: 10px;
+				background-color: #FFFFFF;
+			}
+			#widgets:last-child {
+				float:clear;
+				}
+			LABEL.legenda {
+				position:relative;margin-left:-1200px;background-color:white;opacity:0.5;	width:1200px;		
+			}
+			DIV > .txt {
+				background-color:#3DADD6;
+				display: table-cell;
+				color:white;
+				height: 176px;
+				vertical-align:top;
+				width: 320px;
+				}
+			SECTION.video {height:920px;}
+			UL.opcoes {
+				margin-left:25px;
+				margin-top: 20px;
+				}
+			UL.opcoes LI { 
+				font-size:13px;
+				list-style-type: square;
+				/* display: block; */
+				text-align:left;
+				float:clear;
+				}
+				UL.opcoes LI A { 
+					font-size:13px;
+					color:white;
+					text-decoration:none;
+					cursor:pointer;
+				}
+		</style>
+	</head>
+
+	<!-- Corpo do Documento -->
+	<body onload="init();">
+		
+		<div class="principal">
+
+			<!-- Conteúdo Principal-->
+			<section class="video">
+				<!-- ******************** 01 ******************** -->
+				<div class="pdfs" style="float:left;">
+					<iframe width="390" height="300" src="https://www.youtube.com/embed/9c3thFFSGaM">
+					</iframe>
+				</div>
+				<!-- ******************** 02 ******************** -->
+				<div class="pdfs" style="float:left;">
+					<iframe width="390" height="300" src="https://www.youtube.com/embed/QDNZVB7zKZc">
+					</iframe>
+				</div>
+				<!-- ******************** 03 ******************** -->
+				<div class="pdfs" style="float:clear;">
+					<iframe width="390" height="300" src="https://www.youtube.com/embed/0wlj-hTonaM">
+					</iframe>
+				</div>
+				<!-- ******************** 04 ******************** -->
+				<div class="pdfs" style="float:left;">
+					<iframe width="390" height="300" src="https://www.youtube.com/embed/9ermeVxoSRs">
+					</iframe>
+				</div>
+				<!-- ******************** 05 ******************** -->
+				<div class="pdfs" style="float:left;">
+					<iframe width="390" height="300" src="https://www.youtube.com/embed/y5YZbSeSRpU">
+					</iframe>
+				</div>
+				<!-- ******************** 06 ******************** -->
+				<div class="pdfs" style="float:clear;">
+					<iframe width="390" height="300" src="https://www.youtube.com/embed/5bnShImHCeM">
+					</iframe>
+				</div>
+				<!-- ******************** 07 ******************** -->
+				<div class="pdfs" style="float:left;">
+					<iframe width="390" height="300" src="https://www.youtube.com/embed/QysxGEsyhvo">
+					</iframe>
+				</div>
+				<!-- ******************** 08 ******************** -->
+				<div class="pdfs" style="float:left;">
+					<iframe width="390" height="300" src="https://www.youtube.com/embed/teFH9dtfBJ0">
+					</iframe>
+				</div>
+				<!-- ******************** 09 ******************** -->
+				<div class="pdfs" style="float:clear;">
+					<iframe width="390" height="300" src="https://www.youtube.com/embed/C2evN0SandM">
+					</iframe>
+				</div>
+				<!-- ******************** 10 ******************** -->
+				<div class="pdfs" style="float:left;">
+					<iframe width="390" height="300" src="https://www.youtube.com/embed/pNvPOLi2O4c">
+					</iframe>
+				</div>
+				<!-- ******************** 11 ******************** -->
+				<div class="pdfs" style="float:left;">
+					<iframe width="390" height="300" src="https://www.youtube.com/embed/XKeaEXitqIo">
+					</iframe>
+				</div>
+				<!-- ******************** 12 ******************** -->
+				<div class="pdfs" style="float:clear;">
+					<iframe width="390" height="300" src="https://www.youtube.com/embed/q_3tt0-NUzU">
+					</iframe>
+				</div>
+				<!-- ******************** 13 ******************** -->
+				<div class="pdfs" style="float:left;">
+					<iframe width="390" height="300" src="https://www.youtube.com/embed/I5L2ykzbpjI">
+					</iframe>
+				</div>
+				<!-- ******************** 14 ******************** -->
+				<div class="pdfs" style="float:left;">
+					<iframe width="390" height="300" src="https://www.youtube.com/embed/IjUD54Lq5XM">
+					</iframe>
+				</div>
+				<!-- ******************** 15 ******************** -->
+				<div class="pdfs" style="float:clear;">
+					<iframe width="390" height="300" src="https://www.youtube.com/embed/XrFyWPk95Vs">
+					</iframe>
+				</div>
+				<!-- ******************** 16 ******************** -->
+				<div class="pdfs" style="float:left;">
+					<iframe width="390" height="300" src="https://www.youtube.com/embed/9TNEOW3Cwyc">
+					</iframe>
+				</div>
+				<!-- ******************** 17 ******************** -->
+				<div class="pdfs" style="float:left;">
+					<iframe width="390" height="300" src="https://www.youtube.com/embed/UZYQEp8-1NA">
+					</iframe>
+				</div>
+				<!-- ******************** 18 ******************** -->
+				<div class="pdfs" style="float:clear;">
+					<iframe width="390" height="300" src="https://www.youtube.com/embed/VO0pUrZ9TOc">
+					</iframe>
+				</div>
+				
+				<!-- ******************** 19 ******************** -->
+				<div class="pdfs" style="float:left;">
+					<iframe width="390" height="300" src="https://www.youtube.com/embed/07XcWPLyJSc">
+					</iframe>
+				</div>
+				<!-- ******************** 20 ******************** -->
+				<div class="pdfs" style="float:left;">
+					<iframe width="390" height="300" src="https://www.youtube.com/embed/VBbUPmxMua0">
+					</iframe>
+				</div>
+				<!-- ******************** 21 ******************** -->
+				<div class="pdfs" style="float:clear;">
+					<iframe width="390" height="300" src="https://www.youtube.com/embed/N_Rwm7VWFAk">
+					</iframe>
+				</div>
+			</section>
+
+
+			<!-- Rodapé do site-->
+			<footer id="rodape">&nbsp;</footer>
+
+		</div>
+	</body>
+
+</html>
