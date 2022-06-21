@@ -1,0 +1,110 @@
+<html>
+	<head>
+		<title>Chatbot</title>
+		<style>
+			BODY{
+				font-family: Arial; font-size: 12px; color: dimgray;
+				}
+			DIV#main {
+				border: solid 2px darkgreen;
+				border-radius: 8px;
+				display: table;
+				font-family: Arial;
+				font-size: 22px;
+				height: 550px;
+				width: 450px;
+				}
+			FORM {}
+			DIV#dlg { border: solid 1px gray;display: table-cell; height: 30px;vertical-align: bottom;
+				}
+			H1 {
+				color: darkgreen;
+				font-weight: bold;				
+				font-family: Arial;
+				}
+			INPUT {
+				font-family: Arial;
+				font-size: 22px;
+				}
+			LABEL {
+				color: darkgreen;
+				font-weight: bold;
+				}
+		</style>
+		<meta name="author" content="Bernardo Meyer">
+		<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+		<meta name="description" content="HTML5">
+		<script src="BMyFrmwk.js"></script>
+		<script>
+			var lista = null;
+			var inp = null;
+			var arrAssunto = [];
+			arrAssunto.push("contrato");
+			arrAssunto.push("dúvida no contrato");
+			arrAssunto.push("não enviaram o contrato");
+			arrAssunto.push("não recebi o contrato");
+			arrAssunto.push("contrato está ilegível");
+			arrAssunto.push("defeito");
+			arrAssunto.push("devolução do dinheiro");
+			arrAssunto.push("devolução da mercadoria");
+			arrAssunto.push("devolução do pagamento");
+			arrAssunto.push("devolvam meu dinheiro");
+			arrAssunto.push("devolver a mercadoria");
+			arrAssunto.push("devolver o pagamento");
+			arrAssunto.push("manutenção");
+			arrAssunto.push("manutenção");
+			arrAssunto.push("enviar para manutenção");
+			arrAssunto.push("pagamento");
+			arrAssunto.push("pagamento atrasado");
+			arrAssunto.push("atrasar pagamento");
+			arrAssunto.push("troca");
+			arrAssunto.push("troca de mercadoria");
+			arrAssunto.push("trocar minha mercadoria");
+		</script>
+		<script>
+
+
+			function liga(){
+				var valor = inp.value;
+				if( inp.value != "" ){
+					lista.id = "primitives";
+					inp.pattern = "[\\w\\s+#]{${inp.value.length}}";
+					console.log("Srch On");
+					} else {
+					lista.id = "";
+					console.log("Srch Off");
+					}				
+				}
+			function init(){
+				var ob = new BMy();
+				lista = ob.getById("primitives");
+				inp = ob.getById("entrada");
+
+				entrada.addEventListener('click', mouse_event =>{
+					liga();
+				    });
+				var html = "";
+				for(item in arrAssunto){
+					html += "<option value=\"" + arrAssunto[item] + "\">";
+					}
+				lista.innerHTML = html;
+				inp.autocomplete = "off";
+				}
+		</script>
+	</head>
+	<body id="corpo" onload="init();">
+		<center>
+		<h1>ATENDIMENTO</h1>
+		<div id="main">
+			
+			<div id="dlg">
+				<label>Assunto:</label><input list="primitives" autocomplete="off" placeholder="Digite o que deseja" id="entrada" type=text  oninput="liga();" pattern="" value="">
+			</div>
+		</div>
+		</center>
+		<datalist id="primitives" name="primitives">
+			
+		</datalist>
+		
+	</body>
+</html>
