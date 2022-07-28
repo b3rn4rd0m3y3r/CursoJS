@@ -1,0 +1,43 @@
+<html>
+	<head>
+		<title>Ex076b</title>
+		<style>
+			BODY{
+				font-family: Arial; font-size: 12px; color: dimgray;
+				}
+			INPUT {font-size: 48px;}
+		</style>
+		<meta name="author" content="Berna">
+		<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+		<meta name="description" content="HTML5">
+		<script>
+			var time_ant = 0;
+			var steps = 0;
+			var contador = 0;
+			function delay(){
+				animate(0);
+				}
+			// Callback do loop de animação
+			function animate(timestamp){
+				console.log(timestamp-time_ant);
+				time_ant = timestamp;
+				++contador;
+				(document.getElementById("conta")).value = contador;
+				++steps;
+				if(steps > 10){
+					steps = 0;
+					window.requestAnimationFrame(animate);
+					} else {
+					setTimeout(delay,50);
+					}
+				}
+			function init(){
+				alert("Vou começar");
+				animate(0);
+				}
+		</script>
+	</head>
+	<body id="corpo" onload="init();">
+		<input id="conta" name="conta" value="">
+	</body>
+</html>
