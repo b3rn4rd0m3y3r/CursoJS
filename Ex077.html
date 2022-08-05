@@ -1,0 +1,32 @@
+<html>
+	<head>
+		<title>Ex077</title>
+		<meta charset="iso-8859-1"/>
+		<meta name="author" content="Bernardo Meyer">
+		<meta name="description" content="Objeto MAP do javascript">
+		<meta name="keywords" content="sites, web, desenvolvimento, jscript, javascript">
+		<script type="text/javascript">
+			function init(){
+				const map1 = new Map();
+				map1.set('1', 'Um');
+				map1.set('2','Dois');
+				map1.set('3', 'Três');
+				map1.set('4', 'Quatro');
+				map1.set('5', 'Cinco');
+				map1.set('6', 'Seis');
+				map1.set('7', 'Sete');
+				map1.set('8', 'Oito');
+				console.log(map1.size);
+				map1.forEach((values,keys)=>{
+				  document.write(values,keys+"<br>")
+				});
+				console.log(map1.get('3'));
+				
+				}
+		</script>
+	</head>
+	<body onload="init();">
+	
+
+	</body>
+</html>
