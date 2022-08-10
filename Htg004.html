@@ -1,0 +1,47 @@
+<html>
+	<head>
+		<style>
+			div {
+			  font-family: Arial;
+			  font-weight: bold;
+			  width: 160px;
+			  height: 160px;
+			  background-color: skyblue;
+			  margin-left: 50px;
+			}
+			.rotated1 {
+			  transform: rotate(22deg); /* Equal to rotateZ(45deg) */
+			  background-color: pink;
+			  border-radius: 50%;
+			  padding: 16px;
+			  text-align: center;
+			}
+		</style>
+		<script>
+			var angulo = 1;
+			var div = "";
+			var inc = "";
+			var tempo = 0;
+			function init(){
+				div = document.getElementById("d1");
+				inc = document.getElementById("inc");
+				tempoId = document.getElementById("tempo");
+				roda();
+				}
+			function proximo(){
+				setTimeout(roda,tempo);
+				}
+			function roda(){
+				//angulo = angulo*1;
+				angulo += parseInt(inc.value);
+				tempo = parseInt(tempoId.value);
+				div.style.transform = "rotate("+angulo+"deg)";
+				proximo();
+				}
+		</script>
+	</head>
+	<body onload="init();">
+		<div id="d1" class="rotated1">Girar</div>
+		<input id="inc" type=number value=10 size=6><input id="tempo" type=number value=500 size=6>
+	</body>
+</html>
