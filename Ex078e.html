@@ -1,0 +1,71 @@
+<html>
+	<head>
+		<style>
+			div {
+			  font-family: Arial;
+			  font-weight: bold;
+			  width: 160px;
+			  height: 160px;
+			  background-color: skyblue;
+			  margin-left: 50px;
+			}
+			.rotated1 {
+			  /* transform: rotate(22deg); Equal to rotateZ(45deg) */
+			  background-color: pink;
+			  border-radius: 50%;
+			  padding: 16px;
+			  text-align: center;
+			}
+		</style>
+		<script>
+			var angulo = 1;
+			var div = "";
+			var inc = "";
+			var iProx = "";
+			var iRoda = "";
+			var tempo = 500;
+			var pProx = 0;
+			var pRoda = 0;
+			// NOVO
+			var ta = "";
+			function init(){
+				div = document.getElementById("d1");
+				inc = document.getElementById("inc");
+				iProx = document.getElementById("iProx");
+				iRoda = document.getElementById("iRoda");
+				tempoId = document.getElementById("tempo");
+				roda();
+				}
+			function proximo(){
+				++pProx;
+				if( pRoda % 30 == 2 ){
+					iProx.click();
+					}
+				iProx.value = pProx;
+				ta = setTimeout(roda,tempo);
+				}
+			function roda(){
+				//angulo = angulo*1;
+				if( pRoda % 30 == 0 ){
+					iRoda.click();
+					}
+				++pRoda;
+				iRoda.value = pRoda;
+				angulo += parseInt(inc.value);
+				tempo = parseInt(tempoId.value);
+				div.style.transform = "rotate("+angulo+"deg)";
+				clearTimeout(ta);
+				proximo();
+				}
+		</script>
+	</head>
+	<body onload="init();">
+		<div id="d1" class="rotated1">Girar</div>
+		<input id="inc" type=number value=10 size=6>
+		<input id="tempo" type=number value=10 size=6><br>
+		Roda: <input id="iRoda" type=number value=0 size=4>
+		Prox: <input id="iProx" type=number value=0 size=4>
+		
+		
+	</body>
+</html>
