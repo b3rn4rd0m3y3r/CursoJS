@@ -1,0 +1,56 @@
+<head>
+	<title>Ex081</title>
+	<style>
+		BODY {font-family: Arial;}
+		DIV#movel {
+			  position: absolute;
+			  display: inline-block;
+			  color: black;
+			  font-size: 30px;
+			  text-align: center;
+			  vertical-align: middle;
+			  left: 40px;
+			  width: 120px;
+			  height: 120px;
+			  background-color: skyblue;
+			  animation-name: move;
+			  animation-duration: 30s;
+			}
+		/* Animação */
+		@keyframes move {
+			from { left: 40px; }
+			to { left: 900px; }
+			}
+
+	</style>
+	<script>
+		var angulo = 0;
+		var div1 = "";
+		var estilo = "";
+		var pLeft = "";
+		var tempo = 40;
+		var ctempo = 0;
+		function init(){
+			div1 = document.getElementById("movel");
+			
+			atualiza(0);
+			}
+		function atualiza(timestamp){
+			ctempo++;
+			roda();
+			}
+		function roda(){
+			if( ctempo % tempo == 0 ){
+				estilo = getComputedStyle(div1);
+				pLeft = (estilo.left).replace(/[^0-9\.]/g, '');
+				div1.innerText = pLeft;
+				console.log(ctempo + " -> " + pLeft);
+				}
+			if( pLeft != "40" ) window.requestAnimationFrame(atualiza);
+			}
+	</script>
+</head>
+<body onload="init();">
+	<h1>Acompanhando uma animação</h1>
+	<div id="movel">&nbsp;</div>
+</body>
