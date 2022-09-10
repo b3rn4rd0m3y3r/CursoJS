@@ -1,0 +1,109 @@
+<head>
+	<title>Ex083</title>
+	<style>
+		BODY {font-family: Arial;}
+		DIV#movel {
+			  position: absolute;
+			  display: inline-block;
+			  color: black;
+			  font-size: 30px;
+			  text-align: center;
+			  vertical-align: middle;
+			  left: 40px;
+			  width: 120px;
+			  height: 120px;
+			  background-color: skyblue;
+			  border-radius: 50%;
+			  animation-name: move;
+			  animation-duration: 30s;
+			}
+		DIV#movel2 {
+			  position: absolute;
+			  display: inline-block;
+			  color: black;
+			  font-size: 30px;
+			  text-align: center;
+			  vertical-align: middle;
+			  left: 800px;
+			  top: 700px;
+			  width: 120px;
+			  height: 120px;
+			  background-color: red;
+			  border-radius: 50%;
+			  animation-name: move2;
+			  animation-duration: 30s;
+			}
+		.paused{
+			-webkit-animation-play-state:paused;
+			-moz-animation-play-state:paused;
+			-o-animation-play-state:paused; 
+			animation-play-state:paused;
+			}
+		/* Animações */
+		@keyframes move {
+			from { left: 40px; }
+			to { left: 900px; }
+			}
+		@keyframes move2 {
+			from { top: 700px; }
+			to { top: 20px; }
+			}
+	</style>
+	<script>
+		var angulo = 0;
+		var div1 = "", div2 = "";
+		var dif1 = 0, dif2 = 0;
+		var estilo = "", estilo2 = "";
+		var pLeft = "", pTop = "";
+		var pLeft2 = "", pTop2 = "";
+		var tempo = 40, ctempo = 0;
+		var compare = false, PARE = false;
+
+		function init(){
+			// Declara as DIVs
+			div1 = document.getElementById("movel");
+			div2 = document.getElementById("movel2");
+			atualiza(0);
+			}
+		function atualiza(timestamp){
+			ctempo++;
+			roda();
+			}
+		function roda(){
+			if( ctempo % tempo == 0 ){
+				// PRIMEIRO OBJETO
+				estilo = getComputedStyle(div1);
+				pLeft = (estilo.left).replace(/[^0-9\.]/g, '');
+				pTop = (estilo.top).replace(/[^0-9\.]/g, '');
+				div1.innerHTML = "<br>"+pLeft;
+				// SEGUNDO OBJETO
+				estilo2 = getComputedStyle(div2);
+				pLeft2 = (estilo2.left).replace(/[^0-9\.]/g, '');
+				pTop2 = (estilo2.top).replace(/[^0-9\.]/g, '');
+				div2.innerHTML = "<br>"+pTop2;
+				// DIFERENÇAS DAS COORDENADAS
+				dif1 = parseInt(Math.abs(pLeft2- pLeft));
+				dif2 = parseInt(Math.abs(pTop2-pTop));
+				compare = (dif1 < 91 && dif2 < 91 );
+				console.log(ctempo + " -> (" + dif1 + ") - " + "(" + dif2 +")" + ":" + compare );
+				}
+			// Marca o final da animação: pLeft diferente de 40
+			if( pLeft != "40" && !(PARE) ) window.requestAnimationFrame(atualiza);
+			if( compare ) fim();
+			
+			}
+		function fim(){
+			// Colocando a classe paused nas DIVs
+			// as animações cessam de funcionar
+			div1.classList.add("paused");
+			div2.classList.add("paused");
+			PARE = true;
+			console.log("FIM");
+			}
+	</script>
+</head>
+<body onload="init();">
+	<h1>Acompanhando duas animações</h1>
+	<div id="movel">&nbsp;</div>
+	<div id="movel2">&nbsp;</div>
+</body>
