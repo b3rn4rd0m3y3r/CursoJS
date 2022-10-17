@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Ex085</title>
+        <script>
+		function init(){
+			class Ola extends HTMLElement {
+				connectedCallback() {
+					var att = this.getAttribute("text");
+					var cor = this.getAttribute("color");
+					var corfundo = this.getAttribute("bgcolor");
+					this.innerHTML = "<h1>" + att + "</h1>";
+					this.style.color = cor;
+					this.style.fontFamily = "Arial";
+					// Formatando H1
+					this.childNodes[0].style.backgroundColor = corfundo;
+					this.childNodes[0].style.width = "fit-content";
+					this.childNodes[0].style.padding = "6px";
+					this.childNodes[0].style.borderRadius = "8px";
+					}
+				}
+			customElements.define('ola-elem', Ola);			
+			}
+	</script>
+    </head>
+    <body onload="init();">
+        <ola-elem text="Meu titulo" color="antiquewhite" bgcolor="green"></ola-elem>
+    </body>
+</html>
