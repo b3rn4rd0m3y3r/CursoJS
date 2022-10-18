@@ -1,0 +1,25 @@
+<head>
+	<title>Session</title>
+	<script type="text/javascript">
+		function init(){
+			if(sessionStorage.getItem('sobreNome')){
+				// Existe.
+				console.log("Sobrenome: "+sessionStorage.sobreNome);
+				} else {
+				sessionStorage.sobreNome ="Meyer";
+				console.log(sessionStorage.sobreNome);
+				}
+			}
+	</script>
+</head>
+<body onload="init();">
+	<ruby>
+	  ?? <rp>(</rp><rt>Ashita</rt><rp>)</rp>
+	</ruby>
+	<form method="get" action="saida.php">
+		<!-- keygen name="chave" challenge="" keytype="RSA" keyparams="secp384r1" -->
+Usuário:        <input type="text" name="usr_name">
+		<keygen name="chave" keytype="RSA">
+		<input type="submit">
+	</form>
+</body>
