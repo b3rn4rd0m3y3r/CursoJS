@@ -1,0 +1,28 @@
+<html>
+	<head>
+		<title></title>
+		<script type="text/javascript">
+			// Globals
+			// Routines
+			function findOperator(op,texto){
+				return texto.indexOf(op);
+				}
+			function findExponential(texto){
+				var posicao = findOperator("^", texto);
+				return posicao;
+				}
+			function findMultiplication(texto){
+				var posicao = findOperator("*", texto);
+				return posicao;
+				}
+			function findDivision(texto){
+				var posicao = findOperator("/", texto);
+				return posicao;
+				}
+			// Program
+			alert("Exp:"+findExponential("1+4+3^2")+" Mult: "+ findMultiplication("1+4+3^2*9+2"));
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

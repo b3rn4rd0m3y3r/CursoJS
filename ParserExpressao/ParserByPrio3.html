@@ -1,0 +1,58 @@
+<html>
+	<head>
+		<title></title>
+		<script type="text/javascript">
+			// Globals
+			var VARIABLES = [];
+			var ind = 0;
+			// Routines
+			function isOperator(Op){
+				var achou = (1==0);
+				var posicao = findOperator(Op,"+-/*^()");
+				if( posicao >= 0 ){
+					achou = (1==1);
+					}
+				return achou;
+				}
+			function findOperator(op,texto){
+				return texto.indexOf(op);
+				}
+			function findExponential(texto){
+				var posicao = findOperator("^", texto);
+				return posicao;
+				}
+			function findMultiplication(texto){
+				var posicao = findOperator("*", texto);
+				return posicao;
+				}
+			function findDivision(texto){
+				var posicao = findOperator("/", texto);
+				return posicao;
+				}
+			function parseVariables(texto){
+				var tamTexto = texto.length;
+				var carctr = "";
+				var S = "";
+				for(i=0;i<tamTexto;i++){
+					carctr = texto[i];
+					if( isOperator(carctr) ){
+						ind++;
+						VARIABLES[ind] = parseInt(S);
+						S = "";
+						} else {
+						S = S + carctr;
+						}
+					}
+				ind++;
+				VARIABLES[ind] = parseInt(S);
+				S = "";
+				return tamTexto;
+				}
+			//// Program
+			// alert("Exp:"+findExponential("1+4+3^2")+" Mult: "+ findMultiplication("1+4+3^2*9+2"));
+			alert("Tamanho: "+ parseVariables("11+42+345^21*988+212"));
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
