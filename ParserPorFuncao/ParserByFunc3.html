@@ -1,0 +1,439 @@
+<html>
+	<head>
+		<title>Parse By Priority</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<script type="text/javascript">
+			/*
+				Alteração do parseVariables para neutralizar as subtrações, transformnando-as em somas, invertendo o sinal do argumento numérico
+			*/
+			// Funções matemáticas científicas
+			function SQRT(x){
+				return Math.sqrt(x)
+				}
+			function LOG(x){
+				return Math.log10(x)
+				}
+			function LN(x){
+				return Math.log(x)
+				}
+			// Routines
+			// Obtém o valor armazenado em uma variável
+			function varValue(nomeVar){
+				return VARIABLES[nomeVar];
+				}
+			// Obtém a variável à esquerda DE UMA POSIÇÃO (no caso um operador aritmético)
+			function leftOperand(pos){
+				return textoConv.substr(pos-3,3);
+				}	
+			// Obtém a variável à direita DE UMA POSIÇÃO (no caso um operador aritmético)
+			function rightOperand(pos){
+				return textoConv.substr(pos+1,3);
+				}				
+			// Obtém o conteúdo À ESQUERDA de uma string
+			function left(texto,n){
+				return texto.substr(0,n);
+				}
+			// Obtém o conteúdo À DIREITA de uma string (NÃO USADO)
+			function right0(texto,n){
+				return texto.slice(-n);
+				}
+			// Obtém o conteúdo À DIREITA DE UMA POSIÇÃO de uma string
+			function right1(texto,n){
+				return texto.substr(texto.length-n,n);
+				}
+			// Obtém o conteúdo À DIREITA DE UMA POSIÇÃO de uma string
+			function right(texto,n){
+				return texto.slice(-(texto.length-n));
+				}
+			// Ajusta um nome de variável num campo de número precedido de zeros
+			function adjustZero(texto){
+				texto = right1("000"+texto,2);
+				return "v"+texto
+				}
+			// Verifica se o caracter recolhido é um operador aritmético ou modificador de prioridade ()
+			function isOperator(Op){
+				var achou = (1==0);
+				var posicao = findOperator(Op,"+-/*^()");
+				if( posicao >= 0 ){
+					achou = (1==1);
+					}
+				return achou;
+				}
+			// Verifica se o caracter recolhido é um operador aritmético ou modificador de prioridade ()
+			function isOperator2(Op){
+				var achou = (1==0);
+				var posicao = findOperator(Op,"/*^()");
+				if( posicao >= 0 ){
+					achou = (1==1);
+					}
+				return achou;
+				}
+			// Verifica se o caracter recolhido é um operador aritmético ou modificador de prioridade ()
+			function isSignal(Op){
+				var achou = (1==0);
+				var posicao = findOperator(Op,"-+");
+				if( posicao >= 0 ){
+					achou = (1==1);
+					}
+				return achou;
+				}
+			// Acha um tipo de operador em um texto ou expressão
+			function findOperator(op,texto){
+				return texto.indexOf(op);
+				}
+			// Acha uma operação de EXPONENCIAÇÃO em uma expressão
+			function findExponential(texto){
+				var posicao = findOperator("^", texto);
+				return posicao;
+				}
+			// Acha uma operação de MULTIPLICAÇÃO em uma expressão
+			function findMultiplication(texto){
+				var posicao = findOperator("*", texto);
+				return posicao;
+				}
+			// Acha uma operação de DIVISÃO em uma expressão
+			function findDivision(texto){
+				var posicao = findOperator("/", texto);
+				return posicao;
+				}
+			// Acha uma operação de SOMA em uma expressão
+			function findSum(texto){
+				var posicao = findOperator("+", texto);
+				return posicao;
+				}
+			// Acha uma operação de SUBTRAÇÃO em uma expressão
+			function findSub(texto){
+				var posicao = findOperator("-", texto);
+				return posicao;
+				}
+			// Acha um FECHA PARENTESES
+			function findCloseBrace(texto){
+				var posicao = findOperator(")", texto);
+				return posicao;
+				}
+			// Acha um Operador antes de alguma talvez provável função
+			function findFunc(posicao,texto){
+				var S = "";
+				for(i=posicao-1;i>=0;i--){
+					if( isOperator(texto[i]) ){
+						posicao = i;
+						break;
+						} else {
+						S = texto[i] + S;
+						}
+					}
+				return S;
+				}
+			// Acha um ABRE PARENTESES
+			function findOpenBrace(posicao,texto){
+				for(i=posicao;i>=0;i--){
+					if( texto[i] == "(" ){
+						posicao = i;
+						break;
+						}
+					}
+				return posicao;
+				}
+			// Faz o teste de finalização e atualiza a Expressão aritmética
+			function updExpression(textoConv, posExp){
+				if( left(textoConv,posExp) == left(right(textoConv,posExp+4),left(textoConv,posExp).length) ) {
+					textoConv  = left(textoConv,posExp);
+					} else {
+					textoConv  = left(textoConv,posExp)+right(textoConv,posExp+4);
+					}			
+				return textoConv;
+				}
+			// Faz o parse de valores, transformando-os em nomes de variáveis e vai armazenando os valores nestas variáveis
+			function parseVariables(texto){
+				var tamTexto = texto.length;
+				
+				var carctr = "";
+				var ind = 0;
+				var proxCarctr = "";
+				var S = "";
+				var Variable;
+				var SINAL, PROX_SINAL;
+				var tmp = "";
+				SIGNAL["v01"] = "";
+				for(i=0;i<tamTexto;i++){
+					carctr = texto[i];
+					SINAL = "";
+					tmp = "";
+					// Caracter ATUAL é OPERADOR
+					if( isOperator(carctr) ){
+						// Índice das variáveis armazenadas
+						ind++;
+						Variable = adjustZero((ind+1).toString());
+						SIGNAL[Variable] = "";
+						// Verifica se o operador do caracter atual é "-" (subtração)
+						// if( carctr == "-" ){
+						if( carctr == "-" ){
+							PROX_SINAL = carctr;
+							//Variable = adjustZero((ind+1).toString());
+							Variable = adjustZero((ind+1).toString());
+							SIGNAL[Variable] = "-";
+							} 
+
+						// Obtem próximo caracter
+						proxCarctr = texto[i+1];
+						// Caracter seguinte é OPERADOR também (^-  OU *- OU /-)
+						Variable = adjustZero((ind+1).toString());
+						if( proxCarctr == "-" ){
+							SIGNAL[Variable] = "-"; 
+							i++; // OBSERVAR
+							} 
+						// Vai lidar com o sinal no fim do Parse
+						tmp = SIGNAL[Variable];
+						//S = tmp + S;
+						
+						// Alimenta o array VARIABLES
+						VARIABLES[ind] = parseFloat(S);
+						Variable = adjustZero(ind.toString());
+						VARIABLES[Variable] = parseFloat(S);
+						// Refaz a expressão
+						if( carctr == "-" ) { carctr = "+"; }
+						textoConv = textoConv + Variable + carctr;
+						S = "";
+						// Númeral, e não operador
+						} else {
+						S = S + carctr;
+						}
+					}
+				// Último sinal armazenado em PROX_SINAL - Nesta versão não precisa mais
+				if( PROX_SINAL == "-" || proxCarctr == "-"){
+					SINAL = "-";
+					}
+				// Lida com o sinal
+				Variable = adjustZero((ind+1).toString());
+				tmp = SIGNAL[Variable];
+				//S = tmp + S;
+				ind++;
+				VARIABLES[ind] = parseFloat(S);
+				Variable = adjustZero(ind.toString());
+				VARIABLES[Variable] = parseFloat(S);
+				textoConv = textoConv + Variable;
+				S = "";
+				// Concatena os sinais no array VARIABLES
+				for(i=1;i<=ind;i++){
+					Variable = adjustZero(i.toString());
+					S = SIGNAL[Variable]+VARIABLES[Variable].toString();
+					VARIABLES[Variable] = parseFloat(S);
+					}
+				return tamTexto;
+				}
+			function equate(Expressao){
+				// É NECESSÁRIO EXECUTAR parseVariables
+				console.log("Tamanho: "+ parseVariables(Expressao));
+				var posExp = 0;
+				var aindaTem, temFuncao;
+				// Operador de expoente
+				OPERATOR = "Exp";
+				aindaTem = (0==0);
+				while ( aindaTem ){
+					//posExp = findExponential(textoConv);
+					posExp = FUNCOES[OPERATOR](textoConv);
+					if( posExp >= 0 ){
+						console.log("Exp:("+textoConv+")"+posExp);
+						// Divide operandos à esquerda e à direita do operador
+						var OpDir = rightOperand(posExp);
+						var OpEsq = leftOperand(posExp);
+						// Concretiza a operação
+						Resultado = Math.pow(varValue(OpEsq),varValue(OpDir));
+						console.log("Esq.:"+ OpEsq + "(" + varValue(OpEsq) + ") : " + OpDir + "(" + varValue(OpDir) + ") = " + Resultado);
+						// Substitui o valor da variável à esquerda
+						VARIABLES[OpEsq] = Resultado;
+						// Zera a variável à direita
+						VARIABLES[OpDir] = 0;
+						// testa o fim e refaz a expressão
+						textoConv = updExpression(textoConv, posExp);
+						} else {
+						aindaTem = (0==1);
+						}
+					}
+				console.log(textoConv);
+				// Operador de multiplicação
+				OPERATOR = "Mul";
+				aindaTem = (0==0);
+				while ( aindaTem ){
+					//posExp = findMultiplication(textoConv);
+					posExp = FUNCOES[OPERATOR](textoConv);
+					if( posExp >= 0 ){
+						console.log("Mul:("+textoConv+")"+posExp);
+						// Divide operandos à esquerda e à direita do operador
+						var OpDir = rightOperand(posExp);
+						var OpEsq = leftOperand(posExp);
+						// Concretiza a operação
+						Resultado = varValue(OpEsq)*varValue(OpDir);
+						console.log("Esq.:"+ OpEsq + "(" + varValue(OpEsq) + ") : " + OpDir + "(" + varValue(OpDir) + ") = " + Resultado);
+						// Substitui o valor da variável à esquerda
+						VARIABLES[OpEsq] = Resultado;
+						// Zera a variável à direita
+						VARIABLES[OpDir] = 0;
+						// testa o fim e refaz a expressão
+						textoConv = updExpression(textoConv, posExp);
+						} else {
+						aindaTem = (0==1);
+						}
+					}
+				console.log(textoConv);
+				// Operador de divisão
+				OPERATOR = "Div";
+				aindaTem = (0==0);
+				while ( aindaTem ){
+					//posExp = findDivision(textoConv);
+					posExp = FUNCOES[OPERATOR](textoConv);
+					if( posExp >= 0 ){
+						console.log("Div:("+textoConv+")"+posExp);
+						// Divide operandos à esquerda e à direita do operador
+						var OpDir = rightOperand(posExp);
+						var OpEsq = leftOperand(posExp);
+						// Concretiza a operação
+						Resultado = varValue(OpEsq)/varValue(OpDir);
+						console.log("Esq.:"+ OpEsq + "(" + varValue(OpEsq) + ") : " + OpDir + "(" + varValue(OpDir) + ") = " + Resultado);
+						// Substitui o valor da variável à esquerda
+						VARIABLES[OpEsq] = Resultado;
+						// Zera a variável à direita
+						VARIABLES[OpDir] = 0;
+						// testa o fim e refaz a expressão
+						textoConv = updExpression(textoConv, posExp);
+						} else {
+						aindaTem = (0==1);
+						}
+					}
+				console.log(textoConv);
+				// Operador de subtração
+
+				// Operador de soma
+				OPERATOR = "Sum";
+				aindaTem = (0==0);
+				while ( aindaTem ){
+					//posExp = findSum(textoConv);
+					posExp = FUNCOES[OPERATOR](textoConv);
+					if( posExp >= 0 ){
+						console.log("Sum:("+textoConv+") - Pos: "+posExp);
+						// Divide operandos à esquerda e à direita do operador
+						var OpDir = rightOperand(posExp);
+						var OpEsq = leftOperand(posExp);
+						// Concretiza a operação
+						Resultado = varValue(OpEsq)+varValue(OpDir);
+						console.log("Esq.:"+ OpEsq + "(" + varValue(OpEsq) + ") : " + OpDir + "(" + varValue(OpDir) + ") = " + Resultado);
+						// Substitui o valor da variável à esquerda
+						VARIABLES[OpEsq] = Resultado;
+						// Zera a variável à direita
+						VARIABLES[OpDir] = 0;
+						// testa o fim e refaz a expressão
+						textoConv = updExpression(textoConv, posExp);
+						} else {
+						aindaTem = (0==1);
+						}
+					}
+				return textoConv;
+				}
+			
+
+			function solvExpression(Expressao){
+				//Procedimentos iniciais
+				if( left(Expressao,1) == "(" ){
+					throw new Error('Expressão não pode iniciar com parênteses');
+					}
+				//var ind = 0;
+				var Resultado = 0;
+				var OPERATOR;
+				var posExp_ant = 999999;
+				var posIni = 0;
+				var posFim = 0;
+				var ExpressaoTemp = "";
+				var Tam = 0;
+				var Temp;
+				var LadoEsq,LadoDir;
+				var NOME_FUNC;
+				// Operador de parênteses
+				OPERATOR = ")";
+				aindaTem = (0==0);
+				temFuncao = (0==1);
+				while ( aindaTem ){
+					// A priori, sem indicador de função antes dos parênteses
+					temFuncao = (0==1);
+					posExp = findCloseBrace(Expressao);
+					if( posExp >= 0 ){
+						VARIABLES = [];
+						SIGNAL = [];
+						textoConv = "";
+						ind = 0;
+						
+						posFim = findCloseBrace(Expressao);
+						posIni = findOpenBrace(posFim,Expressao);
+						// Verifica o que vem à esquerda do abre-parênteses, usando posIni como referência
+						NOME_FUNC = findFunc(posIni, Expressao);
+						//
+						ExpressaoTemp = Expressao.substr(posIni+1,posFim-posIni-1);
+						console.log("ExpTemp: "+ExpressaoTemp);
+						Temp = equate(ExpressaoTemp);
+						// LadoEsq e LadoDir
+						if( NOME_FUNC != "" ){
+							//eval(VARIABLES["v01"] = NOME_FUNC+"("+VARIABLES["v01"]+")");
+							VARIABLES["v01"] = eval(NOME_FUNC+"("+VARIABLES["v01"]+")");
+							posIni = posIni - NOME_FUNC.length;
+							}
+						LadoEsq = left(Expressao,posIni);
+						LadoDir = Expressao.substr(posFim+1,9999);
+						Expressao =  LadoEsq +VARIABLES["v01"]+ LadoDir;
+						
+						} else {
+						aindaTem = (0==1);
+						}
+					}
+				console.log(textoConv+" : "+Expressao);
+				
+				VARIABLES = [];
+				SIGNAL = [];
+				textoConv = "";
+				ind = 0;
+				Temp = equate(Expressao);
+				
+				return VARIABLES["v01"];
+				}
+			//// Program
+			/*
+				solvExpression                        				Fornece o resultado de uma expressão aritmética
+				           |
+					+---------  equate          				Resolve a expressão, operação por operação
+							|
+							+-------- parseVariables	Faz o parse da expressão aritmética
+												1 - Coloca cada número em um item do array VARIABLES
+												2 - Coloca sinais negativos dentro dos respectivos itens do array VARIABLES
+			*/
+			// Globals
+			/*
+				Expressões
+					"2+3*(4-2*(4+2*5-1)+5-2)+2*(4-2*3)"
+					"(100*4-235-8*5)/(333-45*2-2*2*2-3)"
+					"11+4^5+42/2+2^21*988-12+212"
+					"(1-1/(90*3-80*2)+1/2+1/3+1.01^10)"
+			*/
+			// Constantes e ARRAYS do CORE do parser e solve
+			var VARIABLES = [];
+			var SIGNAL = [];
+			var FUNCOES = [];
+			FUNCOES["Exp"] = findExponential;
+			FUNCOES["Mul"] = findMultiplication;
+			FUNCOES["Div"] = findDivision;
+			FUNCOES["Sum"] = findSum;
+			FUNCOES["Sub"] = findSub;
+			FUNCOES["Abp"] = findOpenBrace;
+			FUNCOES["Fbp"] = findCloseBrace;
+			var textoConv = "";
+			// Processando a expressão
+			//var res0 = parseVariables("17/2+19/3+1.01^10");
+			// Teste de Parse, apenas sem parênteses, senão precisa de processá-los
+			//var res0 = parseVariables("90*3-80*2");
+			console.log("======================================================");
+			//Expressao = "(1-1/(90*3-80*2)+SQRT(1/2)+LN(1/3)+LN(1/4))";
+			Expressao = "1-1/(90*3-80*2)+SQRT(1/2)+LN(1/3)+LN(1/4)";
+			var result = solvExpression(Expressao);
+			console.log("Resultado: " + result );
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
