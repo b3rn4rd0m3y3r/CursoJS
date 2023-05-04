@@ -1,0 +1,116 @@
+<html>
+	<head>
+		<title>Parse08</title>
+		<script type="text/javascript">
+			// Globals
+			var VARIABLES = [];
+			var textoConv = "";
+			var ind = 0;
+			var Resultado = 0;
+			// Routines
+			function varValue(nomeVar){
+				return VARIABLES[nomeVar];
+				}
+			function leftOperand(pos){
+				return textoConv.substr(pos-3,3);
+				}	
+			function rightOperand(pos){
+				return textoConv.substr(pos+1,3);
+				}				
+			function left(texto,n){
+				return texto.substr(0,n);
+				}
+			function right(texto,n){
+				return texto.slice(-n);
+				}
+			function adjustZero(texto){
+				texto = right("000"+texto,2);
+				return "v"+texto
+				}
+			function isOperator(Op){
+				var achou = (1==0);
+				var posicao = findOperator(Op,"+-/*^()");
+				if( posicao >= 0 ){
+					achou = (1==1);
+					}
+				return achou;
+				}
+			function findOperator(op,texto){
+				return texto.indexOf(op);
+				}
+			function findExponential(texto){
+				var posicao = findOperator("^", texto);
+				return posicao;
+				}
+			function findMultiplication(texto){
+				var posicao = findOperator("*", texto);
+				return posicao;
+				}
+			function findDivision(texto){
+				var posicao = findOperator("/", texto);
+				return posicao;
+				}
+			function parseVariables(texto){
+				var tamTexto = texto.length;
+				var carctr = "";
+				var S = "";
+				var Variable;
+				//var textoConv = "";
+				for(i=0;i<tamTexto;i++){
+					carctr = texto[i];
+					if( isOperator(carctr) ){
+						ind++;
+						VARIABLES[ind] = parseInt(S);
+						Variable = adjustZero(ind.toString());
+						VARIABLES[Variable] = parseInt(S);
+						textoConv = textoConv + Variable + carctr;
+						S = "";
+						} else {
+						S = S + carctr;
+						}
+					}
+				ind++;
+				VARIABLES[ind] = parseInt(S);
+				//textoConv = textoConv +adjustZero(ind.toString());
+				Variable = adjustZero(ind.toString());
+				VARIABLES[Variable] = parseInt(S);
+				textoConv = textoConv + Variable;
+				S = "";
+				return tamTexto;
+				}
+			//// Program
+			// alert("Exp:"+findExponential("1+4+3^2")+" Mult: "+ findMultiplication("1+4+3^2*9+2"));
+			var Expressao = "11+42+2^21*988+212";
+			// É NECESSÁRIO EXECUTAR parseVariables
+			alert("Tamanho: "+ parseVariables(Expressao));
+			// 
+			var posExp = 0;
+			var aindaTem;
+			// Operador de expoente
+			aindaTem = (0==0);
+			while ( aindaTem ){
+				posExp = findExponential(textoConv);
+				if( posExp >= 0 ){
+					alert("Exp:("+Expressao+")"+posExp);
+					// Divide operandos à esquerda e à direita do operador
+					var OpDir = rightOperand(posExp);
+					var OpEsq = leftOperand(posExp);
+					// Concretiza a operação
+					Resultado = Math.pow(varValue(OpEsq),varValue(OpDir));
+					alert("Esq.:"+ OpEsq + "(" + varValue(OpEsq) + ") : " + OpDir + "(" + varValue(OpDir) + ") = " + Resultado);
+					// Substitui o valor da variável à esquerda
+					VARIABLES[OpEsq] = Resultado;
+					// Zera a variável à direita
+					VARIABLES[OpDir] = 0;
+					// refaz a expressão
+					textoConv  = left(textoConv,posExp)+right(textoConv,posExp-3);
+					alert(textoConv);
+					} else {
+					aindaTem = (0==1);
+					}
+				}
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

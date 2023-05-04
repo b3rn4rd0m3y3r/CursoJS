@@ -1,0 +1,79 @@
+<html>
+	<head>
+		<title>Parse05</title>
+		<script type="text/javascript">
+			// Globals
+			var VARIABLES = [];
+			var textoConv = "";
+			var ind = 0;
+			// Routines
+			function left(texto,n){
+				return texto.slice(n);
+				}
+			function right(texto,n){
+				return texto.slice(-n);
+				}
+			function adjustZero(texto){
+				texto = right("000"+texto,2);
+				return "v"+texto
+				}
+			function isOperator(Op){
+				var achou = (1==0);
+				var posicao = findOperator(Op,"+-/*^()");
+				if( posicao >= 0 ){
+					achou = (1==1);
+					}
+				return achou;
+				}
+			function findOperator(op,texto){
+				return texto.indexOf(op);
+				}
+			function findExponential(texto){
+				var posicao = findOperator("^", texto);
+				return posicao;
+				}
+			function findMultiplication(texto){
+				var posicao = findOperator("*", texto);
+				return posicao;
+				}
+			function findDivision(texto){
+				var posicao = findOperator("/", texto);
+				return posicao;
+				}
+			function parseVariables(texto){
+				var tamTexto = texto.length;
+				var carctr = "";
+				var S = "";
+				var Variable;
+				//var textoConv = "";
+				for(i=0;i<tamTexto;i++){
+					carctr = texto[i];
+					if( isOperator(carctr) ){
+						ind++;
+						VARIABLES[ind] = parseInt(S);
+						Variable = adjustZero(ind.toString());
+						VARIABLES[Variable] = parseInt(S);
+						textoConv = textoConv + Variable + carctr;
+						S = "";
+						} else {
+						S = S + carctr;
+						}
+					}
+				ind++;
+				VARIABLES[ind] = parseInt(S);
+				//textoConv = textoConv +adjustZero(ind.toString());
+				Variable = adjustZero(ind.toString());
+				VARIABLES[Variable] = parseInt(S);
+				textoConv = textoConv + Variable;
+				S = "";
+				return tamTexto;
+				}
+			//// Program
+			// alert("Exp:"+findExponential("1+4+3^2")+" Mult: "+ findMultiplication("1+4+3^2*9+2"));
+			alert("Tamanho: "+ parseVariables("11+42+345^21*988+212"));
+			console.log(VARIABLES);
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
