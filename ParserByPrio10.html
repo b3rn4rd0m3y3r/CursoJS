@@ -1,0 +1,185 @@
+<html>
+	<head>
+		<title>Parse By Priority</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<script type="text/javascript">
+			// Globals
+			var VARIABLES = [];
+			var textoConv = "";
+			var ind = 0;
+			var Resultado = 0;
+			var OPERATOR;
+			// Routines
+			// Obtêm o valor armazenado em uma variável
+			function varValue(nomeVar){
+				return VARIABLES[nomeVar];
+				}
+			// Obtêm a variável à esquerda de uma posição (no caso um operador aritmético)
+			function leftOperand(pos){
+				return textoConv.substr(pos-3,3);
+				}	
+			// Obtêm a variável à direita de uma posição (no caso um operador aritmético)
+			function rightOperand(pos){
+				return textoConv.substr(pos+1,3);
+				}				
+			// Obtêm o conteúdo à esquerda de uma string
+			function left(texto,n){
+				return texto.substr(0,n);
+				}
+			// Obtêm o conteúdo à direita de uma string
+			function right0(texto,n){
+				return texto.slice(-n);
+				}
+			// Obtêm o conteúdo à direita de uma string
+			function right(texto,n){
+				return texto.slice(-(texto.length-n));
+				}
+			// Ajusta um nome de variável num campo de número precedido de zeros
+			function adjustZero(texto){
+				texto = right("000"+texto,2);
+				return "v"+texto
+				}
+			// Verifica se o caracter recolhido é um operador aritmético ou modificador de prioridade ()
+			function isOperator(Op){
+				var achou = (1==0);
+				var posicao = findOperator(Op,"+-/*^()");
+				if( posicao >= 0 ){
+					achou = (1==1);
+					}
+				return achou;
+				}
+			// Acha um tipo de operador em um texto ou expressão
+			function findOperator(op,texto){
+				return texto.indexOf(op);
+				}
+			// Acha uma operação de EXPONENCIAÇÃO em uma expressão
+			function findExponential(texto){
+				var posicao = findOperator("^", texto);
+				return posicao;
+				}
+			// Acha uma operação de MULTIPLICAÇÃO em uma expressão
+			function findMultiplication(texto){
+				var posicao = findOperator("*", texto);
+				return posicao;
+				}
+			// Acha uma operação de DIVISÃO em uma expressão
+			function findDivision(texto){
+				var posicao = findOperator("/", texto);
+				return posicao;
+				}
+			// Faz o parse de valores, transformando-os em nomes de variáveis e vai armazenando os valores nestas variáveis
+			function parseVariables(texto){
+				var tamTexto = texto.length;
+				var carctr = "";
+				var S = "";
+				var Variable;
+				//var textoConv = "";
+				for(i=0;i<tamTexto;i++){
+					carctr = texto[i];
+					if( isOperator(carctr) ){
+						ind++;
+						VARIABLES[ind] = parseInt(S);
+						Variable = adjustZero(ind.toString());
+						VARIABLES[Variable] = parseInt(S);
+						textoConv = textoConv + Variable + carctr;
+						S = "";
+						} else {
+						S = S + carctr;
+						}
+					}
+				ind++;
+				VARIABLES[ind] = parseInt(S);
+				//textoConv = textoConv +adjustZero(ind.toString());
+				Variable = adjustZero(ind.toString());
+				VARIABLES[Variable] = parseInt(S);
+				textoConv = textoConv + Variable;
+				S = "";
+				return tamTexto;
+				}
+			//// Program
+			// alert("Exp:"+findExponential("1+4+3^2")+" Mult: "+ findMultiplication("1+4+3^2*9+2"));
+			var Expressao = "11+4^5+42/2+2^21*988+212";
+			// É NECESSÁRIO EXECUTAR parseVariables
+			alert("Tamanho: "+ parseVariables(Expressao));
+			// 
+			var posExp = 0;
+			var aindaTem;
+			// Operador de expoente
+			aindaTem = (0==0);
+			while ( aindaTem ){
+				posExp = findExponential(textoConv);
+				if( posExp >= 0 ){
+					alert("Exp:("+textoConv+")"+posExp);
+					// Divide operandos à esquerda e à direita do operador
+					var OpDir = rightOperand(posExp);
+					var OpEsq = leftOperand(posExp);
+					// Concretiza a operação
+					Resultado = Math.pow(varValue(OpEsq),varValue(OpDir));
+					alert("Esq.:"+ OpEsq + "(" + varValue(OpEsq) + ") : " + OpDir + "(" + varValue(OpDir) + ") = " + Resultado);
+					// Substitui o valor da variável à esquerda
+					VARIABLES[OpEsq] = Resultado;
+					// Zera a variável à direita
+					VARIABLES[OpDir] = 0;
+					// refaz a expressão
+					//textoConv  = left(textoConv,posExp)+right(textoConv,posExp-3);
+					textoConv  = left(textoConv,posExp)+right(textoConv,posExp+4);
+					console.log(textoConv);
+					} else {
+					aindaTem = (0==1);
+					}
+				}
+			console.log(textoConv);
+			// Operador de multiplicação
+			aindaTem = (0==0);
+			while ( aindaTem ){
+				posExp = findMultiplication(textoConv);
+				if( posExp >= 0 ){
+					alert("Mul:("+textoConv+")"+posExp);
+					// Divide operandos à esquerda e à direita do operador
+					var OpDir = rightOperand(posExp);
+					var OpEsq = leftOperand(posExp);
+					// Concretiza a operação
+					Resultado = varValue(OpEsq)*varValue(OpDir);
+					alert("Esq.:"+ OpEsq + "(" + varValue(OpEsq) + ") : " + OpDir + "(" + varValue(OpDir) + ") = " + Resultado);
+					// Substitui o valor da variável à esquerda
+					VARIABLES[OpEsq] = Resultado;
+					// Zera a variável à direita
+					VARIABLES[OpDir] = 0;
+					// refaz a expressão
+					//textoConv  = left(textoConv,posExp)+right(textoConv,posExp-3);
+					textoConv  = left(textoConv,posExp)+right(textoConv,posExp+4);
+					console.log(textoConv);
+					} else {
+					aindaTem = (0==1);
+					}
+				}
+			console.log(textoConv);
+			// Operador de divisão
+			aindaTem = (0==0);
+			while ( aindaTem ){
+				posExp = findDivision(textoConv);
+				if( posExp >= 0 ){
+					alert("Mul:("+textoConv+")"+posExp);
+					// Divide operandos à esquerda e à direita do operador
+					var OpDir = rightOperand(posExp);
+					var OpEsq = leftOperand(posExp);
+					// Concretiza a operação
+					Resultado = varValue(OpEsq)/varValue(OpDir);
+					alert("Esq.:"+ OpEsq + "(" + varValue(OpEsq) + ") : " + OpDir + "(" + varValue(OpDir) + ") = " + Resultado);
+					// Substitui o valor da variável à esquerda
+					VARIABLES[OpEsq] = Resultado;
+					// Zera a variável à direita
+					VARIABLES[OpDir] = 0;
+					// refaz a expressão
+					textoConv  = left(textoConv,posExp)+right(textoConv,posExp+4);
+					console.log(textoConv);
+					} else {
+					aindaTem = (0==1);
+					}
+				}
+			console.log(textoConv);
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
