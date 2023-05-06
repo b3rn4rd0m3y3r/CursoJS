@@ -1,0 +1,30 @@
+<html>
+	<head>
+		<title>Slice - AE02</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<script type="text/javascript">
+			console.log('str1 = "0123456789A123456789B"');
+			var str1 = "0123456789A123456789B";	
+			console.log("Usando SUBSTR");
+			console.log("str1.substr(4)");
+			console.log(str1.substr(4));
+			console.log("str1.substr(-4)");
+			console.log(str1.substr(-4));
+			console.log("Usando SLICE");
+			console.log("str1.slice(4)");
+			console.log(str1.slice(4));
+			console.log("str1.slice(-4)");
+			console.log(str1.slice(-4));
+			console.log("Usando indexOf");
+			var pos = str1.indexOf("A");
+			console.log('str1.indexOf("A")');
+			console.log("pos = "+pos);
+			var esquerda3 = str1.substr(pos-3,3);
+			console.log("esquerda3 = "+esquerda3);
+			var direita3 = str1.substr(pos+1,3);
+			console.log("direita3 = "+direita3);
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
