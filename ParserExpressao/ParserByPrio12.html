@@ -11,7 +11,7 @@
 			var OPERATOR;
 			var posExp_ant = 999999;
 			// Routines
-			// ObtÈm o valor armazenado em uma vari·vel
+			// Obt√™m o valor armazenado em uma vari√°vel
 			function varValue(nomeVar){
 				return VARIABLES[nomeVar];
 				}
@@ -112,95 +112,94 @@
 				return tamTexto;
 				}
 			//// Program
-			// alert("Exp:"+findExponential("1+4+3^2")+" Mult: "+ findMultiplication("1+4+3^2*9+2"));
 			var Expressao = "11+4^5+42/2+2^21*988-12+212";
-			// … NECESS¡RIO EXECUTAR parseVariables
+			// √â NECESS√ÅRIO EXECUTAR parseVariables
 			console.log("Tamanho: "+ parseVariables(Expressao));
 			// 
 			var posExp = 0;
 			var aindaTem;
+			function init(){
 			// Operador de expoente
 			aindaTem = (0==0);
 			while ( aindaTem ){
 				posExp = findExponential(textoConv);
 				if( posExp >= 0 ){
 					console.log("Exp:("+textoConv+")"+posExp);
-					// Divide operandos ‡ esquerda e ‡ direita do operador
+					// Divide operandos √† esquerda e √† direita do operador
 					var OpDir = rightOperand(posExp);
 					var OpEsq = leftOperand(posExp);
-					// Concretiza a operaÁ„o
+					// Concretiza a opera√ß√£o
 					Resultado = Math.pow(varValue(OpEsq),varValue(OpDir));
 					console.log("Esq.:"+ OpEsq + "(" + varValue(OpEsq) + ") : " + OpDir + "(" + varValue(OpDir) + ") = " + Resultado);
-					// Substitui o valor da vari·vel ‡ esquerda
+					// Substitui o valor da vari√°vel √† esquerda
 					VARIABLES[OpEsq] = Resultado;
-					// Zera a vari·vel ‡ direita
+					// Zera a vari√°vel √† direita
 					VARIABLES[OpDir] = 0;
-					//textoConv  = left(textoConv,posExp)+right(textoConv,posExp+4);
-					// testa o fim e refaz a express„o
-					// if( left(textoConv,posExp) == left(right(textoConv,posExp+4),3) ) {
+					// testa o fim e refaz a express√£o
 					if( left(textoConv,posExp) == left(right(textoConv,posExp+4),left(textoConv,posExp).length) ) {
 						textoConv  = left(textoConv,posExp);
 						} else {
 						textoConv  = left(textoConv,posExp)+right(textoConv,posExp+4);
 						}
+					console.log(textoConv);
 					} else {
 					aindaTem = (0==1);
 					}
 				}
 			console.log(textoConv);
-			// Operador de multiplicaÁ„o
+			// Operador de multiplica√ß√£o
 			aindaTem = (0==0);
 			while ( aindaTem ){
 				posExp = findMultiplication(textoConv);
 				if( posExp >= 0 ){
 					console.log("Mul:("+textoConv+")"+posExp);
-					// Divide operandos ‡ esquerda e ‡ direita do operador
+					// Divide operandos √† esquerda e √† direita do operador
 					var OpDir = rightOperand(posExp);
 					var OpEsq = leftOperand(posExp);
-					// Concretiza a operaÁ„o
+					// Concretiza a opera√ß√£o
 					Resultado = varValue(OpEsq)*varValue(OpDir);
 					console.log("Esq.:"+ OpEsq + "(" + varValue(OpEsq) + ") : " + OpDir + "(" + varValue(OpDir) + ") = " + Resultado);
-					// Substitui o valor da vari·vel ‡ esquerda
+					// Substitui o valor da vari√°vel √† esquerda
 					VARIABLES[OpEsq] = Resultado;
-					// Zera a vari·vel ‡ direita
+					// Zera a vari√°vel √† direita
 					VARIABLES[OpDir] = 0;
-					//textoConv  = left(textoConv,posExp)+right(textoConv,posExp+4);
-					// testa o fim e refaz a express„o
-					// if( left(textoConv,posExp) == left(right(textoConv,posExp+4),3) ) {
+					// testa o fim e refaz a express√£o
 					if( left(textoConv,posExp) == left(right(textoConv,posExp+4),left(textoConv,posExp).length) ) {
 						textoConv  = left(textoConv,posExp);
 						} else {
 						textoConv  = left(textoConv,posExp)+right(textoConv,posExp+4);
 						}
+					console.log(textoConv);
 					} else {
 					aindaTem = (0==1);
 					}
 				}
 			console.log(textoConv);
-			// Operador de divis„o
+			// Operador de divis√£o
 			aindaTem = (0==0);
 			while ( aindaTem ){
 				posExp = findDivision(textoConv);
 				if( posExp >= 0 ){
 					console.log("Div:("+textoConv+")"+posExp);
-					// Divide operandos ‡ esquerda e ‡ direita do operador
+					// Divide operandos √† esquerda e √† direita do operador
 					var OpDir = rightOperand(posExp);
 					var OpEsq = leftOperand(posExp);
-					// Concretiza a operaÁ„o
+					// Concretiza a opera√ß√£o
 					Resultado = varValue(OpEsq)/varValue(OpDir);
 					console.log("Esq.:"+ OpEsq + "(" + varValue(OpEsq) + ") : " + OpDir + "(" + varValue(OpDir) + ") = " + Resultado);
-					// Substitui o valor da vari·vel ‡ esquerda
+					// Substitui o valor da vari√°vel √† esquerda
 					VARIABLES[OpEsq] = Resultado;
-					// Zera a vari·vel ‡ direita
+					// Zera a vari√°vel √† direita
 					VARIABLES[OpDir] = 0;
 					//textoConv  = left(textoConv,posExp)+right(textoConv,posExp+4);
-					// testa o fim e refaz a express„o
+					// testa o fim e refaz a express√£o
 					if( left(textoConv,posExp) == left(right(textoConv,posExp+4),left(textoConv,posExp).length) ) {
 					// if( left(textoConv,posExp) == left(right(textoConv,posExp+4),3) ) {
 						textoConv  = left(textoConv,posExp);
 						} else {
 						textoConv  = left(textoConv,posExp)+right(textoConv,posExp+4);
 						}
+					console.log(textoConv);
 					} else {
 					aindaTem = (0==1);
 					}
@@ -212,58 +211,60 @@
 				posExp = findSum(textoConv);
 				if( posExp >= 0 ){
 					console.log("Sum:("+textoConv+") - Pos: "+posExp);
-					// Divide operandos ‡ esquerda e ‡ direita do operador
+					// Divide operandos √† esquerda e √† direita do operador
 					var OpDir = rightOperand(posExp);
 					var OpEsq = leftOperand(posExp);
-					// Concretiza a operaÁ„o
+					// Concretiza a opera√ß√£o
 					Resultado = varValue(OpEsq)+varValue(OpDir);
 					console.log("Esq.:"+ OpEsq + "(" + varValue(OpEsq) + ") : " + OpDir + "(" + varValue(OpDir) + ") = " + Resultado);
-					// Substitui o valor da vari·vel ‡ esquerda
+					// Substitui o valor da vari√°vel √† esquerda
 					VARIABLES[OpEsq] = Resultado;
-					// Zera a vari·vel ‡ direita
+					// Zera a vari√°vel √† direita
 					VARIABLES[OpDir] = 0;
-					// testa o fim e refaz a express„o
+					// testa o fim e refaz a express√£o
 					if( left(textoConv,posExp) == left(right(textoConv,posExp+4),left(textoConv,posExp).length) ) {
-					//if( left(textoConv,posExp).length == 3 && left(textoConv,posExp) == left(right(textoConv,posExp+4),3) ) {
 						textoConv  = left(textoConv,posExp);
 						} else {
 						textoConv  = left(textoConv,posExp)+right(textoConv,posExp+4);
 						}
+					console.log(textoConv);
 					} else {
 					aindaTem = (0==1);
 					}
 				}
 			console.log(textoConv);
-			// Operador de subtraÁ„o
+			// Operador de subtra√ß√£o
 			aindaTem = (0==0);
 			while ( aindaTem ){
 				posExp = findSub(textoConv);
 				if( posExp >= 0 ){
 					console.log("Sub:("+textoConv+") - Pos: "+posExp);
-					// Divide operandos ‡ esquerda e ‡ direita do operador
+					// Divide operandos √† esquerda e √† direita do operador
 					var OpDir = rightOperand(posExp);
 					var OpEsq = leftOperand(posExp);
-					// Concretiza a operaÁ„o
+					// Concretiza a opera√ß√£o
 					Resultado = varValue(OpEsq)-varValue(OpDir);
 					console.log("Esq.:"+ OpEsq + "(" + varValue(OpEsq) + ") : " + OpDir + "(" + varValue(OpDir) + ") = " + Resultado);
-					// Substitui o valor da vari·vel ‡ esquerda
+					// Substitui o valor da vari√°vel √† esquerda
 					VARIABLES[OpEsq] = Resultado;
-					// Zera a vari·vel ‡ direita
+					// Zera a vari√°vel √† direita
 					VARIABLES[OpDir] = 0;
-					// testa o fim e refaz a express„o
-					//if( left(textoConv,posExp).length == 3 && left(textoConv,posExp) == left(right(textoConv,posExp+4),3)   ) {
+					// testa o fim e refaz a express√£o
 					if( left(textoConv,posExp) == left(right(textoConv,posExp+4),left(textoConv,posExp).length) ) {
 						textoConv  = left(textoConv,posExp);
 						} else {
 						textoConv  = left(textoConv,posExp)+right(textoConv,posExp+4);
 						}
+					console.log(textoConv);
 					} else {
 					aindaTem = (0==1);
 					}
 				}
 			console.log(textoConv);
+			}
 		</script>
 	</head>
-	<body>
+	<body onload="init();">
+				<h1>Abra a console do navegador para ver o processamento desta script HTML</h1>
 	</body>
 </html>
