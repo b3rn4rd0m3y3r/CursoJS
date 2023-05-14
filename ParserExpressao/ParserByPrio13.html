@@ -11,23 +11,23 @@
 			var OPERATOR;
 			var posExp_ant = 999999;
 			// Routines
-			// ObtÈm o valor armazenado em uma vari·vel
+			// Obt√™m o valor armazenado em uma vari√°vel
 			function varValue(nomeVar){
 				return VARIABLES[nomeVar];
 				}
-			// ObtÈm a vari·vel ‡ esquerda de uma posiÁ„o (no caso um operador aritmÈtico)
+			// Obt√™m a vari√°vel √† esquerda de uma posi√ß√£o (no caso um operador aritmÈtico)
 			function leftOperand(pos){
 				return textoConv.substr(pos-3,3);
 				}	
-			// ObtÈm a vari·vel ‡ direita de uma posiÁ„o (no caso um operador aritmÈtico)
+			// Obt√™m a vari√°vel √† direita de uma posi√ß√£o (no caso um operador aritmÈtico)
 			function rightOperand(pos){
 				return textoConv.substr(pos+1,3);
 				}				
-			// ObtÈm o conte˙do ‡ esquerda de uma string
+			// Obt√™m o conte√∫do √† esquerda de uma string
 			function left(texto,n){
 				return texto.substr(0,n);
 				}
-			// ObtÈm o conte˙do ‡ direita de uma string
+			// Obt√™m o conte√∫do √† direita de uma string
 			function right0(texto,n){
 				return texto.slice(-n);
 				}
@@ -77,12 +77,12 @@
 				var posicao = findOperator("+", texto);
 				return posicao;
 				}
-			// Acha uma operaÁ„o de SUBTRA«√O em uma express„o
+			// Acha uma opera√ß√£o de SUBTRA√á√ÉO em uma express√£o
 			function findSub(texto){
 				var posicao = findOperator("-", texto);
 				return posicao;
 				}
-			// Faz o teste de finalizaÁ„o e atualiza a Express„o aritmÈtica
+			// Faz o teste de finaliza√ß√£o e atualiza a Express√£o aritm√©tica - splice
 			function updExpression(textoConv, posExp){
 				if( left(textoConv,posExp) == left(right(textoConv,posExp+4),left(textoConv,posExp).length) ) {
 					textoConv  = left(textoConv,posExp);
@@ -91,7 +91,7 @@
 					}			
 				return textoConv;
 				}
-			// Faz o parse de valores, transformando-os em nomes de vari·veis e vai armazenando os valores nestas vari·veis
+			// Faz o parse de valores, transformando-os em nomes de vari√°veis e vai armazenando os valores nestas vari·veis
 			function parseVariables(texto){
 				var tamTexto = texto.length;
 				var carctr = "";
@@ -123,7 +123,7 @@
 			//// Program
 			var Expressao = "11+4^5+42/2+2^21*988-12+212";
 			
-			// … NECESS¡RIO EXECUTAR parseVariables
+			// √â NECESS√ÅRIO EXECUTAR parseVariables
 			console.log("Tamanho: "+ parseVariables(Expressao));
 			var posExp = 0;
 			var aindaTem;
@@ -134,7 +134,7 @@
 				posExp = findExponential(textoConv);
 				if( posExp >= 0 ){
 					console.log("Exp:("+textoConv+")"+posExp);
-					// Divide operandos ‡ esquerda e ‡ direita do operador
+					// Divide operandos √† esquerda e √† direita do operador
 					var OpDir = rightOperand(posExp);
 					var OpEsq = leftOperand(posExp);
 					// Concretiza a operaÁ„o
@@ -144,7 +144,7 @@
 					VARIABLES[OpEsq] = Resultado;
 					// Zera a vari·vel ‡ direita
 					VARIABLES[OpDir] = 0;
-					// testa o fim e refaz a express„o
+					// testa o fim e refaz a express√£o, utilizando a fun√ß√£o "updExpression"
 					textoConv = updExpression(textoConv, posExp);
 					} else {
 					aindaTem = (0==1);
@@ -168,7 +168,7 @@
 					VARIABLES[OpEsq] = Resultado;
 					// Zera a vari·vel ‡ direita
 					VARIABLES[OpDir] = 0;
-					// testa o fim e refaz a express„o
+					// testa o fim e refaz a express√£o, utilizando a fun√ß√£o "updExpression"
 					textoConv = updExpression(textoConv, posExp);
 					} else {
 					aindaTem = (0==1);
@@ -192,7 +192,7 @@
 					VARIABLES[OpEsq] = Resultado;
 					// Zera a vari·vel ‡ direita
 					VARIABLES[OpDir] = 0;
-					// testa o fim e refaz a express„o
+					// testa o fim e refaz a express√£o, utilizando a fun√ß√£o "updExpression"
 					textoConv = updExpression(textoConv, posExp);
 					} else {
 					aindaTem = (0==1);
@@ -216,7 +216,7 @@
 					VARIABLES[OpEsq] = Resultado;
 					// Zera a vari·vel ‡ direita
 					VARIABLES[OpDir] = 0;
-					// testa o fim e refaz a express„o
+					// testa o fim e refaz a express√£o, utilizando a fun√ß√£o "updExpression"
 					textoConv = updExpression(textoConv, posExp);
 					} else {
 					aindaTem = (0==1);
@@ -238,9 +238,9 @@
 					console.log("Esq.:"+ OpEsq + "(" + varValue(OpEsq) + ") : " + OpDir + "(" + varValue(OpDir) + ") = " + Resultado);
 					// Substitui o valor da vari·vel ‡ esquerda
 					VARIABLES[OpEsq] = Resultado;
-					// Zera a vari·vel ‡ direita
+					// Zera a vari√°vel √† direita
 					VARIABLES[OpDir] = 0;
-					// testa o fim e refaz a express„o
+					// testa o fim e refaz a express√£o, utilizando a fun√ß√£o "updExpression"
 					textoConv = updExpression(textoConv, posExp);
 					} else {
 					aindaTem = (0==1);

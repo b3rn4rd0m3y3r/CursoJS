@@ -126,8 +126,9 @@
 				S = "";
 				return tamTexto;
 				}
+			// NOVA nesta vers√£o
 			function equate(Expressao){
-				// … NECESS¡RIO EXECUTAR parseVariables
+				// √â NECESS√ÅRIO EXECUTAR parseVariables
 				console.log("Tamanho: "+ parseVariables(Expressao));
 				var posExp = 0;
 				var aindaTem;
@@ -139,15 +140,15 @@
 					posExp = FUNCOES[OPERATOR](textoConv);
 					if( posExp >= 0 ){
 						console.log("Exp:("+textoConv+")"+posExp);
-						// Divide operandos ‡ esquerda e ‡ direita do operador
+						// Divide operandos √† esquerda e √† direita do operador
 						var OpDir = rightOperand(posExp);
 						var OpEsq = leftOperand(posExp);
-						// Concretiza a operaÁ„o
+						// Concretiza a opera√ß√£o
 						Resultado = Math.pow(varValue(OpEsq),varValue(OpDir));
 						console.log("Esq.:"+ OpEsq + "(" + varValue(OpEsq) + ") : " + OpDir + "(" + varValue(OpDir) + ") = " + Resultado);
-						// Substitui o valor da vari·vel ‡ esquerda
+						// Substitui o valor da vari√°vel √† esquerda
 						VARIABLES[OpEsq] = Resultado;
-						// Zera a vari·vel ‡ direita
+						// Zera a vari√°vel √† direita
 						VARIABLES[OpDir] = 0;
 						// testa o fim e refaz a express„o
 						textoConv = updExpression(textoConv, posExp);
@@ -156,7 +157,7 @@
 						}
 					}
 				console.log(textoConv);
-				// Operador de multiplicaÁ„o
+				// Operador de multiplica√ß√£o
 				OPERATOR = "Mul";
 				aindaTem = (0==0);
 				while ( aindaTem ){
@@ -164,17 +165,17 @@
 					posExp = FUNCOES[OPERATOR](textoConv);
 					if( posExp >= 0 ){
 						console.log("Mul:("+textoConv+")"+posExp);
-						// Divide operandos ‡ esquerda e ‡ direita do operador
+						// Divide operandos √† esquerda e √† direita do operador
 						var OpDir = rightOperand(posExp);
 						var OpEsq = leftOperand(posExp);
-						// Concretiza a operaÁ„o
+						// Concretiza a opera√ß√£o
 						Resultado = varValue(OpEsq)*varValue(OpDir);
 						console.log("Esq.:"+ OpEsq + "(" + varValue(OpEsq) + ") : " + OpDir + "(" + varValue(OpDir) + ") = " + Resultado);
-						// Substitui o valor da vari·vel ‡ esquerda
+						// Substitui o valor da vari√°vel √† esquerda
 						VARIABLES[OpEsq] = Resultado;
-						// Zera a vari·vel ‡ direita
+						// Zera a vari√°vel √† direita
 						VARIABLES[OpDir] = 0;
-						// testa o fim e refaz a express„o
+						// testa o fim e refaz a express√£o
 						textoConv = updExpression(textoConv, posExp);
 						} else {
 						aindaTem = (0==1);
@@ -231,7 +232,7 @@
 						}
 					}
 				console.log(textoConv);
-				// Operador de subtraÁ„o
+				// Operador de subtra√ß√£o
 				OPERATOR = "Sub";
 				aindaTem = (0==0);
 				while ( aindaTem ){
@@ -239,17 +240,17 @@
 					posExp = FUNCOES[OPERATOR](textoConv);
 					if( posExp >= 0 ){
 						console.log("Sub:("+textoConv+") - Pos: "+posExp);
-						// Divide operandos ‡ esquerda e ‡ direita do operador
+						// Divide operandos √† esquerda e √† direita do operador
 						var OpDir = rightOperand(posExp);
 						var OpEsq = leftOperand(posExp);
-						// Concretiza a operaÁ„o
+						// Concretiza a opera√ß√£o
 						Resultado = varValue(OpEsq)-varValue(OpDir);
 						console.log("Esq.:"+ OpEsq + "(" + varValue(OpEsq) + ") : " + OpDir + "(" + varValue(OpDir) + ") = " + Resultado);
-						// Substitui o valor da vari·vel ‡ esquerda
+						// Substitui o valor da vari√°vel √† esquerda
 						VARIABLES[OpEsq] = Resultado;
-						// Zera a vari·vel ‡ direita
+						// Zera a vari√°vel √† direita
 						VARIABLES[OpDir] = 0;
-						// testa o fim e refaz a express„o
+						// testa o fim e refaz a express√£o
 						textoConv = updExpression(textoConv, posExp);
 						} else {
 						aindaTem = (0==1);
@@ -282,6 +283,7 @@
 			var Temp;
 			// Processing
 			console.log(equate(Expressao));
+			// Primeiro teste com uma express√£o que tem n√≠veis de par√™nteses
 			Expressao = "2+3*(4-2*(8+4*5-1)+5-2)+20";
 			VARIABLES = [];
 			textoConv = "";
@@ -289,7 +291,6 @@
 			posFim = findCloseBrace(Expressao);
 			posIni = findOpenBrace(posFim,Expressao);
 			ExpressaoTemp = Expressao.substr(posIni+1,posFim-posIni-1);
-			//Tam = parseVariables(ExpressaoTemp);
 			//console.log("\n"+Expressao+" : "+posIni + "<->" + posFim + " => " + textoConv);
 			Temp = equate(ExpressaoTemp);
 		</script>
