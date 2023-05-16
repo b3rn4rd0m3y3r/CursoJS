@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>Parse By Priority</title>
+		<title>Parse15</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 		<script type="text/javascript">
 			// Routines
@@ -282,15 +282,15 @@
 			var Tam = 0;
 			var Temp;
 			var LadoEsq,LadoDir;
+
 			// Processing
 			Expressao = "2+3*-47+20";
 			console.log(equate(Expressao));
 			Expressao = "2+3*(4-2*(8+4*5-1)+5-2)+20";
-			// Operador de parênteses
+			// Operador de parÃªnteses
 			OPERATOR = ")";
-			aindaTem = (0==0);
-			while ( aindaTem ){
-				//posExp = findSub(textoConv);
+			var aindaTem2 = (0==0);
+			while ( aindaTem2 ){
 				posExp = findCloseBrace(Expressao);
 				if( posExp >= 0 ){
 					VARIABLES = [];
@@ -304,7 +304,7 @@
 					LadoDir = Expressao.substr(posFim+1,9999);
 					Expressao =  LadoEsq +VARIABLES["v01"]+ LadoDir;
 					} else {
-					aindaTem = (0==1);
+					aindaTem2 = (0==1);
 					}
 				}
 		</script>

@@ -293,14 +293,15 @@
 			var Tam = 0;
 			var Temp;
 			var LadoEsq,LadoDir;
+			
 			// Processing
 			Expressao = "2+3*-47+20";
 			console.log(equate(Expressao));
-			Expressao = "2+3*(4-2*(4+2*5-1)+5-2)+2*(4-2*3)";
+			//Expressao = "2+3*(4-2*(4+2*5-1)+5-2)+2*(4-2*3)";
 			// Operador de parênteses
 			OPERATOR = ")";
-			aindaTem = (0==0);
-			while ( aindaTem ){
+			var aindaTem2 = (0==0);
+			while ( aindaTem2 ){
 				//posExp = findSub(textoConv);
 				posExp = findCloseBrace(Expressao);
 				if( posExp >= 0 ){
@@ -315,7 +316,7 @@
 					LadoDir = Expressao.substr(posFim+1,9999);
 					Expressao =  LadoEsq +VARIABLES["v01"]+ LadoDir;
 					} else {
-					aindaTem = (0==1);
+					aindaTem2 = (0==1);
 					}
 				}
 			VARIABLES = [];
