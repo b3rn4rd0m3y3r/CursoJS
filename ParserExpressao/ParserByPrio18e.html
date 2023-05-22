@@ -1,0 +1,291 @@
+<html>
+	<head>
+		<title>Parse18e</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<script type="text/javascript">
+			// Routines
+			// Obtém o valor armazenado em uma variável
+			function varValue(nomeVar){
+				return VARIABLES[nomeVar];
+				}
+			// Obtém a variável à esquerda de uma posição (no caso um operador aritmético)
+			function leftOperand(pos){
+				return textoConv.substr(pos-3,3);
+				}	
+			// Obtém a variável à direita de uma posição (no caso um operador aritmético)
+			function rightOperand(pos){
+				return textoConv.substr(pos+1,3);
+				}				
+			// Obtém o conteúdo à esquerda de uma string
+			function left(texto,n){
+				return texto.substr(0,n);
+				}
+			// Obtém o conteúdo à direita de uma string
+			function right0(texto,n){
+				return texto.slice(-n);
+				}
+			// Obtém o conteúdo à direita de uma string
+			function right1(texto,n){
+				return texto.substr(texto.length-n,n);
+				}
+			// Obtém o conteúdo à direita de uma string
+			function right(texto,n){
+				return texto.slice(-(texto.length-n));
+				}
+			// Ajusta um nome de variável num campo de número precedido de zeros
+			function adjustZero(texto){
+				texto = right1("000"+texto,2);
+				return "v"+texto
+				}
+			// NOVO - Ajusta um número num campo de número precedido de zeros
+			function adjustZeroNew(texto){
+				texto = right1("000"+texto,2);
+				return ""+texto
+				}
+			// Verifica se o caracter recolhido é um operador aritmético ou modificador de prioridade ()
+			function isOperator(Op){
+				var achou = (1==0);
+				var posicao = findOperator(Op,"+-/*^()");
+				if( posicao >= 0 ){
+					achou = (1==1);
+					}
+				return achou;
+				}
+			// Acha um tipo de OPERADOR em um texto ou expressão
+			function findOperator(op,texto){
+				return texto.indexOf(op);
+				}
+			// Acha uma operação de EXPONENCIAÇÃO em uma expressão
+			function findExponential(texto){
+				var posicao = findOperator("^", texto);
+				return posicao;
+				}
+			// Acha uma operação de MULTIPLICAÇÃO em uma expressão
+			function findMultiplication(texto){
+				var posicao = findOperator("*", texto);
+				return posicao;
+				}
+			// Acha uma operação de DIVISÃO em uma expressão
+			function findDivision(texto){
+				var posicao = findOperator("/", texto);
+				return posicao;
+				}
+			// Acha uma operação de SOMA em uma expressão
+			function findSum(texto){
+				var posicao = findOperator("+", texto);
+				return posicao;
+				}
+			// Acha uma operação de SUBTRAÇÃO em uma expressão
+			function findSub(texto){
+				var posicao = findOperator("-", texto);
+				return posicao;
+				}
+			// Acha um FECHA PARENTESES
+			function findCloseBrace(texto){
+				var posicao = findOperator(")", texto);
+				return posicao;
+				}
+			// Acha um ABRE PARENTESES
+			function findOpenBrace(posicao,texto){
+				for(i=posicao;i>=0;i--){
+					if( texto[i] == "(" ){
+						posicao = i;
+						break;
+						}
+					}
+				return posicao;
+				}
+			// Faz o teste de finalização e atualiza a Expressão aritmética
+			function updExpression(textoConv, posExp){
+				if( left(textoConv,posExp) == left(right(textoConv,posExp+4),left(textoConv,posExp).length) ) {
+					textoConv  = left(textoConv,posExp);
+					} else {
+					textoConv  = left(textoConv,posExp)+right(textoConv,posExp+4);
+					}			
+				return textoConv;
+				}
+			// Faz o parse de valores, transformando-os em nomes de variáveis e vai armazenando os valores nestas variáveis
+			function parseVariables(texto){
+				var tamTexto = texto.length;
+				var carctr = "";
+				var proxCarctr = "";
+				var S = "";
+				var Variable;
+				var SINAL;
+				for(i=0;i<tamTexto;i++){
+					carctr = texto[i];
+					SINAL = "";
+					// É um operador
+					if( isOperator(carctr) ){
+						// INÍCIO - Bloco Aries
+						ind++;
+						VARIABLES[ind] = parseInt(S);
+						Variable = adjustZeroNew(ind.toString());
+						/*
+							Próximo número seria negativo na expressão tokenizada ??
+							INÍCIO da análise do sinal MINUS ao final da equação
+						*/
+						if( right1(textoConv,1) == "-" ){
+							Variable = "s".concat(Variable);
+							// Atualiza a equação TOKENizada
+							textoConv = left(textoConv,textoConv.length-1) + "+" + Variable + carctr;
+							VARIABLES[Variable] = parseInt(S)*(-1);
+							} else {
+							// Ainda assim o valor lido pode ter um MENOS UNÁRIO
+							// resultante de uma operação na etapa anterior
+							if( eval(S) < 0 ){
+								Variable = "s".concat(Variable); // Prefixo "s"
+								} else {
+								Variable = "v".concat(Variable); // Prefixo "v"
+								}
+							// Evolui equação TOKENizada
+							textoConv = textoConv + Variable + carctr;
+							VARIABLES[Variable] = parseInt(S);
+							}
+						// FIM da análise do sinal MINUS ao final da equação
+						S = ""; // Zera a string de caracteres lidos até um operador
+						proxCarctr = texto[i+1];
+						// Próximo caracter é um operador (provavelmente o menos unário)
+						if( isOperator(proxCarctr) ){
+							SINAL = proxCarctr;
+							S = SINAL.concat(S);
+							i++;
+							}
+						} else {
+						// Se não é um operador, continua armazenando os caracteres lidos
+						S = S + carctr;
+						}
+					}
+				ind++;
+				VARIABLES[ind] = parseInt(S);
+				// pega o resto que reside em S
+				
+				Variable = adjustZeroNew(ind.toString());
+				// Próximo número seria negativo na expressão tokenizada ??
+				if( right1(textoConv,1) == "-" ){
+					Variable = "s".concat(Variable);
+					textoConv = left(textoConv,textoConv.length-1) + "+" + Variable; // tinha  " + carctr"
+					VARIABLES[Variable] = parseInt(S)*(-1);
+					} else {
+					if( eval(S) < 0 ){
+						Variable = "s".concat(Variable);
+						} else {
+						Variable = "v".concat(Variable);
+						}
+					textoConv = textoConv + Variable;
+					VARIABLES[Variable] = parseInt(S);
+					}
+				S = "";
+				return tamTexto;
+				}
+			// Substitui o corpo comum das operações
+			function itemEquate(operador){
+				aindaTem = (0==0);
+				while ( aindaTem ){
+					posExp = FUNCOES[operador](textoConv);
+					if( posExp >= 0 ){
+						console.log("Exp:("+textoConv+")"+posExp);
+						// Divide operandos à esquerda e à direita do operador
+						OpDir = rightOperand(posExp);
+						OpEsq = leftOperand(posExp);
+						// Escolhe e Concretiza a operação
+						switch (operador){
+							case "Exp":
+								Resultado = Math.pow(varValue(OpEsq),varValue(OpDir));
+								break;
+							case "Mul":
+								Resultado = varValue(OpEsq)*varValue(OpDir);
+								break;
+							case "Div":
+								Resultado = varValue(OpEsq)/varValue(OpDir);
+								break;
+							case "Sum":
+								Resultado = varValue(OpEsq)+varValue(OpDir);
+								break;
+							case "Sub":
+								Resultado = varValue(OpEsq)-varValue(OpDir);
+								break;									
+							}
+						console.log("Esq.:"+ OpEsq + "(" + varValue(OpEsq) + ")-Dir.: " + OpDir + "(" + varValue(OpDir) + ") = " + Resultado);
+						// Substitui o valor da variável à esquerda
+						VARIABLES[OpEsq] = Resultado;
+						// Zera a variável à direita
+						VARIABLES[OpDir] = 0;
+						// testa o fim e refaz a expressão
+						textoConv = updExpression(textoConv, posExp);
+						} else {
+						aindaTem = (0==1);
+						}
+					}				
+				}
+			function equate(Expressao){
+				// É NECESSÁRIO EXECUTAR parseVariables. 
+				// Dar console.log é uma das formas de fazer isto.
+				console.log("Tamanho: "+ parseVariables(Expressao));
+				var posExp = 0;
+				var OpEsq = "";
+				var OpDir = "";
+				var aindaTem;
+				const OPERATORS = ["Exp", "Mul", "Div", "Sum"]
+				for (op in OPERATORS) {
+					itemEquate(OPERATORS[op]);
+					console.log(textoConv);
+					}
+				return textoConv;
+				}
+			
+			//// Program
+			// Globals
+			var FUNCOES = [];
+			FUNCOES["Exp"] = findExponential;
+			FUNCOES["Mul"] = findMultiplication;
+			FUNCOES["Div"] = findDivision;
+			FUNCOES["Sum"] = findSum;
+			FUNCOES["Sub"] = findSub;
+			FUNCOES["Abp"] = findOpenBrace;
+			FUNCOES["Fbp"] = findCloseBrace;
+			var VARIABLES = [];
+			var textoConv = "";
+			var ind = 0;
+			var Resultado = 0;
+			var OPERATOR;
+			var posExp_ant = 999999;
+			var posIni = 0;
+			var posFim = 0;
+			// var Expressao = "11+4^5+42/2+2^21*988-12+212";
+			var ExpressaoTemp = "";
+			var Tam = 0;
+			var Temp;
+			var LadoEsq,LadoDir;
+			
+			// Processing
+			Expressao = "200-3*( 4-2*( 4- 2*5 -1 )-5*(12-2) )-2*(4-2*3)";
+			// Operador de parênteses
+			OPERATOR = ")";
+			var aindaTem2 = (0==0);
+			while ( aindaTem2 ){
+				posExp = findCloseBrace(Expressao);
+				if( posExp >= 0 ){
+					VARIABLES = [];
+					textoConv = "";
+					ind = 0;
+					posFim = findCloseBrace(Expressao);
+					posIni = findOpenBrace(posFim,Expressao);
+					ExpressaoTemp = Expressao.substr(posIni+1,posFim-posIni-1);
+					Temp = equate(ExpressaoTemp);
+					LadoEsq = left(Expressao,posIni);
+					LadoDir = Expressao.substr(posFim+1,9999);
+					Expressao =  LadoEsq +VARIABLES["v01"]+ LadoDir;
+					} else {
+					aindaTem2 = (0==1);
+					}
+				}
+			VARIABLES = [];
+			textoConv = "";
+			ind = 0;
+			Temp = equate(Expressao);
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
