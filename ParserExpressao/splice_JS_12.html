@@ -1,0 +1,244 @@
+<script>
+// Corpo de funções
+// Obtém o valor armazenado em uma variável
+function varValue(nomeVar){
+	return VARIABLES[nomeVar];
+	}
+// Faz o teste de finalização e atualiza a Expressão aritmética
+function updExpression(textoConv, posExp){
+	if( left(textoConv,posExp) == left(right(textoConv,posExp+4),left(textoConv,posExp).length) ) {
+		textoConv  = left(textoConv,posExp);
+		} else {
+		textoConv  = left(textoConv,posExp)+right(textoConv,posExp+4);
+		}			
+	return textoConv;
+	}
+// Obtém o conteúdo à direita de uma string
+function right(texto,n){
+	return texto.slice(-(texto.length-n));
+	}
+// Obtém o conteúdo à direita de uma string
+function right1(texto,n){
+	return texto.substr(texto.length-n,n);
+	}
+// Obtém o conteúdo à esquerda de uma string
+function left(texto,n){
+	return texto.substr(0,n);
+	}
+// Obtém a variável à esquerda de uma posição (no caso um operador aritmético)
+function leftOperand(pos){
+	return textoConv.substr(pos-3,3);
+	}	
+// Obtém a variável à direita de uma posição (no caso um operador aritmético)
+function rightOperand(pos){
+	return textoConv.substr(pos+1,3);
+	}	
+// Ajusta um número num campo de número precedido de zeros
+function adjustZeroNew(texto){
+	texto = right1("000"+texto,2);
+	return ""+texto
+	}
+// Acha um tipo de OPERADOR em um texto ou expressão
+function findOperator(op,texto){
+	return texto.indexOf(op);
+	}
+// Acha uma operação de EXPONENCIAÇÃO em uma expressão
+function findExponential(texto){
+	var posicao = findOperator("^", texto);
+	return posicao;
+	}
+// Acha uma operação de MULTIPLICAÇÃO em uma expressão
+function findMultiplication(texto){
+	var posicao = findOperator("*", texto);
+	return posicao;
+	}
+// Acha uma operação de DIVISÃO em uma expressão
+function findDivision(texto){
+	var posicao = findOperator("/", texto);
+	return posicao;
+	}
+// Acha uma operação de SOMA em uma expressão
+function findSum(texto){
+	var posicao = findOperator("+", texto);
+	return posicao;
+	}
+// Acha uma operação de SUBTRAÇÃO em uma expressão
+function findSub(texto){
+	var posicao = findOperator("-", texto);
+	return posicao;
+	}
+// Acha um FECHA PARENTESES
+function findCloseBrace(texto){
+	var posicao = findOperator(")", texto);
+	return posicao;
+	}
+// Acha um ABRE PARENTESES
+function findOpenBrace(posicao,texto){
+	for(i=posicao;i>=0;i--){
+		if( texto[i] == "(" ){
+			posicao = i;
+			break;
+			}
+		}
+	return posicao;
+	}
+// Verifica se o caracter recolhido é um operador aritmético ou modificador de prioridade ()
+function isOperator(Op){
+	var achou = (1==0);
+	var posicao = findOperator(Op,"+-/*^()");
+	if( posicao >= 0 ){
+		achou = (1==1);
+		}
+	return achou;
+	}
+function parseVariables(Expressao){
+	Expressao = Expressao.replaceAll(/\s/g,'');
+	var pieces = Expressao.split(/\b/);
+	VARIABLES = [];
+	var newPieces = [];
+	var tmp = "";
+	var NotN = "";
+	const regexnum = /[0-9]/g;
+	var arrSplit = null;
+	textoConv = "";
+	for(piece in pieces){
+		tmp = (pieces[piece]);
+		NotN = tmp.match(regexnum);
+		// Tratamento de operadores concatenados
+		// a posição ordinal em que foi achado é "piece"
+		if( NotN == null ){
+			arrSplit = tmp.split('');
+			for( item in arrSplit ){
+				newPieces.push(arrSplit[item]);
+				}
+			} else {
+			newPieces.push(tmp);
+			}
+		}
+	// Constrói uma expressão na base de variáveis "Vnn"
+	// Ainda sem o menos unário
+	var ind = 0;
+	var item = 0;
+	var tmp;
+	var Variable = "";
+	var proxCar = "";
+	var prevCar = "";
+	var SINAL = "";
+	var MINUS = 1;
+	//for(item in newPieces){
+	for(item=0;item<newPieces.length;item++){
+		tmp = newPieces[item];
+		//SINAL = "";
+		// É um operador
+		if( isOperator(tmp) ){
+			proxCar = newPieces[item+1];
+			// Próximo caracter é um operador UNÁRIO
+			if( isOperator(proxCar) ){
+				SINAL = proxCar;
+				item = item+1;
+				}  
+			// Testa se o operador (e não UNÁRIO) da vez é "-"
+			if( tmp == "-" ){
+				MINUS = -1;
+				textoConv = textoConv + "+";
+				} else {
+				textoConv = textoConv + tmp;
+				}
+			} else {
+			ind++;
+			VARIABLES[ind] = parseInt(SINAL.concat(tmp))*MINUS;
+			if( VARIABLES[ind] < 0 ){
+				Variable = "s" + adjustZeroNew(ind.toString());
+				} else {
+				Variable = "v" + adjustZeroNew(ind.toString());
+				}
+			VARIABLES[Variable] = parseInt(SINAL.concat(tmp))*MINUS;
+			textoConv = textoConv + Variable;
+			SINAL = "";
+			MINUS = 1;
+			}
+		// Só existe caracter prévio além do item 0 (zero)
+		if( item > 0 ){
+			prevCar = newPieces[item-1];
+			}
+		console.log(textoConv);
+		}
+	return newPieces;
+	}
+// Substitui o corpo comum das operações
+function itemEquate(operador){
+	aindaTem = (0==0);
+	while ( aindaTem ){
+		posExp = FUNCOES[operador](textoConv);
+		if( posExp >= 0 ){
+			console.log("Exp:("+textoConv+")"+posExp);
+			// Divide operandos à esquerda e à direita do operador
+			OpDir = rightOperand(posExp);
+			OpEsq = leftOperand(posExp);
+			// Escolhe e Concretiza a operação
+			switch (operador){
+				case "Exp":
+					Resultado = Math.pow(varValue(OpEsq),varValue(OpDir));
+					Resultado = (varValue(OpEsq)<0) ? Resultado*-1 : Resultado;
+					break;
+				case "Mul":
+					Resultado = varValue(OpEsq)*varValue(OpDir);
+					break;
+				case "Div":
+					Resultado = varValue(OpEsq)/varValue(OpDir);
+					break;
+				case "Sum":
+					Resultado = varValue(OpEsq)+varValue(OpDir);
+					break;
+				case "Sub":
+					Resultado = varValue(OpEsq)-varValue(OpDir);
+					break;									
+				}
+			console.log("Esq.:"+ OpEsq + "(" + varValue(OpEsq) + ")-Dir.: " + OpDir + "(" + varValue(OpDir) + ") = " + Resultado);
+			// Substitui o valor da variável à esquerda
+			VARIABLES[OpEsq] = Resultado;
+			// Zera a variável à direita
+			VARIABLES[OpDir] = 0;
+			// testa o fim e refaz a expressão
+			textoConv = updExpression(textoConv, posExp);
+			} else {
+			aindaTem = (0==1);
+			}
+		}				
+	}
+function equate(Expressao){
+	// É NECESSÁRIO EXECUTAR parseVariables. 
+	// Dar console.log é uma das formas de fazer isto.
+	console.log("Tamanho: "+ parseVariables(Expressao));
+	var posExp = 0;
+	var OpEsq = "";
+	var OpDir = "";
+	var aindaTem;
+	const OPERATORS = ["Exp", "Mul", "Div", "Sum"]
+	for (op in OPERATORS) {
+		itemEquate(OPERATORS[op]);
+		console.log(textoConv);
+		}
+	return textoConv;
+	}
+/*
+	CORPO DO PROGRAMA
+*/
+// Globals
+var FUNCOES = [];
+FUNCOES["Exp"] = findExponential;
+FUNCOES["Mul"] = findMultiplication;
+FUNCOES["Div"] = findDivision;
+FUNCOES["Sum"] = findSum;
+FUNCOES["Sub"] = findSub;
+FUNCOES["Abp"] = findOpenBrace;
+FUNCOES["Fbp"] = findCloseBrace;
+//var Expressao = "200-3*( 4-2*( 40- 2*5 -1 )-5*(12-22) )-2*(4-2*3)"; 
+var textoConv = "";
+var VARIABLES = [];
+Expressao = "200-2*10-2^6+5*-2";
+var TOKENS = parseVariables(Expressao);
+console.log(textoConv);
+console.log(VARIABLES);
+console.log(equate(Expressao));
+</script>

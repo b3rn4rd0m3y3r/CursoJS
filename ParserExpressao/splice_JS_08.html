@@ -1,0 +1,79 @@
+<script>
+// Corpo de funções
+// Obtém o conteúdo à direita de uma string
+function right1(texto,n){
+	return texto.substr(texto.length-n,n);
+	}
+// Ajusta um número num campo de número precedido de zeros
+function adjustZeroNew(texto){
+	texto = right1("000"+texto,2);
+	return ""+texto
+	}
+// Acha um tipo de OPERADOR em um texto ou expressão
+function findOperator(op,texto){
+	return texto.indexOf(op);
+	}
+// Verifica se o caracter recolhido é um operador aritmético ou modificador de prioridade ()
+function isOperator(Op){
+	var achou = (1==0);
+	var posicao = findOperator(Op,"+-/*^()");
+	if( posicao >= 0 ){
+		achou = (1==1);
+		}
+	return achou;
+	}
+function parseVariables(Expressao){
+	Expressao = Expressao.replaceAll(/\s/g,'');
+	var pieces = Expressao.split(/\b/);
+	VARIABLES = [];
+	var newPieces = [];
+	var tmp = "";
+	var NotN = "";
+	const regexnum = /[0-9]/g;
+	var arrSplit = null;
+	textoConv = "";
+	for(piece in pieces){
+		tmp = (pieces[piece]);
+		NotN = tmp.match(regexnum);
+		// Tratamento de operadores concatenados
+		// a posição ordinal em que foi achado é "piece"
+		if( NotN == null ){
+			arrSplit = tmp.split('');
+			for( item in arrSplit ){
+				newPieces.push(arrSplit[item]);
+				}
+			} else {
+			newPieces.push(tmp);
+			}
+		}
+	// Constrói uma expressão na base de variáveis "Vnn"
+	// Ainda sem o menos unário
+	var ind = 0;
+	var tmp;
+	var Variable = "";
+	for(item in newPieces){
+		tmp = newPieces[item];
+		// É um operador
+		if( isOperator(tmp) ){
+			textoConv = textoConv + tmp;
+			} else {
+			ind++;
+			VARIABLES[ind] = tmp;
+			Variable = "v" + adjustZeroNew(ind.toString());
+			VARIABLES[Variable] = tmp;
+			textoConv = textoConv + Variable;
+			}
+		console.log(textoConv);
+		}
+	return newPieces;
+	}
+/*
+	CORPO DO PROGRAMA
+*/
+//var Expressao = "200-3*( 4-2*( 40- 2*5 -1 )-5*(12-22) )-2*(4-2*3)"; 
+var textoConv = "";
+var VARIABLES = [];
+Expressao = "200-2*10-2^6+5*2";
+var TOKENS = parseVariables(Expressao);
+console.log(TOKENS);
+</script>
