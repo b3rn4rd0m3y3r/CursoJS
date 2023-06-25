@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta charset="iso-8859-1"/>
+	<meta name="author" content="Bernardo Meyer">
+	<meta name="description" content="Lendo um arquivo bas, separando o arquivo linha por linha e gerando um array JSON">
+	<meta name="keywords" content="sites, web, desenvolvimento, jscript, javascript">
+	
+    <title>LeFonte01_e</title>
+    <style type="text/css">
+        #conteudo {
+            border: solid 1px #008080;
+            overflow-y: scroll;
+            height: 400px;
+        }
+    </style>
+    <script type="text/javascript">
+	// Arrays e definiÃ§Ãµes primÃ¡rias
+	var LINHAS = [];
+	var LABELS = [];
+	var OBJFILE = [];
+	var TOKENS = { "PRINT": "01", "INPUT": "02", "IF": "03", "THEN": "04", "FOR": "05", "NEXT": "06", "TO": "07", "GOTO": "08", "GOSUB": "09", "RETURN": "10", "END": "11" };
+	var DELIM_TOK = ' =(,;+-/*^")';
+	//var DELIM_TOK = ' =(,;+-/*^"';
+	var IN_ASPAS = 0;
+	function getTag(nomeId){
+		return document.getElementById(nomeId);
+		}
+	// Retira o carriage return das linhas
+	function separaLinhas(txt){
+		var separado = txt;
+		var separado = txt.replace(/\r/g,"");
+		//separado = separado.replace(/\r\n/g,"'},{'");
+		return separado;
+		}
+	// LanÃ§a as linhas separadas em um array
+	function doParser(fonte){
+		var texto = fonte.split("\n");
+		var lines = texto.length;
+		var obj = {};
+		var objs = [];
+		// Mostra as linhas separadas do array texto
+		for(i=0;i<lines;i++){
+			obj = parser1(texto[i]);
+			obj.i = i;
+			console.log(obj);
+			objs.push(obj);
+			LABELS[obj.label] = i;
+			LINHAS[i] = obj;
+			LINHAS[i].tok = parser2(texto[i]);
+			}
+		console.log("Objs:");
+		console.log(objs);
+		// Lista os atributos de objs
+		console.log("LINHAS:");
+		for(i=0;i<LINHAS.length;i++){
+			console.log(LINHAS[i].i+"|"+LINHAS[i].label+"|"+LINHAS[i].com+"|"+LABELS[LINHAS[i].label]);
+			}
+		console.log("LABELS:");
+		console.log(LABELS);
+		console.log("TOKENS:");
+		console.log(TOKENS);
+		// Composição do array OBJFILE com os tokens de comando
+		var commline = "";
+		var tamline = 0;
+		var cct = "";
+		var ind = 0;
+		var S = "";
+		for(var i=0;i<LINHAS.length;i++){
+			// TODO: Tokenizar a linha de comando
+			commline = LINHAS[i].com;
+			tamline = commline.length;
+			OBJFILE[i] = [];
+			OBJFILE[i][0] = LINHAS[i].label;
+			ind = 0; // Indice para o array OBJFILE
+			S = "";
+			IN_ASPAS = 0;
+			for(var j=0;j<tamline;j++){
+				cct = commline[j];
+				// É um delimitador
+				if( DELIM_TOK.indexOf(cct) >=0 ){
+					// Teste de aspas ABERTA(1)/FECHADA(0-zero)
+					if( cct == '"' ){
+						if( IN_ASPAS == 0 ) { 
+							IN_ASPAS = 1;   // Abre aspas
+							} else {
+							IN_ASPAS = 0; // Fecha aspas
+							}
+						}
+					// Teste de cct ser um ESPAÇO (SPACE)
+					if( cct == " " && IN_ASPAS == 1 ){
+						ind++;
+						OBJFILE[i][ind] = cct;						
+						}
+					// Teste de existência de algum TOKEN armazenado em S
+					// como resultado de letras lidas acumuladas
+					if( S != "" ){
+						ind++;
+						OBJFILE[i][ind] = S;
+						S = "";
+						}
+					// É delimitador, mas tem que testar se é diferente de ESPAÇO
+					if( cct != " " ){
+						ind++;
+						OBJFILE[i][ind] = cct;
+						}
+					} else {
+					// Não é um delimitador. Caracter normal
+					S += cct;
+					}
+				}
+			// No final da linha, sem detectarmos delimitadores, pode haver "resto" em S
+			if( S != "" ){
+				ind++;
+				OBJFILE[i][ind] = S;
+				}
+			console.log(OBJFILE[i]);
+			}		
+		
+		}
+	// Parser nivel 1 - Label e comando
+	function parser1(linTx){
+		var label = linTx.substr(0,3);
+		var com = linTx.substr(4);
+		console.log(label+" - "+com);
+		return { "label": label, "com": com }
+		}
+	// Parser nivel 2 - Comando tokenizado
+	function parser2(linTx){
+		var label = linTx.substr(0,3);
+		var com = linTx.substr(4);
+		console.log(label+" - "+com);
+		var tamCom = com.length;
+		var tok = "";
+		var cc = "";
+		var pos = -1;
+		// Vai atÃ© um possÃ­vel delimitador ou operador
+		for(var i=0;i<tamCom;i++){
+			cc = com.substr(i,1);
+			if( DELIM_TOK.indexOf(cc) >= 0 ){
+				pos = i;
+				break;
+				} else {
+				tok += com.substr(i,1);
+				}
+			}
+		if( pos == -1 ){
+			tok = "Token nÃ£o achado.";
+			}
+		return tok;
+		}	
+	// INIT	
+	function init(){
+		var arqSele = document.getElementById('arqAlvo');
+		var fileReader = new FileReader();
+		var rel = null;
+		var S = "";
+		// Evento que controla o carregamento efetivo do
+		// arquivo lido por fileReader
+		fileReader.onload = function (e) {
+			var fileContents = document.getElementById('conteudo');
+			S = separaLinhas(fileReader.result);
+			alert(S);
+			doParser(S);
+			}
+		// Evento que controla a mudanÃ§a no conteÃºdo do
+		// campo de seleÃ§Ã£o de arquivo INPUT type=file
+		arqSele.addEventListener('change', function (e) {
+			var arquivo = arqSele.files[0];
+			rel = getTag("dados");
+			D = "<h1>Dados do arquivo</h1>";
+			D += "<p><b>Nome:</b> "+arquivo.name+"</p>";
+			D += "<p><b>Tipo:</b> "+(arquivo.name).substr(-3)+"</p>";
+			rel.innerHTML = D;
+			// LÃª efetivamente, o conteÃºdo do arquivo
+			fileReader.readAsText(arquivo, 'ISO-8859-1');
+			// Apresenta todas as informaÃ§Ãµes
+
+			});
+		}
+    </script>
+</head>
+<body onload="init();">
+	<h1>Processador de arquivos BASIC</h1>
+	<h2><i>Por favor selecione arquivo que ser&aacute; lido</i></h2>
+	<input type="file" id="arqAlvo" /><br />
+	<div id="dados"></div>
+	<textarea id="conteudo" cols=100 rows=10>
+    
+	</textarea>
+</body>
+</html>

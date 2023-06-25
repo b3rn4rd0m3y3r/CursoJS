@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<meta charset="iso-8859-1"/>
+	<meta name="author" content="Bernardo Meyer">
+	<meta name="description" content="Lendo um arquivo bas, separando o arquivo linha por linha e gerando um array JSON">
+	<meta name="keywords" content="sites, web, desenvolvimento, jscript, javascript">
+	
+    <title>LeFonte01_m</title>
+    <style type="text/css">
+        #conteudo {
+            border: solid 1px #008080;
+            overflow-y: scroll;
+            height: 400px;
+        }
+    </style>
+    <script type="text/javascript">
+	// Arrays e definições primárias
+	var LINHAS = [];
+	var LABELS = [];
+	var OBJFILE = [];
+	var IP = 0; // Instruction pointer inteiro (número da linha a ser interpretada)
+	var TOKENS = { "LET": "20", "PRINT": "01", "INPUT": "02", "IF": "03", "THEN": "04", "FOR": "05", "NEXT": "06", "TO": "07", "GOTO": "08", "GOSUB": "09", "RETURN": "10", "END": "11" };
+	var DELIM_TOK = ' =(,;+-/*^")';
+	//var DELIM_TOK = ' =(,;+-/*^"';
+	var IN_ASPAS = 0;
+	var VARIAVEIS = {};
+	var INPUTS = [];
+	var idInput = 0;
+	// Funções de controle do DOM
+	function getTag(nomeId){
+		return document.getElementById(nomeId);
+		}
+	// Acha ou não um TOKEN na lista
+	function findToken(arg){
+		var achado = "";
+		for (var key in TOKENS){
+			if( arg == key ){ achado = TOKENS[key]; }
+			}
+		return achado;
+		}
+	// Retira o carriage return das linhas
+	function separaLinhas(txt){
+		var separado = txt;
+		var separado = txt.replace(/\r/g,"");
+		//separado = separado.replace(/\r\n/g,"'},{'");
+		return separado;
+		}
+	// Lança as linhas separadas em um array
+	function doParser(fonte){
+		var texto = fonte.split("\n");
+		var lines = texto.length;
+		var obj = {};
+		var objs = [];
+		// Mostra as linhas separadas do array texto
+		for(i=0;i<lines;i++){
+			obj = parser1(texto[i]); // parser1
+			obj.i = i;
+			console.log(obj);
+			objs.push(obj);
+			LABELS[obj.label] = i;
+			LINHAS[i] = obj;
+			LINHAS[i].tok = parser2(texto[i]); // parser2
+			}
+		console.log("Objs:");
+		console.log(objs);
+		// Lista os atributos de objs
+		console.log("LINHAS:");
+		for(i=0;i<LINHAS.length;i++){
+			console.log(LINHAS[i].i+"|"+LINHAS[i].label+"|"+LINHAS[i].com+"|"+LABELS[LINHAS[i].label]);
+			}
+		console.log("LABELS:");
+		console.log(LABELS);
+		console.log("TOKENS:");
+		console.log(TOKENS);
+		// Composição do array OBJFILE com os tokens de comando
+		var commline = "";
+		var tamline = 0;
+		var cct = "";
+		var ind = 0;
+		var S = "";
+		var tmp = "";
+		for(var i=0;i<LINHAS.length;i++){
+			// TODO: Tokenizar a linha de comando
+			commline = LINHAS[i].com;
+			tamline = commline.length;
+			OBJFILE[i] = [];
+			OBJFILE[i][0] = LINHAS[i].label;
+			ind = 0; // Indice para o array OBJFILE
+			S = "";
+			IN_ASPAS = 0;
+			// Escaneia uma linha de programa
+			for(var j=0;j<tamline;j++){
+				cct = commline[j];
+				// É um delimitador
+				if( DELIM_TOK.indexOf(cct) >=0 ){
+					// Teste de aspas ABERTA(1)/FECHADA(0-zero)
+					if( cct == '"' ){
+						if( IN_ASPAS == 0 ) { 
+							IN_ASPAS = 1;   // Abre aspas
+							} else {
+							IN_ASPAS = 0; // Fecha aspas
+							}
+						}
+					// Teste de existência de algum TOKEN armazenado em S
+					// como resultado de letras lidas acumuladas
+					// Substituir pelo número de TOKEN de palavra chave,
+					// quando for realmente o TOKEN
+					if( S != "" ){
+						tmp = findToken(S);
+						if( tmp == "" ){ OBJFILE[i][++ind] = S;  } else {  OBJFILE[i][++ind] = tmp; }
+						S = "";
+						}
+					// Teste de cct ser um ESPAÇO (SPACE)
+					if( cct == " " && IN_ASPAS == 1 ){ OBJFILE[i][++ind] = cct; }
+					// É delimitador, mas tem que testar se é diferente de ESPAÇO
+					if( cct != " " ){ OBJFILE[i][++ind] = cct; }
+					} else {
+					// Não é um delimitador. Caracter normal
+					S += cct;
+					}
+				}
+			// No final da linha, sem detectarmos delimitadores, pode haver "resto" em S
+			// Substituir pelo número de TOKEN de palavra chave
+			if( S != "" ){
+				tmp = findToken(S);
+				if( tmp == "" ){
+					OBJFILE[i][++ind] = S;
+					} else {
+					OBJFILE[i][++ind] = tmp;
+					}
+				}
+			// Acrescenta uma linha de segurança, com número "000" e token "00"
+			OBJFILE[i+1] = [];
+			OBJFILE[i+1][0] = "000";
+			OBJFILE[i+1][1] = "00";
+			//console.log(OBJFILE[i]);
+			}		
+		Interpreter(OBJFILE, LABELS, TOKENS);
+		}
+	/*
+		PARTE DO INTERPRETADOR BASIC
+	*/
+	function Interpreter(codObjeto, lstLabels, lstTokens){
+		var LBL = "";	// Label ou identificador da linha
+		var TKN = "";	// Token lido
+		var IPtr = "";	// Apontador de instruções (Instruction Pointer)
+		var func = "";
+		// Le o código objeto tokenizado linha por linha
+		// interpretando e processando as linhas
+		IP = 0;
+		// Mantém o processamento em andamento até achar um TOKEN 00
+		// por segurança, pois o programador pode ter se esquecido do END
+		while( TKN != "00" ){
+			LBL = codObjeto[IP][0];
+			TKN = codObjeto[IP][1];
+			func = "fn_"+TKN;
+			console.log(LBL + ":" + TKN + ":" + codObjeto[IP]);
+			if( window[func] ){
+				window[func](codObjeto[IP]);
+				// O TKN = 02 é o INPUT
+				// O IP terá que ser guardado para que o botão de OK
+				// do INPUT continue a execução a partir dele
+				if( TKN == "02" ){
+					
+					}
+				} else {
+				console.log("TOKEN não consta do rol de procedimentos de INTERPRETAÇÃO.");
+				}
+			IP++;
+			}
+		}
+	// Procura por uma variável entre as que estão em VARIAVEIS
+	function findVar(vrv){
+		return VARIAVEIS.hasOwnProperty(vrv);
+		}
+	// LET - Token 20
+	function fn_20(obj){
+		var vrvl = obj[2];
+		var S = "";
+		var si = 4;
+		if( obj[5] ){
+			do{ 
+				if( findVar(obj[si]) ){
+					S += VARIAVEIS[obj[si++]]; 
+					} else {
+					S += obj[si++]; 
+					}
+				} while ( obj[si] )
+			VARIAVEIS[vrvl] = eval(S);
+			} else {
+			VARIAVEIS[vrvl] = obj[4];
+			}
+		console.log("Passei por LET.");
+		return;
+		}
+	// PRINT - Token 01
+	function fn_01(obj){
+		console.log("Passei por PRINT.");
+		return;
+		}
+	// Forma a frase para INPUT
+	function getInput(obj){
+		var S = "";
+		var si = 3;
+		do {
+			S += obj[si++];
+			} while ( obj[si] != '"' );
+		si = si+2;
+		var v1 = obj[si];
+		return { "frase": S, "vrv": v1} ;
+		}
+	// INPUT - Token 02
+	function fn_02(obj){
+		var gi = getInput(obj);
+		console.log(gi);
+		var noPai = getTag("display");
+		const txt = document.createTextNode(gi.frase);
+		const lbl = document.createElement("label");
+		const inp = document.createElement("input");
+		const btn = document.createElement("button");
+		//inp.id = "i"+(idInput++).toString();
+		btn.setAttribute("onclick", "VARIAVEL['"+gi.vrv+"'] = getTag('"+gi.vrv+"').value;"); 
+		btn.innerText = "OK";
+		inp.id = gi.vrv;
+		lbl.appendChild(txt);
+		noPai.append(lbl);
+		noPai.append(inp);
+		noPai.append(btn);
+		console.log("Passei por INPUT.");
+		return;
+		}
+	// INPUT - Token 03
+	function fn_03(obj){
+		console.log("Passei por IF.");
+		return;
+		}
+	// FOR - Token 05
+	function fn_05(obj){
+		console.log("Passei por FOR.");
+		return;
+		}
+	// FOR - Token 06
+	function fn_06(obj){
+		console.log("Passei por NEXT.");
+		return;
+		}
+	// GOTO - Token 08
+	function fn_08(obj){
+		console.log("Passei por GOTO.");
+		return;
+		}
+	// GOSUB - Token 09
+	function fn_09(obj){
+		console.log("Passei por GOSUB.");
+		return;
+		}
+	// RETURN - Token 10
+	function fn_10(obj){
+		console.log("Passei por RETURN.");
+		return;
+		}
+	// END - Token 11
+	function fn_11(obj){
+		console.log("Passei por END.");
+		return;
+		}
+	// FIM - Token 00
+	function fn_00(obj){
+		console.log("Processo de Interpretação CONCLUÍDO.");
+		console.log(VARIAVEIS);
+		return;
+		}
+	// Parser nivel 1 - Label e comando
+	function parser1(linTx){
+		var label = linTx.substr(0,3);
+		var com = linTx.substr(4);
+		console.log(label+" - "+com);
+		return { "label": label, "com": com }
+		}
+	// Parser nivel 2 - Comando tokenizado
+	function parser2(linTx){
+		var label = linTx.substr(0,3);
+		var com = linTx.substr(4);
+		console.log(label+" - "+com);
+		var tamCom = com.length;
+		var tok = "";
+		var cc = "";
+		var pos = -1;
+		// Vai atÃ© um possÃ­vel delimitador ou operador
+		for(var i=0;i<tamCom;i++){
+			cc = com.substr(i,1);
+			if( DELIM_TOK.indexOf(cc) >= 0 ){
+				pos = i;
+				break;
+				} else {
+				tok += com.substr(i,1);
+				}
+			}
+		if( pos == -1 ){
+			tok = "Token nÃ£o achado.";
+			}
+		return tok;
+		}	
+	// INIT	
+	function init(){
+		var arqSele = document.getElementById('arqAlvo');
+		var fileReader = new FileReader();
+		var rel = null;
+		var S = "";
+		// Evento que controla o carregamento efetivo do
+		// arquivo lido por fileReader
+		fileReader.onload = function (e) {
+			var fileContents = document.getElementById('conteudo');
+			S = separaLinhas(fileReader.result);
+			alert(S);
+			doParser(S);
+			}
+		// Evento que controla a mudanÃ§a no conteÃºdo do
+		// campo de seleÃ§Ã£o de arquivo INPUT type=file
+		arqSele.addEventListener('change', function (e) {
+			var arquivo = arqSele.files[0];
+			rel = getTag("dados");
+			D = "<h1>Dados do arquivo</h1>";
+			D += "<p><b>Nome:</b> "+arquivo.name+"</p>";
+			D += "<p><b>Tipo:</b> "+(arquivo.name).substr(-3)+"</p>";
+			rel.innerHTML = D;
+			// LÃª efetivamente, o conteÃºdo do arquivo
+			fileReader.readAsText(arquivo, 'ISO-8859-1');
+			// Apresenta todas as informaÃ§Ãµes
+
+			});
+		}
+    </script>
+</head>
+<body onload="init();">
+	<h1>Processador de arquivos BASIC</h1>
+	<h2><i>Por favor selecione arquivo que ser&aacute; lido</i></h2>
+	<input type="file" id="arqAlvo" /><br />
+	<div id="dados"></div>
+	<div id="display">
+		
+	</div>
+</body>
+</html>
