@@ -1,0 +1,19 @@
+<head>
+	<script>
+		function init(){
+			fetch("RecebeJSON.php",
+			{
+				headers: {
+				  'Content-Type': 'application/json'
+				},
+				method: "POST",
+				body: JSON.stringify({"a": "101", "b": "202", "c": "Bernardo" })
+			})
+				.then(response=>response.json())
+				.then(data=>{ console.log(data); })
+			.catch(function(res){ console.log(res) })
+			}
+	</script>
+</head>
+<body onload="init()">
+</body>
