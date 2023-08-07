@@ -1,0 +1,47 @@
+<html>
+	<head>
+		<title>Ht040_MobJS</title>
+		<link rel="shortcut icon" href="favicon.ico" />
+		<meta charset="UTF-8"/>
+		<meta name="author" content="Bernardo Meyer">
+		<meta name="description" content="Formulários IV - Campos mais comuns. Rótulos formatados.">
+		<meta name="keywords" content="sites, web, desenvolvimento, HTML5">
+		<script src="Ht040.js">
+
+		</script>
+		<style>
+			BODY {
+				font-size: 28px;
+				}
+			FORM {
+				display: grid;
+				font-family: Heebo;
+				
+				grid-template-columns: 300px;
+				max-width: 400px;
+				}
+			INPUT {
+				border-color: maroon;
+				border-style: ridge;
+				font-size: 24px;
+				}
+			LABEL {
+				color: maroon;
+				font-weight: bold;
+				text-align: left;
+				}
+		</style>
+	</head>
+	<body>
+		<center>
+			<form id="frm" method="" action="" onsubmit="aviso();">
+				<label>N&uacute;mero: </label><input type="number" name="inpNumero" id="inpNumero">
+				<label>Texto: </label><input type="text" name="inpTexto" id="inpTexto">
+				<label>Data: </label><input type="date" name="inpData" id="inpData">
+				<label>Senha: </label><input type="password" name="inpSenha" id="inpSenha">
+				<br>
+				<input type="submit" value="Envia">
+			</form>
+		</center>
+	</body>
+</html>
