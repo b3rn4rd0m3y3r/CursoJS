@@ -1,0 +1,44 @@
+<html>
+	<head>
+		<title>getCoord</title>
+		<link rel="shortcut icon" href="favicon.ico" />
+		<meta charset="UTF-8"/>
+		<meta name="author" content="Bernardo Meyer">
+		<meta name="description" content="Openstreetmaps API search JSON results">
+		<meta name="keywords" content="sites, web, desenvolvimento, HTML5">
+		<style>
+			BODY {
+				font-size: 28px;
+				}
+			LABEL {
+				color: maroon;
+				font-weight: bold;
+				text-align: left;
+				}
+		</style>
+		<script>
+			function init(){
+			fetch("https://nominatim.openstreetmap.org/search?q=Rua Mar de Espanha 453 BH MG&format=json",
+			{
+				headers: {
+				  'Content-Type': 'application/json'
+				},
+				method: "GET"
+			})
+				.then(response=>response.json())
+				.then(data=>{ 
+					var resp = data[0].lat+","+data[0].lon;
+					var nodo = document.getElementById("app");
+			
+					//nodo.innerText = resp;
+					document.write(resp);
+					console.log(resp); 
+					})
+			.catch(function(res){ console.log(res) })				
+				}
+		</script>
+	</head>
+	<body id="app" onload="init();">
+
+	</body>
+</html>
