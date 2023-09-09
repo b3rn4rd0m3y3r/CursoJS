@@ -1,102 +1,20 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-	
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <meta charset="iso-8859-1"/>
-	<meta name="author" content="Bernardo Meyer">
-	<meta name="description" content="Lendo um arquivo CSV, separando o arquivo linha por linha e gerando um array JSON">
-	<meta name="keywords" content="sites, web, desenvolvimento, jscript, javascript">
-	
-    <title>LeFonte01</title>
-    <style type="text/css">
-        #conteudo {
-            border: solid 1px #008080;
-            overflow-y: scroll;
-            height: 400px;
-        }
-    </style>
-    <script type="text/javascript">
-	// Arrays e definições primárias
-	var LINHAS = [];
-	var LABELS = [];
-	function getTag(nomeId){
-		return document.getElementById(nomeId);
-		}
-	// Retira o carriage return das linhas
-	function separaLinhas(txt){
-		var separado = txt;
-		var separado = txt.replace(/\r/g,"");
-		//separado = separado.replace(/\r\n/g,"'},{'");
-		return separado;
-		}
-	// Lança as linhas separadas em um array
-	function doParser(fonte){
-		var texto = fonte.split("\n");
-		var lines = texto.length;
-		var obj = {};
-		var objs = [];
-		// Mostra as linhas separadas do array texto
-		for(i=0;i<lines;i++){
-			obj = parser1(texto[i]);
-			obj.i = i;
-			console.log(obj);
-			objs.push(obj);
-			LABELS[obj.label] = i;
-			LINHAS[i] = obj;
-			}
-		console.log("Objs:");
-		console.log(objs);
-		console.log("LINHAS:");
-		console.log(LINHAS);
-		console.log("LABELS:");
-		console.log(LABELS);
-		}
-	// Parser nivel 1 - Label e comando
-	function parser1(linTx){
-		var label = linTx.substr(0,3);
-		var com = linTx.substr(4);
-		console.log(label+" - "+com);
-		return { "label": label, "com": com }
-		}
-	// INIT	
-	function init(){
-		var arqSele = document.getElementById('arqAlvo');
-		var fileReader = new FileReader();
-		var rel = null;
-		var S = "";
-		// Evento que controla o carregamento efetivo do
-		// arquivo lido por fileReader
-		fileReader.onload = function (e) {
-			var fileContents = document.getElementById('conteudo');
-			S = separaLinhas(fileReader.result);
-			alert(S);
-			doParser(S);
-			}
-		// Evento que controla a mudança no conteúdo do
-		// campo de seleção de arquivo INPUT type=file
-		arqSele.addEventListener('change', function (e) {
-			var arquivo = arqSele.files[0];
-			rel = getTag("dados");
-			D = "<h1>Dados do arquivo</h1>";
-			D += "<p><b>Nome:</b> "+arquivo.name+"</p>";
-			D += "<p><b>Tipo:</b> "+(arquivo.name).substr(-3)+"</p>";
-			rel.innerHTML = D;
-			// Lê efetivamente, o conteúdo do arquivo
-			fileReader.readAsText(arquivo, 'ISO-8859-1');
-			// Apresenta todas as informações
+	<title>Clip</title>
+	<script type="text/javascript">
 
-			});
-		}
-    </script>
+		function init(){
+			var canvas = document.getElementById('canvas1'),
+			context = canvas.getContext('2d');
+			base_image = new Image();
+			base_image.width = 80;
+			base_image.height = 80;
+			base_image.src = 'Thumbs.jpg';
+			base_image.onload = function(){
+				context.drawImage(base_image, -80, -80);
+				}
+			}
+	</script>
 </head>
 <body onload="init();">
-	<h1>Processador de arquivos BASIC</h1>
-	<h2><i>Por favor selecione arquivo que ser&aacute; lido</i></h2>
-	<input type="file" id="arqAlvo" /><br />
-	<div id="dados"></div>
-	<textarea id="conteudo" cols=100 rows=10>
-    
-	</textarea>
+	<canvas id="canvas1" width=80 height=80></canvas>
 </body>
-</html>

@@ -6,8 +6,6 @@
 			var canvas = document.getElementById('canvas1'),
 			context = canvas.getContext('2d');
 			base_image = new Image();
-			base_image.width = 80;
-			base_image.height = 80;
 			base_image.src = 'Thumbs.jpg';
 			base_image.onload = function(){
 				context.drawImage(base_image, 0, 0);
@@ -16,5 +14,6 @@
 	</script>
 </head>
 <body onload="init();">
-	<canvas id="canvas1" width=80 height=80></canvas>
+	<canvas id="canvas1" width=400 height=400>
+	</canvas>
 </body>
