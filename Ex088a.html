@@ -1,0 +1,24 @@
+<head>
+	<title>Clip</title>
+	<script type="text/javascript">
+		var canvas = null, context = null;
+		function change(vLeft, vTop){
+			context.drawImage(base_image, vLeft, vTop);
+			}
+		function init(){
+			canvas = document.getElementById('canvas1'),
+			context = canvas.getContext('2d');
+
+			base_image = new Image();
+			base_image.width = 80;
+			base_image.height = 80;
+			base_image.src = 'Thumbs.jpg';
+			base_image.onload = function(){
+				change(-80, 0);
+				}
+			}
+	</script>
+</head>
+<body onload="init();">
+	<canvas id="canvas1" width=80 height=80></canvas>
+</body>

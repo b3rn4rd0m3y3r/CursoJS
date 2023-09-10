@@ -1,0 +1,44 @@
+<head>
+	<title>Clip</title>
+	<script type="text/javascript">
+		var canvas = null, context = null;
+		var NoFig = 0;
+		var temp1 = null;
+		function callChange(vLeft, vTop){
+			context.drawImage(base_image,vLeft, vTop);
+			NoFig++;
+			if( NoFig < 4 ){
+				change(NoFig*(-300),0);
+				} else {
+				NoFig = 0;
+				change(NoFig*(-300),0);
+				}
+			}
+		function change(vLeft, vTop){
+			temp1 = setTimeout(callChange,5000, vLeft, vTop);
+			}
+		function init(){
+			canvas = document.getElementById('canvas1'),
+			context = canvas.getContext('2d');
+			base_image = new Image();
+			base_image.width = 300;
+			base_image.height = 200;
+			base_image.src = 'Slides.jpg';
+			base_image.onload = function(){
+				context.drawImage(base_image, 0,0);
+				change(-300, 0);
+				}
+			}
+	</script>
+	<style>
+		BODY {padding: 0px;margin:0px;font-family: Heebo;}
+		CANVAS {padding: 0px;margin:0px;}
+	</style>
+</head>
+<body onload="init();">
+	<center>
+		<h1>SlideFlip em Javascript</h1>
+		<canvas id="canvas1" width=300 height=200>
+		</canvas>
+	</center>
+</body>
