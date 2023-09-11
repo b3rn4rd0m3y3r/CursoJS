@@ -1,0 +1,49 @@
+<head>
+	<title>Clip</title>
+	<script type="text/javascript">
+
+		function init(){
+			var bordaLin = 2;
+			var canvas1 = document.getElementById('canvas1'),
+			ctx1 = canvas1.getContext('2d');
+			var canvas2 = document.getElementById('canvas2'),
+			ctx2 = canvas2.getContext('2d');
+			var canvas3 = document.getElementById('canvas3'),
+			ctx3 = canvas3.getContext('2d');
+			ctx1.beginPath();
+			ctx2.beginPath();
+			ctx3.beginPath();
+			ctx1.moveTo(40,40);
+			ctx1.lineTo(190,70);
+			//ctx1.lineTo(220,55);
+			ctx2.moveTo(190,70);
+			ctx2.lineTo(220,55);
+			ctx2.lineTo(130,25);
+			ctx1.moveTo(130,25);
+			ctx1.lineTo(110,95);
+			ctx3.moveTo(110,95);
+			ctx3.lineTo(120,175);
+			ctx1.lineWidth = bordaLin;
+			ctx1.strokeStyle = "blue";
+			ctx1.stroke();
+			ctx2.lineWidth = bordaLin;
+			ctx2.strokeStyle = "red";
+			ctx2.stroke();
+			ctx3.lineWidth = bordaLin;
+			ctx3.strokeStyle = "green";
+			ctx3.stroke();
+			}
+	</script>
+	<style>
+		CANVAS {position: relative;top: 0px;left: 0px;margin: 0px;padding:0px;}
+		CANVAS#canvas2 {left: -404px;}
+		CANVAS#canvas3 {left: -808px;}
+	</style>
+</head>
+<body onload="init();">
+	<div>
+		<canvas id="canvas1" width=400 height=400></canvas>
+		<canvas id="canvas2" width=400 height=400></canvas>
+		<canvas id="canvas3" width=400 height=400></canvas>
+	</div>
+</body>

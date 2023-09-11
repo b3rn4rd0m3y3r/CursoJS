@@ -1,0 +1,39 @@
+<head>
+	<title>Clip</title>
+	<script type="text/javascript">
+
+		function init(){
+			var bordaLin = 1;
+			var canvas1 = document.getElementById('canvas1'),
+			ctx1 = canvas1.getContext('2d');
+			ctx1.rect(10,10,160,85);
+			ctx1.lineWidth = bordaLin;
+			ctx1.strokeStyle = "blue";
+			ctx1.stroke();
+			var canvas2 = document.getElementById('canvas2'),
+			ctx2 = canvas2.getContext('2d');
+			ctx2.rect(170,10,230,85);
+			ctx2.lineWidth = bordaLin;
+			ctx2.strokeStyle = "green";
+			ctx2.stroke();
+			var canvas3 = document.getElementById('canvas3'),
+			ctx3 = canvas3.getContext('2d');
+			ctx3.rect(50,50,180,105);
+			ctx3.lineWidth = bordaLin;
+			ctx3.strokeStyle = "red";
+			ctx3.stroke();			
+			}
+	</script>
+	<style>
+		CANVAS {position: relative;top: 0px;left: 0px;}
+		CANVAS#canvas2 {left: -400px;}
+		CANVAS#canvas3 {left: -800px;}
+	</style>
+</head>
+<body onload="init();">
+	<div>
+		<canvas id="canvas1" width=400 height=400></canvas>
+		<canvas id="canvas2" width=400 height=400></canvas>
+		<canvas id="canvas3" width=400 height=400></canvas>
+	</div>
+</body>
