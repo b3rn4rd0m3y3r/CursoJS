@@ -1,0 +1,60 @@
+<head>
+	<title>Ex090b</title>
+	<style>
+		CANVAS {position: relative;top: 0px;left: 0px;}
+		CANVAS#canvas2 {left: -604px;}
+	</style>
+	<script>
+		var bordaLin = 2;
+		var tempo = 20;
+		var tempoc = 1;
+		var canvas1 = null;
+		var ctx1 = null;
+		var canvas2 = null;
+		var ctx2 = null;
+		var arcX = 100;
+		const INC = 10;
+		// Inicia Canvas e contexto
+		function init(){
+			canvas1 = document.getElementById('canvas1');
+			ctx1 = canvas1.getContext('2d');
+			ctx1.arc(arcX, 110, 40, 0, 2 * Math.PI, false);
+			ctx1.lineWidth = bordaLin;
+			//ctx1.strokeStyle = "red";
+			ctx1.fillStyle="red";
+			//ctx1.stroke();
+			ctx1.fill();
+			canvas2 = document.getElementById('canvas2');
+			ctx2 = canvas2.getContext('2d');
+			ctx2.lineWidth = bordaLin+INC;
+			ctx2.strokeStyle = "white";
+			//ctx2.stroke();				
+			atualiza(0);
+			}
+		// Atualiza contexto lógico
+		function atualiza(timestamp){
+			tempoc++;
+			roda();
+			}
+		// Atualiza contexto gráfico
+		function roda(){
+			if( tempoc % tempo == 0 ){
+				ctx2.beginPath();			
+				ctx2.arc(arcX, 110, 40+2*bordaLin+2, Math.PI/2, 3 * Math.PI/2, false);
+				//ctx2.arc(arcX, 110, 40, 0, 2 * Math.PI, false);
+				ctx2.stroke();	
+				arcX = arcX + INC;
+				
+				ctx1.arc(arcX, 110, 40, 0, 2 * Math.PI, false);
+				ctx1.fill();
+				}
+			window.requestAnimationFrame(atualiza);
+			}
+	</script>
+</head>
+<body onload="init();">
+	<canvas id="canvas1" width=600 height=600>
+	</canvas>
+	<canvas id="canvas2" width=600 height=600>
+	</canvas>
+</body>

@@ -1,0 +1,47 @@
+<head>
+	<title>Ex090a</title>
+	<style>
+
+	</style>
+	<script>
+		var bordaLin = 2;
+		var tempo = 10;
+		var tempoc = 1;
+		var canvas1 = null;
+		var ctx1 = null;
+		var arcX = 100;
+		// Inicia Canvas e contexto
+		function init(){
+			canvas1 = document.getElementById('canvas1');
+			ctx1 = canvas1.getContext('2d');
+			ctx1.arc(arcX, 110, 40, 0, 2 * Math.PI, false);
+			ctx1.lineWidth = bordaLin+3;
+			ctx1.strokeStyle = "red";
+			ctx1.stroke();				
+			atualiza(0);
+			}
+		// Atualiza contexto lógico
+		function atualiza(timestamp){
+			tempoc++;
+			roda();
+			}
+		// Atualiza contexto gráfico
+		function roda(){
+			if( tempoc % tempo == 0 ){
+				ctx1.strokeStyle = "white";
+				ctx1.stroke();				
+				ctx1.arc(arcX, 110, 40, 0, 2 * Math.PI, false);
+				arcX = arcX + 10;
+				ctx1.arc(arcX, 110, 40, 0, 2 * Math.PI, false);
+				ctx1.strokeStyle = "red";
+				ctx1.stroke();
+				}
+			window.requestAnimationFrame(atualiza);
+			}
+	</script>
+</head>
+<body onload="init();">
+	<canvas id="canvas1" width=600 height=600>
+		
+	</canvas>
+</body>
