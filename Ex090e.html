@@ -1,0 +1,49 @@
+<head>
+	<title>Clip</title>
+	<script type="text/javascript">
+		var bordaLin = 2;
+		var tempo = 5;
+		var tempoc = 1;
+		var canvas1 = null;
+		var ctx1 = null;
+		var canvas2 = null;
+		var ctx2 = null;
+		var arcX = 10;
+		const INC = 10;
+		// Inicia Canvas e contexto
+		function init(){
+			canvas1 = document.getElementById('canvas1'),
+			ctx1 = canvas1.getContext('2d');
+			base_image = new Image();
+			base_image.width = 80;
+			base_image.height = 80;
+			base_image.src = 'Sprite01.gif';
+			base_image.onload = function(){
+				ctx1.drawImage(base_image, 0, 0);
+				atualiza(0);
+				}
+			
+			}
+		// Atualiza contexto lógico
+		function atualiza(timestamp){
+			tempoc++;
+			roda();
+			}		
+		// Atualiza contexto gráfico
+		function roda(){
+			if( tempoc % tempo == 0 ){
+				//ctx1.beginPath();
+				//canvas = document.getElementById('canvas1'),
+				//ctx1 = canvas.getContext('2d');				
+				arcX = arcX + INC;
+				ctx1.drawImage(base_image, arcX, 0);
+				ctx1.stroke();	
+				
+				}
+			window.requestAnimationFrame(atualiza);
+			}
+	</script>
+</head>
+<body onload="init();">
+	<canvas id="canvas1" width=800 height=800></canvas>
+</body>
