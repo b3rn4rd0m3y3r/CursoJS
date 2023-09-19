@@ -1,5 +1,5 @@
 <head>
-	<title>Ex090a</title>
+	<title>Ex090a1</title>
 	<style>
 
 	</style>
@@ -30,12 +30,14 @@
 			if( tempoc % tempo == 0 ){
 				
 				ctx1.beginPath();
+				ctx1.lineWidth = bordaLin+3;
 				ctx1.strokeStyle = "white";
-				ctx1.arc(arcX, 110, 40, 0, 2 * Math.PI, false);
+				ctx1.arc(arcX-1, 110, 40, 0, 2 * Math.PI, false);
 				ctx1.stroke();
-				
+
 				arcX = arcX + 10;
 				ctx1.beginPath();
+				ctx1.lineWidth = bordaLin;
 				ctx1.arc(arcX, 110, 40, 0, 2 * Math.PI, false);
 				ctx1.strokeStyle = "red";
 				ctx1.stroke();
