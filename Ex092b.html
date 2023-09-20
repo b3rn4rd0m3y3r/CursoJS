@@ -1,0 +1,104 @@
+<script>
+var canvas = null;
+var ctx = null;
+var player = null;
+var grid = null;
+var keyz = null;
+var inst = null;
+
+function init(){
+	canvas = document.createElement('canvas');
+	grid = 50;
+	canvas.setAttribute('width', grid * 20);
+	canvas.setAttribute('height', grid * 15);
+	document.body.appendChild(canvas);
+	canvas.style.border = '1px solid #408080';
+	ctx = canvas.getContext('2d');
+	player = {
+	  x: 10
+	  , x_ant: 10
+	  , y: canvas.height / 2
+	  , y_ant: canvas.height / 2
+	  , size: 10
+	  , speed: 5
+	  , trace: false
+	};
+	keyz = {
+	  ArrowLeft: false
+	  , ArrowRight: false
+	  , ArrowUp: false
+	  , ArrowDown: false
+	  , KeyK: false
+	  , KeyJ: false
+	};
+	document.addEventListener('keydown', (e) => {
+	  if (e.code in keyz) {
+		keyz[e.code] = true;
+	  }
+	  console.log(e.key+ " " +e.code);
+	})
+	document.addEventListener('keyup', (e) => {
+	  if (e.code in keyz) {
+		keyz[e.code] = false;
+	  }
+	  console.log(keyz);
+	})
+	console.log(player);
+	inst = requestAnimationFrame(draw);
+	// Ordena deixar rastro ou apagar
+	canvas.addEventListener('click', () => {
+	  if( player.trace ){
+		player.trace = false;
+		} else {
+		player.trace = true;
+		}
+	})
+}
+	// Parte lógica
+	function movePlayer() {
+	  if ( (keyz['ArrowLeft'] || keyz['KeyJ'])  && player.x > 0 ) {
+		player.x_ant = player.x;
+		player.x -= player.speed;
+	  }
+	  if ( (keyz['ArrowRight'] || keyz['KeyK'] ) && player.x < canvas.width ) {
+		player.x_ant = player.x;
+		player.x += player.speed;
+	  }
+	  if (keyz['ArrowUp']  && player.y > 0 ) {
+		player.y_ant = player.y;
+		player.y -= player.speed;
+	  };
+	  if (keyz['ArrowDown'] && player.y < canvas.height ) {
+		player.y_ant = player.y;
+		player.y += player.speed;
+	  };
+	}
+
+	function draw() {
+		/*
+		if( !player.trace ){
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			}
+		*/
+	
+		//ctx.beginPath();
+		movePlayer();
+		if( !player.trace ){
+			ctx.fillStyle = 'white';
+			ctx.fillRect(player.x_ant-2*player.size, player.y_ant-2*player.size, player.size*2+player.speed*4, player.size+player.speed*5);
+			}
+		ctx.beginPath();
+		ctx.fillStyle = 'red';
+		ctx.arc(player.x, player.y, player.size, 0, Math.PI * 2);			
+		ctx.fill();			
+
+		inst = requestAnimationFrame(draw);
+		}
+
+
+
+
+</script>
+<body onload="init()">
+
+</body>

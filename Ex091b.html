@@ -9,7 +9,10 @@
 		var canvas2 = null;
 		var ctx2 = null;
 		var arcX = 10;
+		var ardX = 720;
 		const INC = 10;
+		var base_image = null;
+		var base_image2 = null;
 		// Inicia Canvas e contexto
 		function init(){
 			canvas1 = document.getElementById('canvas1'),
@@ -18,11 +21,21 @@
 			base_image.width = 80;
 			base_image.height = 80;
 			base_image.src = 'Sprite01.gif';
+
 			base_image.onload = function(){
-				ctx1.drawImage(base_image, 0, 0);
-				atualiza(0);
+				ctx1.drawImage(base_image, arcX, 0);
+				preAtualiza();
 				}
-			
+			}
+		function preAtualiza(){
+			base_image2 = new Image();
+			base_image2.width = 80;
+			base_image2.height = 80;
+			base_image2.src = 'Sprite02.gif';
+			base_image2.onload = function(){
+				ctx1.drawImage(base_image2, ardX, 0);
+				atualiza(0);
+				}			
 			}
 		// Atualiza contexto lógico
 		function atualiza(timestamp){
@@ -32,13 +45,12 @@
 		// Atualiza contexto gráfico
 		function roda(){
 			if( tempoc % tempo == 0 ){
-				//ctx1.beginPath();
-				//canvas = document.getElementById('canvas1'),
-				//ctx1 = canvas.getContext('2d');				
 				arcX = arcX + INC;
 				ctx1.drawImage(base_image, arcX, 0);
+				ardX = ardX - INC;
+				if( arcX >= ardX - 40){ return; }
+				ctx1.drawImage(base_image2, ardX, 0);
 				ctx1.stroke();	
-				
 				}
 			window.requestAnimationFrame(atualiza);
 			}
