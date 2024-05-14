@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+	<html lang="pt-br">
+	<!-- Cabeçalho -->
+	<head>
+		<meta charset="iso-8859-1">
+		<style>
+			BODY {
+				font-family: Trebuchet MS;
+				margin-left: 15%;
+				width: 70%;
+				}
+			</style>
+		<script>
+			class ArrayBidim {
+				constructor(LINHA, COLUNA) {
+						if( LINHA === undefined && COLUNA === undefined  ){
+							this.ARRAY = [];
+							} else {
+							return this.readCelula(LINHA, COLUNA);
+							} 
+
+					}
+				//Getter
+
+				//Funções internas
+				buildInd(LINHA, COLUNA) {
+					var ind = String(LINHA+"_"+COLUNA);
+					ind = ind.trim();
+					return ind;
+					}
+				putCelula(LINHA, COLUNA, valor) {
+					var ind = this.buildInd(LINHA, COLUNA);
+					this.ARRAY[ind] = valor;
+					}	
+				readCelula(LINHA, COLUNA) {
+					var ind = this.buildInd(LINHA, COLUNA);
+					return this.ARRAY[ind];
+					}
+				}		
+			function init(){
+				var a = new ArrayBidim();
+				a.putCelula(1,1,7);
+				a.putCelula(1,2,17);
+				a.putCelula(1,3,27);
+				return true;
+				}
+		</script>
+	</head>
+
+	<!-- Corpo do Documento -->
+	<body onload="init();">
+	
+
+
+	</body>
+
+</html>

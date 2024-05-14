@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+	<html lang="pt-br">
+	<!-- Cabeçalho -->
+	<head>
+		<meta charset="iso-8859-1">
+		<style>
+			BODY {
+				font-family: Trebuchet MS;
+				margin-left: 15%;
+				width: 70%;
+				}
+			</style>
+		<script>
+			// Por função
+			function ArrayBid(LINHA, COLUNA) {
+				this.buildInd = function(LINHA, COLUNA) {
+					var ind = String(LINHA+"_"+COLUNA);
+					ind = ind.trim();
+					return ind;
+					}
+				this.putCelula = function(LINHA, COLUNA, valor) {
+					var ind = this.buildInd(LINHA, COLUNA);
+					this[ind] = valor;
+					}	
+				this.readCelula = function(LINHA, COLUNA) {
+					var ind = this.buildInd(LINHA, COLUNA);
+					return this[ind];
+					}
+				if( LINHA === undefined && COLUNA === undefined  ){
+					this.prototype = new Array();
+					} else {
+					return this.readCelula(LINHA, COLUNA);
+					}
+				}
+
+			function init(){
+				var a = new ArrayBid();
+				a.putCelula(1,1,7);
+				a.putCelula(1,2,17);
+				a.putCelula(1,3,27);
+				return true;
+				}
+		</script>
+	</head>
+
+	<!-- Corpo do Documento -->
+	<body onload="init();">
+	
+
+
+	</body>
+
+</html>
