@@ -1,0 +1,184 @@
+<html>
+	<head>
+		<title>ScreenCap</title>
+		<link rel="shortcut icon" href="favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+	</head>
+	<body onload="init()">
+		<video width="640" height="480" autoplay></video><br>
+		<button id="shareScreen">Capture Screen</button>
+		<button id="rec" disabled>Record</button>
+		<button id="stop" disabled>Stop</button>
+		<a id="downloadLink" download="mediarecorder.mp4" name="mediarecorder.mp4" href></a>
+		<div id="error"></div>
+		<script type="text/javascript">
+			var shareBtn = null;
+			var recBtn = null;
+			var stopBtn = null;
+			var videoElement = null;
+			var downloadLink = null;
+			var mediaRecorder;
+			var localStream = null;
+			
+
+
+			function shareScreen(){
+			  console.log("shareScreen");
+			  document.getElementById("error").innerHTML = "";
+			  //var screenConstraints = { video: true, audio: true };
+			  var screenConstraints = { video: { 
+					width: { ideal: 1920, max: 1920 },
+					height: { ideal: 1080, max: 1080 },
+					frameRate: {ideal: 19, max: 30} 
+					}, 
+					audio: {
+						autoGainControl: false,
+						echoCancellation: false,
+						googAutoGainControl: false,
+						noiseSuppression: false
+						} 
+					};
+			  navigator.mediaDevices.getDisplayMedia(screenConstraints).then(function(screenStream){
+				/* use the screen & audio stream */
+				var micConstraints = {audio:true};
+				navigator.mediaDevices.getUserMedia(micConstraints).then(function(micStream) {
+				  /* use the microphone stream */
+
+				  //create a new stream in which to pack everything together
+				  var composedStream = new MediaStream();
+
+				  //add the screen video stream
+				  screenStream.getVideoTracks().forEach(function(videoTrack) {
+					composedStream.addTrack(videoTrack);
+				  });
+
+				  //create new Audio Context
+				  var context = new AudioContext();
+
+				  //create new MediaStream destination. This is were our final stream will be.
+				  var audioDestinationNode = context.createMediaStreamDestination();
+
+				  //check to see if we have a screen stream and only then add it
+				  if (screenStream && screenStream.getAudioTracks().length > 0) {
+					//get the audio from the screen stream
+					const systemSource = context.createMediaStreamSource(screenStream);
+
+					//set it's volume (from 0.1 to 1.0)
+					const systemGain = context.createGain();
+					systemGain.gain.value = 1.0;
+
+					//add it to the destination
+					systemSource.connect(systemGain).connect(audioDestinationNode);
+
+				  }
+
+				  //check to see if we have a microphone stream and only then add it
+				  if (micStream && micStream.getAudioTracks().length > 0) {
+					//get the audio from the microphone stream
+					const micSource = context.createMediaStreamSource(micStream);
+
+					//set it's volume
+					const micGain = context.createGain();
+					micGain.gain.value = 1.0;
+
+					//add it to the destination
+					micSource.connect(micGain).connect(audioDestinationNode);
+				  }
+
+				//add the combined audio stream
+				audioDestinationNode.stream.getAudioTracks().forEach(function(audioTrack) {
+					composedStream.addTrack(audioTrack);
+					});
+
+				  //pass over to function that shows the stream and activates the recording controls
+				  onCombinedStreamAvailable(composedStream)
+
+				}).catch(function(err) {
+				  console.log(err);
+				  document.getElementById("error").innerHTML = "You need a microphone to run the demo";
+				});
+			  }).catch(function(err) {
+				console.log(err);
+				document.getElementById("error").innerHTML = "You need to share your screen to run the demo";
+			  });
+			}
+
+		function onCombinedStreamAvailable(stream) {
+		  console.log("onCombinedStreamAvailable");
+		  localStream = stream;
+		  
+		  videoElement.srcObject = localStream;
+		  videoElement.play();
+		  videoElement.muted = true;
+		  recBtn.disabled = false;
+		  shareBtn.disabled = true;
+		  stopBtn.disabled = true;
+		}
+		// Ordena a gravação
+		function onBtnRecordClicked() {
+			console.log("onBtnRecordClicked");
+			if (localStream != null) {
+				mediaRecorder = new MediaRecorder(localStream,{
+					audioBitsPerSecond: 128000,
+					videoBitsPerSecond: 2500000,
+					mimeType: "video/mp4"
+					});
+			// Quando a gravação parar		
+			mediaRecorder.onstop = function() {
+				console.log("mediaRecorder.onstop");
+			  
+				var blob = new Blob(chunks, { type: "video/mp4" });
+				chunks = [];
+				var videoURL = window.URL.createObjectURL(blob);
+				downloadLink.href = videoURL;
+				videoElement.src = videoURL;
+				downloadLink.innerHTML = "Download arquivo de video";
+				}
+			
+			let chunks = [];
+			mediaRecorder.ondataavailable = function(e) {
+				chunks.push(e.data);
+				}
+
+			mediaRecorder.start(2);
+			console.log(mediaRecorder.state);
+			
+			recBtn.style.background = "red";
+			recBtn.style.color = "yellow";
+			
+			recBtn.disabled = true;
+			shareBtn.disabled = true;
+			stopBtn.disabled = false;
+			} else	{
+				console.log("localStream is missing");
+			}
+		}
+		// Ordem de STOP do usuário
+		function onBtnStopClicked(){
+			mediaRecorder.stop();
+			console.log(mediaRecorder.state);
+			console.log("recorder stopped");
+			recBtn.style.background = "";
+			recBtn.style.color = "";
+			}
+		// INICIO
+		function init(){
+			shareBtn = document.querySelector("button#shareScreen");
+			shareBtn.onclick = shareScreen;
+
+			recBtn = document.querySelector("button#rec");
+			recBtn.onclick = onBtnRecordClicked;
+
+			stopBtn = document.querySelector("button#stop");
+			stopBtn.onclick = onBtnStopClicked;
+
+			videoElement = document.querySelector("video");
+			videoElement.style.backgroundColor = "black";
+
+			downloadLink = document.querySelector("a#downloadLink");
+			document.getElementById("error").innerHTML = "";			
+			}
+		</script>		
+	</body>
+</html>
