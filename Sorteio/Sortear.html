@@ -1,0 +1,160 @@
+<html>
+
+<head>
+
+	<title>Sorteio de ingressos</title>
+	<link rel="icon" href="favicon.ico" type="image/x-icon">
+
+	<script language="javascript">
+	function showtime () 
+	{
+	//alert ("oi")
+	  var now = new Date();
+	  var now1 = now.getDate()
+	  var now2 = now.getMonth()+1
+	  var now3 = now.getYear()
+	  var now4 = now1 +"/" + now2 + "/" + now3
+	  var hours = now.getHours();
+	  var minutes = now.getMinutes();
+	  var seconds = now.getSeconds()
+	  var timeValue = "" + ((hours >12) ? hours -12 :hours)
+	  timeValue += ((minutes < 10) ? ":0" : ":") + minutes
+	  timeValue += ((seconds < 10) ? ":0" : ":") + seconds
+	  timeValue += (hours >= 12) ? " P.M." : " A.M."
+	  //document.clock.iddatasorteio.value = now4 + "  " + timeValue;
+	  
+	//var obj = document.getElementById("iddata")
+	//obj.style.backgroundColor='navajowhite';
+
+	//  obj.style.borderWidth=0;
+	  timerID = setTimeout("showtime()",1000);
+	  timerRunning = true;
+	}
+
+	function Sortear()
+	{
+	if ((document.getElementById("evento").value) == "")
+	{
+		alert ("O campo nome do evento é obrigatório");
+		document.getElementById("evento").focus();
+		return false;
+	}
+	else
+		if ((document.getElementById("pessoas").value) == "")
+		{
+			alert ("O campo número de convites é obrigatório");
+			document.getElementById("pessoas").focus();
+			return false;
+		}
+		else
+			if ((document.getElementById("totpessoas").value) == "")
+			{
+				alert ("O campo número de pessoas é obrigatório");
+				document.getElementById("totpessoas").focus();
+				return false
+			}
+			else
+				if ((document.getElementById("idnumquinz").value) == "")
+				{
+					alert ("O campo número da quinzena é obrigatório");
+					document.getElementById("idnumquinz").focus();
+					return false
+				}
+				else
+					if ((document.getElementById("iddatasorteio").value) == "")
+					{
+						alert ("O campo data do sorteio é obrigatório");
+						document.getElementById("iddatasorteio").focus();
+						return false
+					}
+
+		var pessoas = eval(document.getElementById("pessoas").value);
+		var totpessoas = eval(document.getElementById("totpessoas").value);
+		var matrizSorteio = new Array();
+		matrizSorteio.length = pessoas;
+			
+				cont=0
+				for (x=1;x<=eval(pessoas);x++)
+				{
+					num=Math.ceil(Math.random()*eval(totpessoas));
+					
+					matrizSorteio[x] = num;
+		
+					
+					
+						for (y=1;y<=eval(pessoas);y++)
+						{
+								if (matrizSorteio[x]==matrizSorteio[y])
+								{
+									cont = cont + 1;
+								}
+							
+						}
+						if (cont>1)
+						{
+							matrizSorteio[x] = "";
+							x = x - 1;
+							
+						}
+						
+						cont=0;
+					<!--window.location="http://intranet-se01/dvpi/portalspca/recebelinguica.asp?linguica="+linguicao-->
+				}
+		
+				linguicao="";
+				for (x=1;x<=eval(pessoas);x++)
+				{
+					if (x==1)
+					{
+							linguicao = 	matrizSorteio[x];
+					}
+					if (x>1)
+					{
+							linguicao = linguicao + ";" + matrizSorteio[x];
+					}
+					//linguicao = matrizSorteio[x] + ";" + linguicao;
+				}
+				alert(linguicao);
+				document.getElementById("idnumeros").value = linguicao
+				showtime()
+	}
+	</script>
+	<style>
+		TABLE {color: #006080;font-family: Verdana;}
+		
+	</style>
+</head>
+
+<body>
+<center>
+<form action="http://intranet-se01/dvpi/portalspca/sorteio/sorteio_ingressos.asp" method="post">
+	
+	<table style="position:absolute; top:60px; left:550px" cellspacing=0>
+	<thead>
+	<th><h1 align=center><img src="urnaSorteio.jpg"><br><i>Sorteio de ingressos</i></h1></th>
+	</thead>
+
+		<tr>
+			<td>
+				Número de convites<input type="text" name="NoIngressos" id="NoIngressos">
+			</td>
+		</tr>	
+		<br>
+		<tr>
+			<td>
+				Número de pessoas<input type="text" name="NoParticipantes" id="NoParticipantes">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<center>
+				<input style="background: red;color: white;border-radius: 8px;font-weight: bold;" type="submit" value="SORTEAR"></input>
+				</center>
+			</td>
+		</tr>
+	</table>
+	
+</form>
+</center>
+</body>
+</html>
